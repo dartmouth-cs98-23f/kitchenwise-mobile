@@ -19,6 +19,7 @@ TODO: how to deploy the project
 ## Authors
 
 Stefel Smith <br>
-Victor Sanni <br>s
+Victor Sanni <br>
+Syed Hussaini <br>
 
 ## Acknowledgments
