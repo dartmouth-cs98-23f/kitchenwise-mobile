@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -43,7 +42,7 @@ export default function App() {
           component={HomeScreen}
           options={{title: 'Welcome', headerShown: true}}
         />
-        {/* // <Stack.Screen name="Name" component={ScreenName} /> */}
+        {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -93,9 +92,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //fontFamily: 'Montserrat',
     fontSize: 15,
-  },
-  logoContainer: {  // semicircle at top right of page
-    alignItems: 'center',
-    flex: 1,
   },
 });
