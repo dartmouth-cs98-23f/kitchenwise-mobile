@@ -6,11 +6,22 @@ TODO: short project description, some sample screenshots or mockups
 
 ## Architecture
 
-TODO: descriptions of code organization and tools and libraries used
+We have a front-end that uses npm/Yarn as a JavaScript package manager and React Native as a frontend framework.
+
+TODO: descriptions of code organization
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc
+### Setup Instructions
+
+Install node (version 12 or newer) https://nodejs.org/en/download/
+Navigate to home directory ('kitchenwise-mobile') and run npm install.
+
+### Starting
+
+Cd into the 'kitchenwise-mobile' directory.
+Run npm start to start a local dev server
+If it crashes immediately, make sure you've run npm install and have the correct node version
 
 ## Deployment
 
