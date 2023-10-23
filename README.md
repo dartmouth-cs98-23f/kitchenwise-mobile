@@ -20,5 +20,6 @@ TODO: how to deploy the project
 
 Stefel Smith <br>
 Syed Hussaini <br>
+Brian Zhang <br>
 
 ## Acknowledgments
