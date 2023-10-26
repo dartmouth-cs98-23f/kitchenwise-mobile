@@ -24,9 +24,17 @@ const StartButton = ({navigation}) => {  // button to get started
   return (
     <View style={styles.buttonContainer}>
     <TouchableOpacity style={styles.button}
-      onPress={() =>{}}
+      onPress={() => navigation.navigate('MainHome')}
     ><Text style={styles.buttonText}>Login</Text>
     </TouchableOpacity>
+    </View>
+  );
+};
+
+const MainHomePage = () => {
+  return (
+    <View style={styles.container}>
+      <Text>Main Home Page Content</Text>
     </View>
   );
 };
@@ -42,6 +50,12 @@ export default function App() {
           component={HomeScreen}
           options={{title: 'Welcome', headerShown: true}}
         />
+        <Stack.Screen
+            name="MainHome"
+            component={MainHomePage}
+            options={{title: 'Main Home Page', headerShown: true}}
+        />
+
         {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
       </Stack.Navigator>
     </NavigationContainer>
