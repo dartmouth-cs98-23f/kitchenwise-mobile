@@ -1,15 +1,73 @@
-import {View, Modal, StyleSheet, Text} from 'react-native';
-import StartButton from './StartButton';
+import React, { useState } from 'react';
+import { View, Modal, StyleSheet, Text, TextInput } from 'react-native';
+import LoginButton from './LoginButton';
+import LoginInput from './LoginInput';
 
+const LoginScreen = ({ navigation }) => {
+  const [isNewAccount, setIsNewAccount] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-const LoginScreen = ({navigation}) => {
+  function newAccountHandler() {
+    setIsNewAccount(true);
+    setModalVisible(true);
+  }
+
+  function openLoginModal() {
+    setModalVisible(true);
+  }
+
+  function closeLoginModal() {
+    setModalVisible(false);
+    setIsNewAccount(false);
+  }
+
   return (
     <View style={styles.container}>
+      <Modal visible={modalVisible} animationType="slide" transparent={false}>
+   
+          <Text style={styles.headModalText}>Kitchenwise.</Text>
+          <View style={styles.loginContainer}>
+            <View style={styles.inputContainer}>
+              <LoginInput
+                style={styles.loginInput}
+                placeholder="Username"
+                onChangeText={(text) => setUsername(text)}
+            />
+              <LoginInput
+                style={styles.loginInput}
+                placeholder="Password"
+                onChangeText={(text) => setPassword(text)}
+              />
+              {isNewAccount &&  <LoginInput
+                style={styles.loginInput}
+                placeholder="Confirm Password"
+                onChangeText={(text) => setPassword(text)}
+              />}
+          </View>
+          <LoginButton
+            text="Login"
+            isBlack={true}
+            onClick={() => {
+                // TODO : Add Auth here later 
+                closeLoginModal();
+                navigation.navigate('MainHome');
+            }}
+          />
+          <LoginButton text="Cancel" onClick={closeLoginModal} isBlack={false} />
+          
+        </View>
+      </Modal>
       <CenterText />
-      <StartButton navigation={navigation}/>
+      <View style={styles.buttonContainer}>
+        <LoginButton text="Login" onClick={openLoginModal} isBlack={true} />
+        <LoginButton text="Create New Account" onClick={newAccountHandler} isBlack={false} />
+      </View>
     </View>
   );
-}
+};
 
 const CenterText = () => {  // text at center of page befote log in button is pressed
   return (
@@ -35,6 +93,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: '75%',
   },
+  buttonContainer: {  // container for button
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: "center",
+    width: '90%',
+    marginBottom: "50%"
+  },
   headText: {  // header text
     alignItems: "center",
     justifyContent: "center",
@@ -42,12 +107,40 @@ const styles = StyleSheet.create({
     fontSize: 35,
     padding: 20,
   },
+  headModalText: {  // header text
+    flex: 1,
+    marginTop: "50%",
+    fontWeight: '600',
+    fontSize: 35,
+    padding: 20,
+    marginBottom: 0,
+  },
   bodyText: {  // text following header text
     alignItems: "center",
     justifyContent: "center",
-    //fontFamily: 'Montserrat',
     fontSize: 15,
   },
+  loginContainer: {
+    flex: 4,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: "80%",
+    alignSelf:"center",
+  },
+  loginInput: {
+    padding: 8,
+    width: '100%',
+    borderColor: "#cccccc",
+    borderWidth: 1,
+    margin: 5,
+    color: "black",
+    borderRadius: 8,
+  },
+  inputContainer: {
+    width: "100%",
+    marginBottom: 50,
+  },
+
 });
 
 export default LoginScreen;
