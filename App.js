@@ -1,35 +1,7 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const HomeScreen = ({navigation}) => {
-  return (
-    <View style={styles.container}>
-      <CenterText />
-      <StartButton navigation={navigation}/>
-    </View>
-  );
-};
-
-const CenterText = () => {  // text at center of page
-  return (
-    <View style={styles.textContainer}>
-        <Text style={styles.headText}>Kitchenwise.</Text>
-        <Text style={styles.bodyText}>The Future of Cooking. Powered by Alexa.</Text>
-    </View>
-  );
-};
-
-const StartButton = ({navigation}) => {  // button to get started
-  return (
-    <View style={styles.buttonContainer}>
-    <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('MainHome')}
-    ><Text style={styles.buttonText}>Login</Text>
-    </TouchableOpacity>
-    </View>
-  );
-};
+import LoginScreen from './components/login_components/LoginScreen';
 
 const MainHomePage = () => {
   return (
@@ -47,7 +19,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={HomeScreen}
+          component={LoginScreen}
           options={{title: 'Welcome', headerShown: true}}
         />
         <Stack.Screen
@@ -93,18 +65,5 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     //fontFamily: 'Montserrat',
     fontWeight: '400',
-  },
-  headText: {  // header text
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: '600',
-    fontSize: 35,
-    padding: 20,
-  },
-  bodyText: {  // text following header text
-    alignItems: "center",
-    justifyContent: "center",
-    //fontFamily: 'Montserrat',
-    fontSize: 15,
   },
 });
