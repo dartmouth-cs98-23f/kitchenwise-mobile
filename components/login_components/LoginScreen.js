@@ -53,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
             onClick={() => {
                 // TODO : Add Auth here later 
                 closeLoginModal();
-                navigation.navigate('MainHome');
+                navigation.navigate('MainHomePage');
             }}
           />
           <LoginButton text="Cancel" onClick={closeLoginModal} isBlack={false} />

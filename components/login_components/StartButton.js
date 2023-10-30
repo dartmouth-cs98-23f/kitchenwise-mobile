@@ -4,7 +4,7 @@ const StartButton = ({navigation}) => {  // button to get started
   return (
     <View style={styles.buttonContainer}>
     <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('MainHome')}
+      onPress={() => navigation.navigate('MainHomePage')}
     ><Text style={styles.buttonText}>Continue</Text>
     </TouchableOpacity>
     </View>
