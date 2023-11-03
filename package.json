@@ -13,6 +13,7 @@
     "@react-navigation/devtools": "^6.0.20",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.16",
+    "axios": "^1.6.0",
     "expo": "^49.0.16",
     "expo-dev-client": "~2.4.11",
     "expo-status-bar": "~1.6.0",
