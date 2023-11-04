@@ -22,11 +22,9 @@ export default function App() {
             component={MainHomePage}
             options={{ title: "Main Home Page", headerShown: false }}
           />
-
           {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
         </Stack.Navigator>
       </NavigationContainer>
-      <RevisionModal />
     </>
   );
 }
