@@ -13,26 +13,11 @@ import { Button, Input, ProgressButton, Select } from "../form_components";
 import InventoryContext from "../../context/inventory-context";
 import UserContext from "../../context/user-context";
 
-const DEFAULT_ACTION = {
-  _id: "65429e607ef8587232415ef5",
-  ownerId: "653997da2d9889247c37976e",
-  inventoryId: "653ae18c69e3eb4c94de9af2",
-  foodItem: {
-    name: "butter",
-    quantity: 5,
-    unit: "oz",
-    tags: [],
-    expirationDate: new Date("2023-11-08"),
-  },
-  date: new Date("2023-11-01T18:52:16.703Z"),
-  status: "PENDING",
-};
-
 // How many seconds the modal stays open before autoconfirming
 const MAX_TIME_OPEN = 10;
 
 const RevisionModal = () => {
-  const [currAction, setCurrAction] = useState(DEFAULT_ACTION);
+  const [currAction, setCurrAction] = useState(null);
   const [foodName, setFoodName] = useState(null);
   const [foodQuantity, setFoodQuantity] = useState(null);
   const [foodUnit, setFoodUnit] = useState(null);
@@ -41,45 +26,50 @@ const RevisionModal = () => {
   const [timeOpen, setTimeOpen] = useState(0);
   const { userInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
+
+  // initiates a looped interval that polls backend for any pending actions
   useEffect(() => {
     const intervalId = setInterval(
       () =>
         getPendingAction(userId).then((pendingAction) => {
-          if (pendingAction) {
+          // if there is a new pending action, replace the current one
+          if (pendingAction && pendingAction._id != currAction?._id) {
             setCurrAction(pendingAction);
-          } else if (currAction != null) {
-            // setReviseFood(null);
-            // setActionId(null);
+            // if there is no longer a pending action and we're still displaying one, reset it:
+            //   backend as the single source of truth
+          } else if (pendingAction == null && currAction != null) {
+            setCurrAction(null);
+            setActionId(null);
           }
         }),
       500
     );
     // useEffect "destructor" that clears the previous interval whenever this useEffect is re-run
     return () => clearInterval(intervalId);
-  }, [userId, setCurrAction]);
+  }, [userId, setCurrAction, currAction]);
+
+  // when a new action is loaded, populate the form values
   useEffect(() => {
     if (currAction != null) {
+      setTimeOpen(0);
       const { foodItem, inventoryId } = currAction;
       setFoodName(foodItem.name);
       setFoodQuantity(foodItem.quantity.toString());
       setFoodUnit(foodItem.unit);
-      setFoodExpiration(moment(foodItem.expirationDate).format("L"));
+      console.log(foodItem?.expirationDate);
+      if (foodItem.expirationDate)
+        setFoodExpiration(
+          moment.utc(foodItem.expirationDate.toLocaleString()).format("L")
+        );
       setActionInventory(inventoryId);
       const intervalId = setInterval(() => {
         setTimeOpen((prev) => prev + 0.25);
       }, 250);
       return () => clearInterval(intervalId);
     }
-  }, [
-    currAction,
-    setFoodName,
-    setFoodQuantity,
-    setFoodUnit,
-    setFoodExpiration,
-    setActionInventory,
-    setTimeOpen,
-  ]);
+  }, [currAction]);
 
+  // every time the timeOpen changes, check if it's past the max, and if so, auto-confirm
   useEffect(() => {
     if (currAction) {
       if (timeOpen >= MAX_TIME_OPEN) {
@@ -89,18 +79,22 @@ const RevisionModal = () => {
     }
   }, [timeOpen, onConfirm, setCurrAction]);
 
+  // sends rejection to backend
   const onCancel = useCallback(() => {
     rejectAction(currAction._id).then(() => {
       setCurrAction(null);
     });
   }, [currAction, setCurrAction]);
+
+  // builds new AddAction object with form data and sends it to the backend
+  // TODO: validation
   const onConfirm = useCallback(() => {
     const newAction = currAction;
     const newFoodItem = {
       name: foodName,
       quantity: Number(foodQuantity),
       unit: foodUnit,
-      expirationDate: moment(foodExpiration, "L").toDate(),
+      expirationDate: moment.utc(foodExpiration, "L").toDate(),
     };
     newAction.foodItem = newFoodItem;
     newAction.inventoryId = actionInventory;
@@ -114,6 +108,7 @@ const RevisionModal = () => {
     foodExpiration,
     actionInventory,
     setCurrAction,
+    currAction,
   ]);
   return (
     <Modal
