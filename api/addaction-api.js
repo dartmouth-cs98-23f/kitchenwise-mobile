@@ -11,6 +11,10 @@ export const getPendingAction = async (userId) => {
   ).data;
 };
 
+export const reviseAction = async (action) => {
+  return await axios.put(`${URL}/revise`, action);
+};
+
 export const confirmAction = async (actionId) => {
   return await axios.post(`${URL}/confirm`, { actionId });
 };

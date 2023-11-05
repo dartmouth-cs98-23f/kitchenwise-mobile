@@ -4,20 +4,16 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 function Button(props) {
   return (
     <TouchableOpacity
-      style={{
-        ...styles.buttonContainer,
+      style={[
+        styles.buttonContainer,
         // ensures that containerstyle overwrites props.color, especially if props.color is undefined
-        ...{ backgroundColor: props.color },
-        ...props.containerStyle,
-      }}
-      onPress={props.onClick}
+        { backgroundColor: props.color },
+        props.containerStyle,
+      ]}
+      onPress={props.onPress}
     >
       <Text
-        style={{
-          ...styles.buttonText,
-          ...{ color: props.textColor },
-          ...props.textStyle,
-        }}
+        style={[styles.buttonText, { color: props.textColor }, props.textStyle]}
       >
         {props.text}
       </Text>

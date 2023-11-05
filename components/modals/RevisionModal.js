@@ -1,13 +1,15 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Text, StyleSheet, Modal, View } from "react-native";
-import { Picker } from "react-native-web";
+import { Picker } from "@react-native-picker/picker";
+import moment from "moment";
 import {
   confirmAction,
   getPendingAction,
   rejectAction,
+  reviseAction,
 } from "../../api/addaction-api";
 import themeStyles from "../../styles";
-import { Button, Input, Select } from "../form_components";
+import { Button, Input, ProgressButton, Select } from "../form_components";
 import InventoryContext from "../../context/inventory-context";
 import UserContext from "../../context/user-context";
 
@@ -20,13 +22,23 @@ const DEFAULT_ACTION = {
     quantity: 5,
     unit: "oz",
     tags: [],
+    expirationDate: new Date("2023-11-08"),
   },
   date: new Date("2023-11-01T18:52:16.703Z"),
   status: "PENDING",
 };
 
+// How many seconds the modal stays open before autoconfirming
+const MAX_TIME_OPEN = 10;
+
 const RevisionModal = () => {
-  const [reviseAction, setReviseAction] = useState(DEFAULT_ACTION);
+  const [currAction, setCurrAction] = useState(DEFAULT_ACTION);
+  const [foodName, setFoodName] = useState(null);
+  const [foodQuantity, setFoodQuantity] = useState(null);
+  const [foodUnit, setFoodUnit] = useState(null);
+  const [foodExpiration, setFoodExpiration] = useState(null);
+  const [actionInventory, setActionInventory] = useState(null);
+  const [timeOpen, setTimeOpen] = useState(0);
   const { userInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
   useEffect(() => {
@@ -34,8 +46,8 @@ const RevisionModal = () => {
       () =>
         getPendingAction(userId).then((pendingAction) => {
           if (pendingAction) {
-            setReviseAction(pendingAction);
-          } else if (reviseAction != null) {
+            setCurrAction(pendingAction);
+          } else if (currAction != null) {
             // setReviseFood(null);
             // setActionId(null);
           }
@@ -44,9 +56,72 @@ const RevisionModal = () => {
     );
     // useEffect "destructor" that clears the previous interval whenever this useEffect is re-run
     return () => clearInterval(intervalId);
-  }, [userId, setReviseAction]);
+  }, [userId, setCurrAction]);
+  useEffect(() => {
+    if (currAction != null) {
+      const { foodItem, inventoryId } = currAction;
+      setFoodName(foodItem.name);
+      setFoodQuantity(foodItem.quantity.toString());
+      setFoodUnit(foodItem.unit);
+      setFoodExpiration(moment(foodItem.expirationDate).format("L"));
+      setActionInventory(inventoryId);
+      const intervalId = setInterval(() => {
+        setTimeOpen((prev) => prev + 0.25);
+      }, 250);
+      return () => clearInterval(intervalId);
+    }
+  }, [
+    currAction,
+    setFoodName,
+    setFoodQuantity,
+    setFoodUnit,
+    setFoodExpiration,
+    setActionInventory,
+    setTimeOpen,
+  ]);
+
+  useEffect(() => {
+    if (currAction) {
+      if (timeOpen >= MAX_TIME_OPEN) {
+        onConfirm();
+        setCurrAction(null);
+      }
+    }
+  }, [timeOpen, onConfirm, setCurrAction]);
+
+  const onCancel = useCallback(() => {
+    rejectAction(currAction._id).then(() => {
+      setCurrAction(null);
+    });
+  }, [currAction, setCurrAction]);
+  const onConfirm = useCallback(() => {
+    const newAction = currAction;
+    const newFoodItem = {
+      name: foodName,
+      quantity: Number(foodQuantity),
+      unit: foodUnit,
+      expirationDate: moment(foodExpiration, "L").toDate(),
+    };
+    newAction.foodItem = newFoodItem;
+    newAction.inventoryId = actionInventory;
+    reviseAction(newAction).then(() => {
+      setCurrAction(null);
+    });
+  }, [
+    foodName,
+    foodQuantity,
+    foodUnit,
+    foodExpiration,
+    actionInventory,
+    setCurrAction,
+  ]);
   return (
-    <Modal visible={reviseAction != null} transparent={true}>
+    <Modal
+      visible={currAction != null}
+      transparent={true}
+      animationIn={"slideInUp"}
+      animationOut={"slideOutDown"}
+    >
       <View style={styles.modalPadding}>
         <View style={styles.modalWrapper}>
           <View style={styles.modalHeader}>
@@ -59,8 +134,11 @@ const RevisionModal = () => {
             <View>
               <Text style={themeStyles.text.h5}>Food Title</Text>
               <Input
-                defaultValue={reviseAction?.foodItem?.name}
+                value={foodName}
                 style={styles.formInput}
+                onChangeText={(val) => {
+                  setFoodName(val);
+                }}
               />
             </View>
             <View style={styles.formRow}>
@@ -68,29 +146,43 @@ const RevisionModal = () => {
                 <Text style={themeStyles.text.h5}>Quantity</Text>
                 <Input
                   keyboardType="numeric"
-                  defaultValue={reviseAction?.foodItem?.quantity?.toString()}
+                  defaultValue={foodQuantity}
                   style={styles.formInput}
+                  onChangeText={(val) => {
+                    setFoodQuantity(val);
+                  }}
                 />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={themeStyles.text.h5}>Unit</Text>
                 <Input
-                  defaultValue={reviseAction?.foodItem?.unit}
+                  defaultValue={foodUnit}
                   style={styles.formInput}
+                  onChangeText={(val) => {
+                    setFoodUnit(val);
+                  }}
                 />
               </View>
             </View>
             <View>
               <Text style={themeStyles.text.h5}>Expiration Date</Text>
               <Input
-                defaultValue={reviseAction?.foodItem?.expirationDate}
+                defaultValue={foodExpiration}
                 style={styles.formInput}
-                placeholder="Optional"
+                placeholder="MM/DD/YYYY (Optional)"
+                onChangeText={(val) => {
+                  setFoodExpiration(val);
+                }}
               />
             </View>
             <View>
               <Text style={themeStyles.text.h5}>Inventory</Text>
-              <Select selectedValue={reviseAction?.inventoryId}>
+              <Select
+                selectedValue={actionInventory}
+                onValueChange={(itemVal, itemIdx) => {
+                  setActionInventory(itemVal);
+                }}
+              >
                 {userInventories?.map((inv) => (
                   <Picker.Item
                     label={inv.title}
@@ -100,20 +192,22 @@ const RevisionModal = () => {
                 ))}
               </Select>
             </View>
-            <View>
-              <Button
-                text="Cancel"
-                color={themeStyles.colors.failure}
-                textColor="white"
-                onPress={rejectAction}
-              />
-              <Button
-                text="Confirm"
-                color={themeStyles.colors.success}
-                textColor="white"
-                onPress={confirmAction}
-              />
-            </View>
+          </View>
+          <View style={styles.modalFooter}>
+            <Button
+              text="Cancel"
+              color={themeStyles.colors.failure}
+              textColor="white"
+              onPress={onCancel}
+            />
+            <ProgressButton
+              text="Confirm"
+              color="#7EB37D"
+              progressColor="#158013"
+              textColor="white"
+              progress={timeOpen / MAX_TIME_OPEN}
+              onPress={onConfirm}
+            />
           </View>
         </View>
       </View>
@@ -125,6 +219,10 @@ const styles = StyleSheet.create({
   modalWrapper: {
     backgroundColor: "#FFFFFF",
     width: "80%",
+    padding: 16,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
   },
   modalPadding: {
     height: "100%",
@@ -134,14 +232,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalHeader: {
-    padding: 16,
-  },
   modalBody: {
     backgroundColor: "#FFF",
-    padding: 16,
     flexDirection: "column",
-    gap: 12,
   },
   formRow: {
     flexDirection: "row",

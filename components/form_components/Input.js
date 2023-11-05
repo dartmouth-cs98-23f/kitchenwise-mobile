@@ -4,11 +4,12 @@ import { TextInput, StyleSheet } from "react-native";
 function Input(props) {
   return (
     <TextInput
-      style={{ ...styles.input, ...props.style }}
+      style={[styles.input, props.style]}
       placeholder={props.placeholder}
       value={props.value}
       defaultValue={props.defaultValue}
       keyboardType={props.keyboardType}
+      onChangeText={props.onChangeText}
     ></TextInput>
   );
 }

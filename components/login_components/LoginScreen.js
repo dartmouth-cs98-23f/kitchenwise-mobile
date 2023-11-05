@@ -60,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
           <LoginButton
             text="Login"
             isBlack={true}
-            onClick={() => {
+            onPress={() => {
               // TODO : Add Auth here later
               sendLogin();
               closeLoginModal();
@@ -69,17 +69,17 @@ const LoginScreen = ({ navigation }) => {
           />
           <LoginButton
             text="Cancel"
-            onClick={closeLoginModal}
+            onPress={closeLoginModal}
             isBlack={false}
           />
         </View>
       </Modal>
       <CenterText />
       <View style={styles.buttonContainer}>
-        <LoginButton text="Login" onClick={openLoginModal} isBlack={true} />
+        <LoginButton text="Login" onPress={openLoginModal} isBlack={true} />
         <LoginButton
           text="Create New Account"
-          onClick={newAccountHandler}
+          onPress={newAccountHandler}
           isBlack={false}
         />
       </View>
