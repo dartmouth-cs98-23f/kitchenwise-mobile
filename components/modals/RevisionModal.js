@@ -1,30 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, Modal, View, TextInput } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { Text, StyleSheet, Modal, View } from "react-native";
+import { Picker } from "react-native-web";
 import {
   confirmAction,
   getPendingAction,
   rejectAction,
 } from "../../api/addaction-api";
 import themeStyles from "../../styles";
-import { Button, Input } from "../form_components";
+import { Button, Input, Select } from "../form_components";
+import InventoryContext from "../../context/inventory-context";
+import UserContext from "../../context/user-context";
 
-const DEFAULT_FOOD = {
-  name: "Carrot",
-  quantity: "8",
-  unit: "slices",
+const DEFAULT_ACTION = {
+  _id: "65429e607ef8587232415ef5",
+  ownerId: "653997da2d9889247c37976e",
+  inventoryId: "653ae18c69e3eb4c94de9af2",
+  foodItem: {
+    name: "butter",
+    quantity: 5,
+    unit: "oz",
+    tags: [],
+  },
+  date: new Date("2023-11-01T18:52:16.703Z"),
+  status: "PENDING",
 };
 
 const RevisionModal = () => {
-  const [reviseFood, setReviseFood] = useState(DEFAULT_FOOD);
-  const [actionId, setActionId] = useState(null);
+  const [reviseAction, setReviseAction] = useState(DEFAULT_ACTION);
+  const { userInventories } = useContext(InventoryContext);
+  const { userId } = useContext(UserContext);
   useEffect(() => {
     const intervalId = setInterval(
       () =>
-        getPendingAction().then((pendingAction) => {
+        getPendingAction(userId).then((pendingAction) => {
           if (pendingAction) {
-            setReviseFood(pendingAction.foodItem);
-            setActionId(pendingAction._id);
-          } else if (reviseFood != null) {
+            setReviseAction(pendingAction);
+          } else if (reviseAction != null) {
             // setReviseFood(null);
             // setActionId(null);
           }
@@ -33,9 +44,9 @@ const RevisionModal = () => {
     );
     // useEffect "destructor" that clears the previous interval whenever this useEffect is re-run
     return () => clearInterval(intervalId);
-  }, [setReviseFood, setActionId]);
+  }, [userId, setReviseAction]);
   return (
-    <Modal visible={reviseFood != null} transparent={true}>
+    <Modal visible={reviseAction != null} transparent={true}>
       <View style={styles.modalPadding}>
         <View style={styles.modalWrapper}>
           <View style={styles.modalHeader}>
@@ -47,21 +58,24 @@ const RevisionModal = () => {
           <View style={styles.modalBody}>
             <View>
               <Text style={themeStyles.text.h5}>Food Title</Text>
-              <Input defaultValue={reviseFood?.name} style={styles.formInput} />
+              <Input
+                defaultValue={reviseAction?.foodItem?.name}
+                style={styles.formInput}
+              />
             </View>
             <View style={styles.formRow}>
               <View style={{ flex: 1 }}>
                 <Text style={themeStyles.text.h5}>Quantity</Text>
                 <Input
                   keyboardType="numeric"
-                  defaultValue={reviseFood?.quantity}
+                  defaultValue={reviseAction?.foodItem?.quantity?.toString()}
                   style={styles.formInput}
                 />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={themeStyles.text.h5}>Unit</Text>
                 <Input
-                  defaultValue={reviseFood?.unit}
+                  defaultValue={reviseAction?.foodItem?.unit}
                   style={styles.formInput}
                 />
               </View>
@@ -69,10 +83,22 @@ const RevisionModal = () => {
             <View>
               <Text style={themeStyles.text.h5}>Expiration Date</Text>
               <Input
-                defaultValue={reviseFood?.expirationDate}
+                defaultValue={reviseAction?.foodItem?.expirationDate}
                 style={styles.formInput}
                 placeholder="Optional"
               />
+            </View>
+            <View>
+              <Text style={themeStyles.text.h5}>Inventory</Text>
+              <Select selectedValue={reviseAction?.inventoryId}>
+                {userInventories?.map((inv) => (
+                  <Picker.Item
+                    label={inv.title}
+                    value={inv._id}
+                    key={inv._id}
+                  />
+                ))}
+              </Select>
             </View>
             <View>
               <Button

@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { View, Modal, StyleSheet, Text, TextInput } from "react-native";
 import { Input } from "../form_components";
 import LoginButton from "./LoginButton";
+import UserContext from "../../context/user-context";
+
+const DEFAULT_USER_ID = "653997da2d9889247c37976e";
 
 const LoginScreen = ({ navigation }) => {
   const [isNewAccount, setIsNewAccount] = useState(false);
@@ -9,20 +12,26 @@ const LoginScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { userId, setUserId } = useContext(UserContext);
 
-  function newAccountHandler() {
+  const newAccountHandler = useCallback(() => {
     setIsNewAccount(true);
     setModalVisible(true);
-  }
+  }, [setIsNewAccount, setModalVisible]);
 
-  function openLoginModal() {
+  const openLoginModal = useCallback(() => {
     setModalVisible(true);
-  }
+  }, [setModalVisible]);
 
-  function closeLoginModal() {
+  const closeLoginModal = useCallback(() => {
     setModalVisible(false);
     setIsNewAccount(false);
-  }
+  }, [setModalVisible, setIsNewAccount]);
+
+  const sendLogin = useCallback(() => {
+    // TODO: rig up to API
+    setUserId(DEFAULT_USER_ID);
+  }, [setUserId]);
 
   return (
     <View style={styles.container}>
@@ -53,6 +62,7 @@ const LoginScreen = ({ navigation }) => {
             isBlack={true}
             onClick={() => {
               // TODO : Add Auth here later
+              sendLogin();
               closeLoginModal();
               navigation.navigate("MainHomePage");
             }}
