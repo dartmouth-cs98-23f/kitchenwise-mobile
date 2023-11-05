@@ -1,8 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, StatusBar, Image, TouchableOpacity } from 'react-native';
+import {React, useState} from 'react';
+import { StyleSheet, Text, View, FlatList, StatusBar, TouchableOpacity, Image, Modal} from 'react-native';
 import RecipeCard from '../components/recipeScreen_components/RecipeCard';
 import Navbar from './Navbar';
 import { Ionicons } from '@expo/vector-icons';
+
 
 const recipes = [
   {
@@ -68,31 +69,64 @@ const recipes = [
     difficulty: 'Medium',
     cookTIime: '45 min',
   },
-  // Add more recipe data as needed
 ];
 
 const MainHomePage = ({ navigation }) => {
- 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currRecipe, setCurrRecipe] = useState({});
+  
+
+  const onRecipePress = (recipe) => {
+    setModalVisible(true);
+    setCurrRecipe(recipe);
+    console.log(recipe);   // could make a DB query request here
+  }
+
+  const onBackPress = () => {
+    setModalVisible(false);
+  };
+
   const renderItems = (itemData) => {
       return(
         <View key={itemData.id}>
-          <RecipeCard recipe={itemData.item} />
+          <RecipeCard recipe={itemData.item} onPress={onRecipePress}/>
         </View>
       )
   }
  
   return (
     <>
-      <StatusBar style="dark" />
-      <View style={styles.mainHomeContainer}>
-        <View style={styles.mainHomeHeaderContainer}>
-          <Text style={styles.mainHomeTitle} >My Recipes</Text>
-          <Ionicons name="search-outline" size={36} style={styles.searchButton}/>
-        </View>
-        <View style={styles.recipeListContainer}>
-          <FlatList data={recipes} renderItem = {renderItems} numColumns={2}/>
-        </View>
+    <StatusBar style="dark" />
+
+    <Modal visible={modalVisible} animationType="slide" transparent={false}>
+      <View style={styles.recipeModalContainer}>
+          <TouchableOpacity onPress={onBackPress}>
+            <Ionicons name="arrow-back-outline" size={36} style={styles.backButton}/>
+          </TouchableOpacity>
+          <Image style={styles.image} source={ { uri: currRecipe.image }}/>
+          <Text style={styles.modalSubheader}> You have </Text>
+          <FlatList>
+
+          </FlatList>
+          <Text style={styles.modalSubheader} > You need </Text>
+          <FlatList>
+
+          </FlatList>
       </View>
+    </Modal>
+   
+    <View style={styles.mainHomeContainer}>
+      <View style={styles.mainHomeHeaderContainer}>
+        <Text style={styles.mainHomeTitle} >My Recipes</Text>
+        <TouchableOpacity>
+          <Ionicons name="search-outline" size={36} style={styles.searchButton}/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.recipeListContainer}>
+        <FlatList data={recipes} renderItem = {renderItems} numColumns={2} alwaysBounceVertical={true}/>
+      </View>
+    </View>
+    
       <Navbar />
     </>
   );
@@ -117,12 +151,35 @@ const styles = StyleSheet.create({
 
   },
   recipeListContainer: {
-    flex: 8,
+    flex: 10,
   },
   searchButton: {
     alignItems: 'center',
     marginRight: "10%"
   },
+  recipeModalContainer: {
+    flex: 1,
+    // backgroundColor: "yellow", for debugging
+    justifyContent: 'flex-start',
+  },
+  image: {
+    width: "80",
+    height: "30%",
+    margin: 5,
+
+  },
+  backButton: {
+    margin: "5%",
+    marginTop: "10%",
+    // backgroundColor: 'red', for debugging
+  },
+  modalSubheader: {
+    color: "#353434d9",
+    fontSize: 20,
+    fontWeight: 600,
+    margin: "5%"
+  }
+
   
 });
 

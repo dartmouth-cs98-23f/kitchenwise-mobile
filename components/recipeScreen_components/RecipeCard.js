@@ -1,14 +1,24 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const RecipeCard = ({recipe}) => {
-  const imageSource = { uri: recipe.image }; 
+const RecipeCard = (props) => {
+
+  const recipeData = props.recipe;
+  const imageSource = { uri: recipeData.image }; 
+
+  const handleOnPress = () => {
+    props.onPress(recipeData);
+  };
+
   return (
     <View style={styles.card}>
-      <Image source={imageSource} style={styles.cardImage} />
-      <View style={styles.cardLabelContainer}>
-       <Text style={styles.cardLabel}>{recipe.title}</Text>
-      </View>
+      <TouchableOpacity onPress={handleOnPress}>
+        <Image source={imageSource} style={styles.cardImage} />
+        <View style={styles.cardLabelContainer}>
+          <Text style={styles.cardLabel}>{recipeData.title}</Text>
+        </View>
+      </TouchableOpacity>
+     
     </View>
   );
 };
