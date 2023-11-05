@@ -1,20 +1,98 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, StatusBar, Image, TouchableOpacity } from 'react-native';
+import RecipeCard from '../components/recipeScreen_components/RecipeCard';
 import Navbar from './Navbar';
+import { Ionicons } from '@expo/vector-icons';
+
+const recipes = [
+  {
+    key: '1',
+    title: 'Recipe 1',
+    image: '../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg',
+    difficulty: 'Easy',
+    cookTime: '30 min',
+  },
+  {
+    key: '2',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '3',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '4',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '5',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '6',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '7',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '8',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  {
+    key: '9',
+    title: 'Recipe 2',
+    image: '../assets/healthFood.jpg',
+    difficulty: 'Medium',
+    cookTIime: '45 min',
+  },
+  // Add more recipe data as needed
+];
 
 const MainHomePage = ({ navigation }) => {
+ 
+  const renderItems = (itemData) => {
+      return(
+        <View key={itemData.id}>
+          <RecipeCard recipe={itemData.item} />
+        </View>
+      )
+  }
+ 
   return (
-    // Use a fragment to wrap adjacent elements
     <>
+      <StatusBar style="dark" />
       <View style={styles.mainHomeContainer}>
-        <Text style={styles.mainHomeTitle}>Homepage</Text>
-        <Text style={styles.mainHomeSubtitle}>Explore the Future of Cooking with Alexa</Text>
-        <TouchableOpacity 
-          style={styles.goBackButton} 
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.goBackButtonText}>Go Back</Text>
-        </TouchableOpacity>
+        <View style={styles.mainHomeHeaderContainer}>
+          <Text style={styles.mainHomeTitle} >My Recipes</Text>
+          <Ionicons name="search-outline" size={36} style={styles.searchButton}/>
+        </View>
+        <View style={styles.recipeListContainer}>
+          <FlatList data={recipes} renderItem = {renderItems} numColumns={2}/>
+  
+        </View>
       </View>
       <Navbar />
     </>
@@ -24,35 +102,32 @@ const MainHomePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainHomeContainer: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 60, // Add padding to avoid overlap with the Navbar
+    flexDirection: 'column',
+    backgroundColor: "red",
+  
+  },
+  mainHomeHeaderContainer: {
+    flex: 2,
+    backgroundColor: "yellow",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row"
   },
   mainHomeTitle: {
     fontSize: 28,
     fontWeight: '600',
-    marginBottom: 20,
-  },
-  mainHomeSubtitle: {
-    fontSize: 18,
-    marginBottom: 40,
-    textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-  goBackButton: {
-    backgroundColor: '#000000',
-    padding: 10,
-    borderRadius: 100,
-    width: '50%',
-    alignItems: 'center',
-  },
-  goBackButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '400',
-  },
-  // Ensure to close the styles object correctly
-});
+    paddingLeft: "10%",
 
+  },
+  recipeListContainer: {
+    flex: 8,
+    backgroundColor: "blue",
+  },
+  searchButton: {
+    alignItems: 'center',
+    marginRight: "10%"
+  },
+  
+});
 
 export default MainHomePage;
