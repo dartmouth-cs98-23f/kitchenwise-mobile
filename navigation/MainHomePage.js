@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    margin: 5,
+    padding: "2%"
   },
   mainHomeHeaderContainer: {
     flex: 2,
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
 
   },
   recipeListContainer: {
+    
     flex: 10,
   },
   searchButton: {
