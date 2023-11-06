@@ -31,17 +31,21 @@ const RevisionModal = () => {
   useEffect(() => {
     const intervalId = setInterval(
       () =>
-        getPendingAction(userId).then((pendingAction) => {
-          // if there is a new pending action, replace the current one
-          if (pendingAction && pendingAction._id != currAction?._id) {
-            setCurrAction(pendingAction);
-            // if there is no longer a pending action and we're still displaying one, reset it:
-            //   backend as the single source of truth
-          } else if (pendingAction == null && currAction != null) {
-            setCurrAction(null);
-            setActionId(null);
-          }
-        }),
+        getPendingAction(userId)
+          .then((pendingAction) => {
+            // if there is a new pending action, replace the current one
+            if (pendingAction && pendingAction._id != currAction?._id) {
+              setCurrAction(pendingAction);
+              // if there is no longer a pending action and we're still displaying one, reset it:
+              //   backend as the single source of truth
+            } else if (pendingAction == null && currAction != null) {
+              setCurrAction(null);
+              setActionId(null);
+            }
+          })
+          .catch(() => {
+            console.log("Polling failed - not online");
+          }),
       500
     );
     // useEffect "destructor" that clears the previous interval whenever this useEffect is re-run
@@ -56,7 +60,6 @@ const RevisionModal = () => {
       setFoodName(foodItem.name);
       setFoodQuantity(foodItem.quantity.toString());
       setFoodUnit(foodItem.unit);
-      console.log(foodItem?.expirationDate);
       if (foodItem.expirationDate)
         setFoodExpiration(
           moment.utc(foodItem.expirationDate.toLocaleString()).format("L")
