@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
   mainHomeContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    margin: 5,
   },
   mainHomeHeaderContainer: {
     flex: 2,
