@@ -56,7 +56,6 @@ const RevisionModal = () => {
       setFoodName(foodItem.name);
       setFoodQuantity(foodItem.quantity.toString());
       setFoodUnit(foodItem.unit);
-      console.log(foodItem?.expirationDate);
       if (foodItem.expirationDate)
         setFoodExpiration(
           moment.utc(foodItem.expirationDate.toLocaleString()).format("L")
