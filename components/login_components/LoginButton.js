@@ -1,51 +1,30 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Button } from "../form_components";
 
 function LoginButton(props) {
   return (
-    <TouchableOpacity
-      style={props.isBlack ? styles.buttonBlack : styles.buttonWhite}
-      onPress={props.onClick}
-    >
-      <Text style={props.isBlack ? styles.buttonTextWhite : styles.buttonTextBlack}>
-        {props.text}
-      </Text>
-    </TouchableOpacity>
+    <Button
+      {...props}
+      textColor={
+        props.isBlack ? styles.buttonTextWhite : styles.buttonTextBlack
+      }
+      containerStyle={props.isBlack ? styles.buttonBlack : styles.buttonWhite}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   buttonBlack: {
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    borderRadius: 100,
-    width: '100%',
-    marginBottom: 15,
-    height: 48,
+    backgroundColor: "black",
   },
   buttonWhite: {
-    backgroundColor: 'white',
-    borderColor: 'black',
+    backgroundColor: "white",
+    borderColor: "black",
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    borderRadius: 100,
-    width: '100%',
-    marginBottom: 15,
-    height: 48,
-
   },
-  buttonTextWhite: {
-    color: '#FFFFFF',
-    fontWeight: '400',
-  },
-  buttonTextBlack: {
-    color: 'black',
-    fontWeight: '400',
-  },
+  buttonTextWhite: "white",
+  buttonTextBlack: "black",
 });
 
 export default LoginButton;
