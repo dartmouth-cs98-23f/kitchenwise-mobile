@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     // header text
     alignItems: "center",
     justifyContent: "center",
-    fontWeight: "600",
+    // fontWeight: 600,
     fontSize: 35,
     padding: 20,
   },
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     // header text
     flex: 1,
     marginTop: "50%",
-    fontWeight: "600",
+    // fontWeight: 600,
     fontSize: 35,
     padding: 20,
     marginBottom: 0,

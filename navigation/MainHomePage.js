@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    padding: "2%"
+    padding: '2%',
   },
   mainHomeHeaderContainer: {
     flex: 2,
@@ -174,8 +174,8 @@ const styles = StyleSheet.create({
   },
   mainHomeTitle: {
     fontSize: 28,
-    fontWeight: "600",
-    paddingLeft: "10%",
+    // fontWeight: 600,
+    paddingLeft: '10%',
   },
   recipeListContainer: {
     
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-    fontWeight: "400",
+    // fontWeight: 400,
   },
   image: {
     width: "80",
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   modalSubheader: {
     color: "#353434d9",
     fontSize: 20,
-    fontWeight: 600,
+    // fontWeight: 600,
     margin: "5%",
   },
 });
