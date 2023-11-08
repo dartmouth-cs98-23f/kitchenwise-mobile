@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   buttonText: {
-    fontWeight: "400",
+    // fontWeight: 400,
   },
 });
 

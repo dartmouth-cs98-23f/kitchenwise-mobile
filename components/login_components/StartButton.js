@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {  // text inside butoon
     color: "#FFFFFF",
-    fontWeight: '400',
+    // fontWeight: 400,
   },
 
 });

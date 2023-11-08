@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   cardLabel: {
     marginTop: 10,
     fontSize: 16,
-    fontWeight: 400,
+    // fontWeight: 400,
     alignSelf: "center"
   },
 });
