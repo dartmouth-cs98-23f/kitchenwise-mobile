@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   buttonText: {
-    fontWeight: "400",
+    // fontWeight: 400,
   },
   progressBackground: {
     height: 48,

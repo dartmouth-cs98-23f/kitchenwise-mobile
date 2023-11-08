@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   mainHomeTitle: {
     fontSize: 28,
-    fontWeight: "600",
+    // fontWeight: 600,
     paddingLeft: "10%",
   },
   recipeListContainer: {
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-    fontWeight: "400",
+    // fontWeight: 400,
   },
   image: {
     width: "80",
