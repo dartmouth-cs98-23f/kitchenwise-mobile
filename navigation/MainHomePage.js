@@ -105,9 +105,11 @@ const MainHomePage = ({ navigation }) => {
 
   const renderItems = (itemData) => {
     return (
-      <View key={itemData.id}>
-        <RecipeCard recipe={itemData.item} onPress={onRecipePress} />
-      </View>
+      <RecipeCard
+        key={itemData.id}
+        recipe={itemData.item}
+        onPress={onRecipePress}
+      />
     );
   };
 
@@ -146,6 +148,7 @@ const MainHomePage = ({ navigation }) => {
         </View>
         <View style={styles.recipeListContainer}>
           <FlatList
+            style={{ width: "100%" }}
             data={recipes}
             renderItem={renderItems}
             numColumns={2}
@@ -162,15 +165,15 @@ const MainHomePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainHomeContainer: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    padding: "2%"
+    flexDirection: "column",
+    backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    flex: 2,
+    // flex: 2,
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
+    width: "100%",
   },
   mainHomeTitle: {
     fontSize: 28,
@@ -178,8 +181,7 @@ const styles = StyleSheet.create({
     paddingLeft: "10%",
   },
   recipeListContainer: {
-    
-    flex: 10,
+    width: "100%",
   },
   searchButton: {
     alignItems: "center",
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
   modalSubheader: {
     color: "#353434d9",
     fontSize: 20,
-    fontWeight: 600,
+    fontWeight: "600",
     margin: "5%",
   },
 });
