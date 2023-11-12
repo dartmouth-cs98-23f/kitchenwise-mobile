@@ -1,37 +1,42 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const Navbar = () => {
     const navigation = useNavigation();
+    const [opacity, setOpacity] = useState(new Animated.Value(1));
 
-    const navigateToProfile = () => {
-        navigation.navigate('Profile');
+    const navigateWithAnimation = (routeName) => {
+        // Fade out
+        Animated.timing(opacity, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+        }).start(() => {
+            navigation.navigate(routeName);
+            // Fade in
+            Animated.timing(opacity, {
+                toValue: 1,
+                duration: 200,
+                useNativeDriver: true,
+            }).start();
+        });
     };
-
-    const navigateToMainHomePage = () => {
-        // Use the navigate function to go to the MainHomePage
-        navigation.navigate('MainHomePage');
-    };
-
-    const navigateToPantryPage = () => {
-        navigation.navigate('Pantry');
-    }
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.button} onPress={navigateToPantryPage}>
+            <Animated.View style={[styles.container, { opacity }]}>
+                <TouchableOpacity style={styles.button} onPress={() => navigateWithAnimation('Pantry')}>
                     <Ionicons name="file-tray-stacked-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={navigateToMainHomePage}>
+                <TouchableOpacity style={styles.button} onPress={() => navigateWithAnimation('MainHomePage')}>
                     <Ionicons name="home-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
+                <TouchableOpacity style={styles.button} onPress={() => navigateWithAnimation('Profile')}>
                     <Ionicons name="person-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
         </SafeAreaView>
     );
 };
