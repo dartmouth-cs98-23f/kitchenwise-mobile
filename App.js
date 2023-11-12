@@ -3,8 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./components/login_components/LoginScreen";
 import MainHomePage from "./navigation/MainHomePage";
-import ProfilePage from "./navigation/ProfilePage";
-import PantryPage from "./navigation/ProfilePage";
+import ProfileScreen from "./components/profile_components/ProfileScreen";
 import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
@@ -43,10 +42,10 @@ export default function App() {
               <Stack.Screen
                 name="MainHomePage"
                 component={MainHomePage}
-                options={{ title: "Main Home Page", headerShown: false }}
+                options={{ title: "Main Home Page", headerBackVisible: false, headerTitle: "" }}
               />
-              <Stack.Screen name="ProfilePage" component={ProfilePage} />
-              <Stack.Screen name="PantryPage" component={PantryPage} />
+              <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerBackVisible: false }}/>
+              {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
             </Stack.Navigator>
           </NavigationContainer>
         </InventoryContext.Provider>

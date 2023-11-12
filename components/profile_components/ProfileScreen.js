@@ -1,0 +1,84 @@
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import Navbar from "../../navigation/Navbar";
+
+const ProfileScreen = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
+        <Text style={styles.nameText}>John Doe</Text>
+        <Text style={styles.emailText}>john.doe@example.com</Text>
+      </View>
+      <ScrollView style={styles.scrollView}>
+        {/* Your touchable opacity buttons go here */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Eating Preferences</Text>
+          <View style={styles.separator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Add to Alexa</Text>
+          <View style={styles.separator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Connect to Instacart</Text>
+          <View style={styles.separator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Help</Text>
+          <View style={styles.separator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Settings</Text>
+          <View style={styles.separator} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>About</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <Navbar />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  profileContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 10,
+  },
+  nameText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  emailText: {
+    fontSize: 16,
+    color: '#888',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  button: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    fontSize: 18,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#ccc',
+    marginVertical: 10,
+  },
+});
+
+export default ProfileScreen;
