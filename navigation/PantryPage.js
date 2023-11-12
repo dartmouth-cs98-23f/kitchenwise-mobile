@@ -14,12 +14,22 @@ import Navbar from "./Navbar";
 
   const PantryPage =  () => {
     return (
-          <View>
+      <>
+        <View style={styles.container}>
           <Text>Test text</Text>
-          <Navbar/>
-          </View>
+        </View>
+        <Navbar/>
+      </>
     );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  }
+});
+
 
 
   export default PantryPage;

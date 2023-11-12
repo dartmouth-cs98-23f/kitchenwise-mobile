@@ -4,40 +4,42 @@ import Navbar from "../../navigation/Navbar";
 
 const ProfileScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.profileContainer}>
-        <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
-        <Text style={styles.nameText}>John Doe</Text>
-        <Text style={styles.emailText}>john.doe@example.com</Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.profileContainer}>
+          <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
+          <Text style={styles.nameText}>John Doe</Text>
+          <Text style={styles.emailText}>john.doe@example.com</Text>
+        </View>
+        <ScrollView style={styles.scrollView}>
+          {/* Your touchable opacity buttons go here */}
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Eating Preferences</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Add to Alexa</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Connect to Instacart</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Help</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Settings</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>About</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
-      <ScrollView style={styles.scrollView}>
-        {/* Your touchable opacity buttons go here */}
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Eating Preferences</Text>
-          <View style={styles.separator} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Add to Alexa</Text>
-          <View style={styles.separator} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Connect to Instacart</Text>
-          <View style={styles.separator} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Help</Text>
-          <View style={styles.separator} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Settings</Text>
-          <View style={styles.separator} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>About</Text>
-        </TouchableOpacity>
-      </ScrollView>
       <Navbar />
-    </View>
+    </>
   );
 };
 
