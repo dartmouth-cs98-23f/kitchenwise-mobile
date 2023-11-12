@@ -43,11 +43,11 @@ export default function App() {
               <Stack.Screen
                 name="MainHomePage"
                 component={MainHomePage}
-                options={{ title: "Main Home Page", headerBackVisible: false, headerTitle: "" }}
+                options={{ title: "Main Home Page", headerBackVisible: false, headerTitle: "", animation: 'none' }}
               />
-              <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerBackVisible: false }}/>
+              <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerBackVisible: false, animation: 'none' }}/>
 
-              <Stack.Screen name="Pantry" component={PantryPage} options={{ headerBackVisible: false }}/>
+              <Stack.Screen name="Pantry" component={PantryPage} options={{ headerBackVisible: false, animation: 'none' }}/>
               {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
             </Stack.Navigator>
           </NavigationContainer>
