@@ -178,8 +178,11 @@ const styles = StyleSheet.create({
     paddingLeft: "10%",
   },
   recipeListContainer: {
-    
-    flex: 10,
+    // flex: 10,
+    height: "75%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "red"
   },
   searchButton: {
     alignItems: "center",
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
   modalSubheader: {
     color: "#353434d9",
     fontSize: 20,
-    fontWeight: 600,
+    fontWeight: "600",
     margin: "5%",
   },
 });
