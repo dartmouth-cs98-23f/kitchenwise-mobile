@@ -14,6 +14,7 @@ import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
+import { NavigationContainerRefContext } from "@react-navigation/native";
 
 const recipes = [
   {
@@ -134,7 +135,7 @@ const MainHomePage = ({ navigation }) => {
           <FlatList></FlatList>
         </View>
       </Modal>
-      <RevisionModal />
+      {/* <RevisionModal /> */}
 
       <View style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
@@ -158,7 +159,7 @@ const MainHomePage = ({ navigation }) => {
         </View>
       </View>
 
-      <Navbar />
+      <Navbar navigation={navigation}/>
     </>
   );
 };
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
   backButton: {
     margin: "5%",
     marginTop: "10%",
-    // backgroundColor: 'red', for debugging
   },
   modalSubheader: {
     color: "#353434d9",
