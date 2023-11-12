@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   StyleSheet,
   Text,
@@ -105,9 +106,11 @@ const MainHomePage = ({ navigation }) => {
 
   const renderItems = (itemData) => {
     return (
-      <View key={itemData.id}>
-        <RecipeCard recipe={itemData.item} onPress={onRecipePress} />
-      </View>
+      <RecipeCard
+        key={itemData.id}
+        recipe={itemData.item}
+        onPress={onRecipePress}
+      />
     );
   };
 
@@ -146,6 +149,7 @@ const MainHomePage = ({ navigation }) => {
         </View>
         <View style={styles.recipeListContainer}>
           <FlatList
+            style={{ width: "100%" }}
             data={recipes}
             renderItem={renderItems}
             numColumns={2}
@@ -162,27 +166,23 @@ const MainHomePage = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainHomeContainer: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    padding: "2%"
+    flexDirection: "column",
+    backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    flex: 2,
+    // flex: 2,
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
+    width: "100%",
   },
   mainHomeTitle: {
     fontSize: 28,
-    fontWeight: "600",
+    // fontWeight: 600,
     paddingLeft: "10%",
   },
   recipeListContainer: {
-    // flex: 10,
-    height: "75%",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "red"
+    width: "100%",
   },
   searchButton: {
     alignItems: "center",
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-    fontWeight: "400",
+    // fontWeight: 400,
   },
   image: {
     width: "80",

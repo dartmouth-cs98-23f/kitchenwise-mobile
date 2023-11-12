@@ -1,19 +1,31 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const Navbar = () => {
+    const navigation = useNavigation();
+
+    const navigateToProfile = () => {
+        navigation.navigate('Profile');
+    };
+
+    const navigateToMainHomePage = () => {
+        // Use the navigate function to go to the MainHomePage
+        navigation.navigate('MainHomePage');
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button}>
-                    <Ionicons name="add-circle-outline" size={24} color="black" />
+                    <Ionicons name="file-tray-stacked-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Ionicons name="home-outline" size={24} color="black" />
+                <TouchableOpacity style={styles.button} onPress={navigateToMainHomePage}>
+                    <Ionicons name="home-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Ionicons name="person-outline" size={24} color="black" />
+                <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
+                    <Ionicons name="person-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -30,7 +42,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 60,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#957E51',
     },
     button: {
         alignItems: 'center',
