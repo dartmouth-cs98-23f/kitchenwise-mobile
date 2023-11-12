@@ -15,10 +15,14 @@ const Navbar = () => {
         navigation.navigate('MainHomePage');
     };
 
+    const navigateToPantryPage = () => {
+        navigation.navigate('Pantry');
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PantryPage')}>
+                <TouchableOpacity style={styles.button} onPress={navigateToPantryPage}>
                     <Ionicons name="file-tray-stacked-outline" size={24} color="#957E51" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={navigateToMainHomePage}>

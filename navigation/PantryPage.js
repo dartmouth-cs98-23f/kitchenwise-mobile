@@ -9,19 +9,15 @@ import {
   Image,
   Modal,
 } from "react-native";
-// import PantryCard from "../components/pantry_components/pantry";
 import Navbar from "./Navbar";
-import { Ionicons } from "@expo/vector-icons";
 
 
-  const PantryPage =  ( {navigation} ) => {
+  const PantryPage =  () => {
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-            <text>Test text</text>
-            <Navbar navigation={navigation}/>
-            </View>
-        </SafeAreaView>
+          <View>
+          <Text>Test text</Text>
+          <Navbar/>
+          </View>
     );
 };
 
