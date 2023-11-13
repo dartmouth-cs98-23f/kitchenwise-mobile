@@ -175,21 +175,6 @@ const MainHomePage = ({ navigation }) => {
       <RevisionModal />
       <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Type something..."
-              value={searchInput}
-              onChangeText={(text) => setSearchInput(text)}
-            />
-            <TouchableOpacity>
-              <Ionicons
-                name="search-outline"
-                size={36}
-                style={styles.searchButton}
-              />
-            </TouchableOpacity>
-          </View>
           <View style={styles.titleContainer}>
             <TouchableOpacity onPress={onMyRecipesPress}>
               <Text
@@ -214,6 +199,21 @@ const MainHomePage = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Type something..."
+              value={searchInput}
+              onChangeText={(text) => setSearchInput(text)}
+            />
+            <TouchableOpacity>
+              <Ionicons
+                name="search-outline"
+                size={36}
+                style={styles.searchButton}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.recipeListContainer}>
           <FlatList
@@ -226,7 +226,7 @@ const MainHomePage = ({ navigation }) => {
         </View>
       </SafeAreaView>
 
-      <Navbar />
+      <Navbar navigation={navigation} />
     </>
   );
 };
@@ -242,6 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     padding: "5%",
+    gap: 24,
   },
   recipeListContainer: {
     width: "100%",
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flexDirection: "row",
-    marginBottom: "5%",
+    // marginBottom: "5%",
   },
   searchInput: {
     flex: 1,
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: "4%",
+    // marginTop: "4%",
   },
   mainHomeTitle: {
     fontSize: 20,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   titleSmall: {
-    fontSize: 15,
+    fontSize: 20,
     color: "grey",
   },
 });
