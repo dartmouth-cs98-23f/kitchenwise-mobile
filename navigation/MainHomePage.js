@@ -133,6 +133,15 @@ const MainHomePage = ({ navigation }) => {
           onPress={onRecipePress}
         />
       );
+    } else {
+      // TODO: Need to send an API call to Spoonacular to search for suggested recipes, if the search is blank render randmon/top recupes, else send a request for recipes that match search
+      return (
+        <RecipeCard
+          key={itemData.id}
+          recipe={itemData.item}
+          onPress={onRecipePress}
+        />
+      );
     }
   };
 
