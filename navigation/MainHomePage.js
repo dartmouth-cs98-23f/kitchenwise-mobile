@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   Image,
   Modal,
+  TextInput,
 } from "react-native";
 import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
+
 
 const recipes = [
   {
@@ -93,6 +95,7 @@ const recipes = [
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
+  const [title, setCurrTitle] = useState("My Recipes")
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
@@ -103,6 +106,15 @@ const MainHomePage = ({ navigation }) => {
   const onBackPress = () => {
     setModalVisible(false);
   };
+
+  const onMyRecipesPress = () => {
+    setCurrTitle("My Recipes");
+  };
+
+  const onSuggestedPress = () => {
+    setCurrTitle("Suggested Recipes");
+  };
+
 
   const renderItems = (itemData) => {
     return (
@@ -138,16 +150,32 @@ const MainHomePage = ({ navigation }) => {
 
       <View style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-          <Text style={styles.mainHomeTitle}>My Recipes</Text>
-          <TouchableOpacity>
-            <Ionicons
-              name="search-outline"
-              size={36}
-              style={styles.searchButton}
+    
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Type something..."
             />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Ionicons
+                name="search-outline"
+                size={36}
+                style={styles.searchButton}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.titleContainer}>
+            <TouchableOpacity onPress={onMyRecipesPress}>
+              <Text style={title==="My Recipes"? styles.mainHomeTitle : styles.titleSmall }>My Recipes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onSuggestedPress}>
+              <Text style={title==="Suggested Recipes"? styles.mainHomeTitle : styles.titleSmall }>Suggested Recipes</Text>
+            </TouchableOpacity>
+          </View>
+         
         </View>
         <View style={styles.recipeListContainer}>
+        
           <FlatList
             style={{ width: "100%" }}
             data={recipes}
@@ -170,27 +198,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    // flex: 2,
-    alignItems: "center",
+
+    flexDirection: "column",
     justifyContent: "space-between",
-    flexDirection: "row",
     width: "100%",
-  },
-  mainHomeTitle: {
-    fontSize: 28,
-    // fontWeight: 600,
-    paddingLeft: "10%",
+    padding: "5%"
   },
   recipeListContainer: {
     width: "100%",
   },
-  searchButton: {
-    alignItems: "center",
-    marginRight: "10%",
-  },
   recipeModalContainer: {
     flex: 1,
-    // backgroundColor: "yellow", for debugging
     justifyContent: "flex-start",
     backgroundColor: "#f8f8f8",
     alignItems: "center",
@@ -206,7 +224,6 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-    // fontWeight: 400,
   },
   image: {
     width: "80",
@@ -216,7 +233,6 @@ const styles = StyleSheet.create({
   backButton: {
     margin: "5%",
     marginTop: "10%",
-    // backgroundColor: 'red', for debugging
   },
   modalSubheader: {
     color: "#353434d9",
@@ -224,6 +240,36 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     margin: "5%",
   },
+  searchContainer: {
+    flexDirection: "row",
+    marginBottom: "5%",
+  },
+  searchInput: {
+    flex: 1,
+    height:"100%", 
+    borderColor: 'gray', 
+    borderWidth: 1, 
+    paddingHorizontal: 8,
+    marginRight: "5%",
+    borderRadius: 10
+  },
+  searchButton: {
+    alignItems: "center",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginTop: "4%"
+  },
+  mainHomeTitle: {
+    fontSize: 20,
+  },
+  titleSmall: {
+    fontSize: 15,
+    color: "grey",
+  },
+ 
 });
 
 export default MainHomePage;

@@ -11,15 +11,13 @@ const RecipeCard = (props) => {
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={handleOnPress} style={{ width: "100%" }}>
-        <Image source={imageSource} style={styles.cardImage} />
-        </View>
-
-        <View style={styles.cardLabelContainer}>
-          <Text style={styles.cardLabel}>{recipeData.title}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onPress={handleOnPress} style={{ width: "100%" }}>
+      <Image source={imageSource} style={styles.cardImage} />
+      <View style={styles.cardLabelContainer}>
+        <Text style={styles.cardLabel}>{recipeData.title}</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
   );
 };
 
