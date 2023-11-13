@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   Modal,
+  SafeAreaView
 } from "react-native";
 import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
@@ -120,7 +121,7 @@ const MainHomePage = ({ navigation }) => {
       <StatusBar style="dark" />
 
       <Modal visible={modalVisible} animationType="slide" transparent={false}>
-        <View style={styles.recipeModalContainer}>
+        <SafeAreaView style={styles.recipeModalContainer}>
           <TouchableOpacity onPress={onBackPress}>
             <Ionicons
               name="arrow-back-outline"
@@ -133,13 +134,13 @@ const MainHomePage = ({ navigation }) => {
           <FlatList></FlatList>
           <Text style={styles.modalSubheader}> You need </Text>
           <FlatList></FlatList>
-        </View>
+        </SafeAreaView>
       </Modal>
       {/* <RevisionModal /> */}
 
-      <View style={styles.mainHomeContainer}>
+      <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-          <Text style={styles.mainHomeTitle}>My Recipes</Text>
+          <Text style={styles.mainHomeTitle}>my recipes</Text>
           <TouchableOpacity>
             <Ionicons
               name="search-outline"
@@ -157,7 +158,7 @@ const MainHomePage = ({ navigation }) => {
             alwaysBounceVertical={true}
           />
         </View>
-      </View>
+      </SafeAreaView>
 
       <Navbar navigation={navigation}/>
     </>
@@ -171,23 +172,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    // flex: 2,
-    alignItems: "center",
-    justifyContent: "space-between",
     flexDirection: "row",
-    width: "100%",
   },
   mainHomeTitle: {
-    fontSize: 28,
-    // fontWeight: 600,
-    paddingLeft: "10%",
+    fontSize: 32,
+    fontWeight: '500',
+    padding: 20,
+    textAlign: 'center',
+    color: '#957E51',
+    paddingRight: 170,
+
   },
   recipeListContainer: {
     width: "100%",
   },
   searchButton: {
     alignItems: "center",
-    marginRight: "10%",
+    color: '#957E51',
+    paddingTop: 20,
   },
   recipeModalContainer: {
     flex: 1,

@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import Navbar from "../../navigation/Navbar";
 
 const ProfileScreen = () => {
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
           <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
           <Text style={styles.nameText}>John Doe</Text>
@@ -37,7 +37,7 @@ const ProfileScreen = () => {
             <Text style={styles.buttonText}>About</Text>
           </TouchableOpacity>
         </ScrollView>
-      </View>
+      </SafeAreaView>
       <Navbar />
     </>
   );
