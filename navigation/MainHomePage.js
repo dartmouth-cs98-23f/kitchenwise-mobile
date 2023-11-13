@@ -96,6 +96,7 @@ const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
   const [title, setCurrTitle] = useState("My Recipes")
+  const [searchInput, setSearchInput] = useState("")
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
@@ -115,17 +116,27 @@ const MainHomePage = ({ navigation }) => {
     setCurrTitle("Suggested Recipes");
   };
 
-
   const renderItems = (itemData) => {
-    return (
-      <RecipeCard
-        key={itemData.id}
-        recipe={itemData.item}
-        onPress={onRecipePress}
-      />
-    );
+    if (title== "My Recipes" && searchInput === "") {
+      return (
+        <RecipeCard
+          key={itemData.id}
+          recipe={itemData.item}
+          onPress={onRecipePress}
+        />
+      );
+    } else if (itemData.item.title.toLowerCase().includes(searchInput.toLowerCase())) {
+      return (
+        <RecipeCard
+          key={itemData.id}
+          recipe={itemData.item}
+          onPress={onRecipePress}
+        />
+      );
+    }
   };
 
+  console.log(searchInput);
   return (
     <>
       <StatusBar style="dark" />
@@ -155,6 +166,8 @@ const MainHomePage = ({ navigation }) => {
             <TextInput
               style={styles.searchInput}
               placeholder="Type something..."
+              value={searchInput}
+              onChangeText={(text) => setSearchInput(text)}
             />
             <TouchableOpacity>
               <Ionicons
