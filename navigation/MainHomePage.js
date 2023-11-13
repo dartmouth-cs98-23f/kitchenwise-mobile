@@ -15,6 +15,7 @@ import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
+import RecipeModal from "../components/recipeScreen_components/RecipeModal";
 
 
 const recipes = [
@@ -149,28 +150,10 @@ const MainHomePage = ({ navigation }) => {
   return (
     <>
       <StatusBar style="dark" />
-
-      <Modal visible={modalVisible} animationType="slide" transparent={false}>
-        <View style={styles.recipeModalContainer}>
-          <TouchableOpacity onPress={onBackPress}>
-            <Ionicons
-              name="arrow-back-outline"
-              size={36}
-              style={styles.backButton}
-            />
-          </TouchableOpacity>
-          <Image style={styles.image} source={{ uri: currRecipe.image }} />
-          <Text style={styles.modalSubheader}> You have </Text>
-          <FlatList></FlatList>
-          <Text style={styles.modalSubheader}> You need </Text>
-          <FlatList></FlatList>
-        </View>
-      </Modal>
+      <RecipeModal modalState = {modalVisible} backFunction = {onBackPress} recipe = {currRecipe}/> 
       <RevisionModal />
-
       <View style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-    
           <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
@@ -220,7 +203,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-
     flexDirection: "column",
     justifyContent: "space-between",
     width: "100%",
@@ -228,14 +210,6 @@ const styles = StyleSheet.create({
   },
   recipeListContainer: {
     width: "100%",
-  },
-  recipeModalContainer: {
-    flex: 1,
-    justifyContent: "flex-start",
-    backgroundColor: "#f8f8f8",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingBottom: 60, // Add padding to avoid overlap with the Navbar
   },
   goBackButton: {
     backgroundColor: "#000000",
@@ -246,21 +220,6 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-  },
-  image: {
-    width: "80",
-    height: "30%",
-    margin: 5,
-  },
-  backButton: {
-    margin: "5%",
-    marginTop: "10%",
-  },
-  modalSubheader: {
-    color: "#353434d9",
-    fontSize: 20,
-    fontWeight: "600",
-    margin: "5%",
   },
   searchContainer: {
     flexDirection: "row",
