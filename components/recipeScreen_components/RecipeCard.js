@@ -26,16 +26,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     margin: "5%",
-    borderWidth: 1,
     borderColor: "#DFBC8D",
     width: "40%",
+    borderRadius: "20",
+   
   },
   cardImage: {
     width: "100%",
     aspectRatio: 1 / 1,
+    borderRadius: "20",
   },
   cardLabelContainer: {
-    backgroundColor: "#E2E5EE",
     width: "100%",
   },
   cardLabel: {

@@ -286,6 +286,8 @@ const styles = StyleSheet.create({
   },
   mainHomeTitle: {
     fontSize: 20,
+    color: "#957E51",
+    fontWeight: "600",
   },
   titleSmall: {
     fontSize: 15,
