@@ -139,7 +139,7 @@ const MainHomePage = ({ navigation }) => {
 
       <View style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-          <Text style={styles.mainHomeTitle}>My Recipes</Text>
+          <Text style={styles.mainHomeTitle}>my recipes</Text>
           <TouchableOpacity>
             <Ionicons
               name="search-outline"
@@ -171,23 +171,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    // flex: 2,
-    alignItems: "center",
-    justifyContent: "space-between",
     flexDirection: "row",
-    width: "100%",
   },
   mainHomeTitle: {
-    fontSize: 28,
-    // fontWeight: 600,
-    paddingLeft: "10%",
+    fontSize: 32,
+    fontWeight: '500',
+    padding: 20,
+    textAlign: 'center',
+    color: '#957E51',
+    paddingRight: 170,
+
   },
   recipeListContainer: {
     width: "100%",
   },
   searchButton: {
     alignItems: "center",
-    marginRight: "10%",
+    color: '#957E51',
+    paddingTop: 20,
   },
   recipeModalContainer: {
     flex: 1,
