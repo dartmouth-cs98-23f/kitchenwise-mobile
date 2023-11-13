@@ -14,18 +14,18 @@ const RecipeModal = (props) => {
   const [selectedRecipeInfo, setSelectedRecipeInfo] = useState("Ingredients");
 
   const onIngredients = () => {
-    setSelectedRecipeInfo("Ingredients")
-  }
+    setSelectedRecipeInfo("Ingredients");
+  };
   const onCookware = () => {
-    setSelectedRecipeInfo("Cookware")
-  }
+    setSelectedRecipeInfo("Cookware");
+  };
   const onProcedure = () => {
-    setSelectedRecipeInfo("Procedure")
-  }
+    setSelectedRecipeInfo("Procedure");
+  };
 
   const renderInfo = (info) => {
-    return <Text>{info.item}</Text>
-  }
+    return <Text>{info.item}</Text>;
+  };
 
   return (
     <Modal visible={props.modalState} animationType="slide" transparent={false}>
@@ -43,47 +43,98 @@ const RecipeModal = (props) => {
           </TouchableOpacity>
           <Text style={styles.title}>{props.recipe.title}</Text>
           <View style={styles.recipeInfoContainer}>
-            <TouchableOpacity onPress={onIngredients} style={selectedRecipeInfo === "Ingredients"? styles.recipeInfoTouchable : {}}><Text style={ selectedRecipeInfo === "Ingredients"? {color:"white" }: {color:"#957E51"}}>Ingredients</Text></TouchableOpacity>
-            <TouchableOpacity onPress={onCookware} style={selectedRecipeInfo === "Cookware"? styles.recipeInfoTouchable : {}} ><Text style={ selectedRecipeInfo === "Cookware"? {color:"white" }: {color:"#957E51"}}>Cookware</Text></TouchableOpacity>
-            <TouchableOpacity onPress={onProcedure} style={selectedRecipeInfo === "Procedure"? styles.recipeInfoTouchable : {}}><Text style={ selectedRecipeInfo === "Procedure"? {color:"white" }: {color:"#957E51"}}>Procedure</Text></TouchableOpacity>
+            <TouchableOpacity
+              onPress={onIngredients}
+              style={
+                selectedRecipeInfo === "Ingredients"
+                  ? styles.recipeInfoTouchable
+                  : {}
+              }
+            >
+              <Text
+                style={
+                  selectedRecipeInfo === "Ingredients"
+                    ? { color: "white" }
+                    : { color: "#957E51" }
+                }
+              >
+                Ingredients
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onCookware}
+              style={
+                selectedRecipeInfo === "Cookware"
+                  ? styles.recipeInfoTouchable
+                  : {}
+              }
+            >
+              <Text
+                style={
+                  selectedRecipeInfo === "Cookware"
+                    ? { color: "white" }
+                    : { color: "#957E51" }
+                }
+              >
+                Cookware
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onProcedure}
+              style={
+                selectedRecipeInfo === "Procedure"
+                  ? styles.recipeInfoTouchable
+                  : {}
+              }
+            >
+              <Text
+                style={
+                  selectedRecipeInfo === "Procedure"
+                    ? { color: "white" }
+                    : { color: "#957E51" }
+                }
+              >
+                Procedure
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-        { selectedRecipeInfo === "Ingredients" && <>
-          <View>
-            <Text style={styles.modalSubheader}>You have</Text>
-            {/* //TODO : crosslist invenotry with recipe ingredients and render items the user currently has */}
-            <FlatList
-              style = {{width: "100%"}}
-              data={props.recipe.ingredients}
-              renderItem={renderInfo}
-            />
-          </View>
-          <View>
-            <Text style={styles.modalSubheader}>You need</Text>
-             {/* //TODO : Put items not in user inventory here with a todo list */}
-            <FlatList></FlatList>
-          </View>
-        </>
-        }
-        { selectedRecipeInfo === "Cookware" && 
+        {selectedRecipeInfo === "Ingredients" && (
+          <>
+            <View>
+              <Text style={styles.modalSubheader}>You have</Text>
+              {/* //TODO : crosslist invenotry with recipe ingredients and render items the user currently has */}
+              <FlatList
+                style={{ width: "100%" }}
+                data={props.recipe.ingredients}
+                renderItem={renderInfo}
+              />
+            </View>
+            <View>
+              <Text style={styles.modalSubheader}>You need</Text>
+              {/* //TODO : Put items not in user inventory here with a todo list */}
+              <FlatList></FlatList>
+            </View>
+          </>
+        )}
+        {selectedRecipeInfo === "Cookware" && (
           <>
             <FlatList
-              style = {{width: "100%"}}
+              style={{ width: "100%" }}
               data={props.recipe.equipment}
               renderItem={renderInfo}
             />
           </>
-        }
-        { selectedRecipeInfo === "Procedure" && 
+        )}
+        {selectedRecipeInfo === "Procedure" && (
           <>
             <FlatList
-              style = {{width: "100%"}}
+              style={{ width: "100%" }}
               data={props.recipe.steps}
               renderItem={renderInfo}
             />
           </>
-        }
-       
+        )}
       </View>
     </Modal>
   );
@@ -98,7 +149,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    aspectRatio: 5/4,
+    aspectRatio: 5 / 4,
   },
   modalSubheader: {
     color: "#957E51",
@@ -119,14 +170,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginTop: "2%",
-    alignItems: 'center'
+    alignItems: "center",
   },
   recipeInfoTouchable: {
     backgroundColor: "#957E51",
-    borderRadius: "10",
-    borderWidth: "2",
+    borderRadius: 10,
+    borderWidth: 2,
     borderColor: "#957E51",
-    padding: ".5%"
+    padding: ".5%",
   },
 });
 

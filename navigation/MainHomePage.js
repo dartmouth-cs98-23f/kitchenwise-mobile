@@ -1,5 +1,4 @@
 import { React, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   StyleSheet,
   Text,
@@ -7,8 +6,6 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
-  Image,
-  Modal,
   TextInput,
   SafeAreaView,
 } from "react-native";
