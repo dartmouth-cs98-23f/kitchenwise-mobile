@@ -4,5 +4,9 @@ import { API_URL } from "./urls";
 const URL = API_URL + "/inventory";
 
 export const getUserInventories = async (userId) => {
-  return (await axios.get(`${URL}/all`, { params: { userId } })).data;
+  return (await axios.get(URL + "/all", { params: { userId } })).data;
+};
+
+export const getAllItems = async (userId) => {
+  return (await axios.get(URL + "/allitems", { params: { userId } })).data;
 };

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState, useContext, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,8 @@ import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
 import RecipeModal from "../components/recipeScreen_components/RecipeModal";
+import { getSavedRecipes, getSuggestedRecipes } from "../api/recipe-api";
+import UserContext from "../context/user-context";
 
 const recipes = [
   {
@@ -37,7 +39,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVTeQYk3K-xm33ZBXYvUXzeWgIXFVynKg3Gw&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -46,7 +48,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy5bLTDIaGCQWxp14-4cy2FWzDt59LOTaQCQ&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -55,7 +57,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQam75tTNPk7iik2UnZQQdrmEp4rnG_U_dyWw&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -64,7 +66,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRd12T4dshafLbevnN-QYAwTn--GhmqjY_gg&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -73,7 +75,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CerEZRSBlTN-Ni75IBIMgtQ1SvND5cT3MA&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -82,7 +84,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lT10tINHblp_sllc_o3eMZU32tF6K6DNxA&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -91,7 +93,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP1tVk95UBNwlif-CZ3SHtazYgdZm-1PjRBg&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
@@ -100,7 +102,7 @@ const recipes = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV2fYhkn84wH8NkZgKneOs4nTY5Brsz5Uag&usqp=CAU",
     difficulty: "Medium",
-    cookTIime: "45 min",
+    cookTime: "45 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
 ];
@@ -108,8 +110,33 @@ const recipes = [
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
-  const [title, setCurrTitle] = useState("My Recipes");
+  const [title, setCurrTitle] = useState("Suggested Recipes");
   const [searchInput, setSearchInput] = useState("");
+  const [suggestedRecipes, setSuggestedRecipes] = useState([]);
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const { userId } = useContext(UserContext);
+
+  useEffect(() => {
+    getSuggestedRecipes(userId).then((data) => {
+      const parsedRecipes = data.map((rec) => ({
+        key: rec._id,
+        title: rec.title,
+        image: rec.image,
+      }));
+      setSuggestedRecipes(parsedRecipes);
+    });
+  }, [userId, setSuggestedRecipes]);
+
+  useEffect(() => {
+    getSavedRecipes(userId).then((data) => {
+      const parsedRecipes = data.map((rec) => ({
+        key: rec._id,
+        title: rec.title,
+        image: rec.image,
+      }));
+      setSavedRecipes(parsedRecipes);
+    });
+  }, [userId, setSavedRecipes]);
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
@@ -160,7 +187,6 @@ const MainHomePage = ({ navigation }) => {
     }
   };
 
-  console.log(searchInput);
   return (
     <>
       <StatusBar style="dark" />
@@ -169,21 +195,9 @@ const MainHomePage = ({ navigation }) => {
         backFunction={onBackPress}
         recipe={currRecipe}
       />
-      <RevisionModal />
       <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
           <View style={styles.titleContainer}>
-            <TouchableOpacity onPress={onMyRecipesPress}>
-              <Text
-                style={
-                  title === "My Recipes"
-                    ? styles.mainHomeTitle
-                    : styles.titleSmall
-                }
-              >
-                My Recipes
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={onSuggestedPress}>
               <Text
                 style={
@@ -193,6 +207,17 @@ const MainHomePage = ({ navigation }) => {
                 }
               >
                 Suggested Recipes
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onMyRecipesPress}>
+              <Text
+                style={
+                  title === "My Recipes"
+                    ? styles.mainHomeTitle
+                    : styles.titleSmall
+                }
+              >
+                My Recipes
               </Text>
             </TouchableOpacity>
           </View>
@@ -215,7 +240,7 @@ const MainHomePage = ({ navigation }) => {
         <View style={styles.recipeListContainer}>
           <FlatList
             style={{ width: "100%" }}
-            data={recipes}
+            data={title == "My Recipes" ? savedRecipes : suggestedRecipes}
             renderItem={renderItems}
             numColumns={2}
             alwaysBounceVertical={true}

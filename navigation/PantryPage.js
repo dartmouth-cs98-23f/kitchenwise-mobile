@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,9 @@ import {
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import InventoryContext from "../context/inventory-context";
+import UserContext from "../context/user-context";
+import { getAllItems } from "../api/inventory-api";
 
 const categories = ["Dairy", "Fresh Produce", "Canned", "Fruits"];
 
@@ -49,43 +52,21 @@ const PantryItem = ({ name, expiration, image }) => (
 
 const PantryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const [items, setItems] = useState([
-    {
-      id: "1",
-      name: "Eggs",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-    {
-      id: "2",
-      name: "Sausage",
-      expiration: "11/14",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-    {
-      id: "3",
-      name: "Baked Beans",
-      expiration: "11/13",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-    {
-      id: "4",
-      name: "Bacon",
-      expiration: "11/12",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-    {
-      id: "5",
-      name: "Cereal",
-      expiration: "11/11",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-    {
-      id: "6",
-      name: "Rice",
-      expiration: "11/10",
-      image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-    },
-  ]);
+  const [items, setItems] = useState([]);
+  const { userInventories } = useContext(InventoryContext);
+  const { userId } = useContext(UserContext);
+  useEffect(() => {
+    getAllItems(userId).then((data) => {
+      setItems(
+        data.map((item) => ({
+          id: item._id,
+          name: item.name,
+          expiration: item?.expirationDate?.toString(),
+          image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
+        }))
+      );
+    });
+  }, [userId]);
   return (
     <>
       <SafeAreaView style={styles.container}>

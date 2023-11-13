@@ -10,6 +10,7 @@ import InventoryContext, {
 } from "./context/inventory-context";
 import UserContext, { defaultUserContext } from "./context/user-context";
 import { getUserInventories } from "./api/inventory-api";
+import RevisionModal from "./components/modals/RevisionModal";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,12 +28,12 @@ export default function App() {
       });
   }, [userId, setUserInventories]);
   return (
-
     <>
       <UserContext.Provider value={{ userId, setUserId }}>
         <InventoryContext.Provider
           value={{ userInventories, setUserInventories }}
         >
+          <RevisionModal />
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen
@@ -43,11 +44,33 @@ export default function App() {
               <Stack.Screen
                 name="MainHomePage"
                 component={MainHomePage}
-                options={{ title: "Main Home Page", headerBackVisible: false, headerShown: false, animation: 'none',  headerShown: false}}
+                options={{
+                  title: "Main Home Page",
+                  headerBackVisible: false,
+                  headerShown: false,
+                  animation: "none",
+                  headerShown: false,
+                }}
               />
-              <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerBackVisible: false, animation: 'none',  headerShown: false }}/>
+              <Stack.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{
+                  headerBackVisible: false,
+                  animation: "none",
+                  headerShown: false,
+                }}
+              />
 
-              <Stack.Screen name="Pantry" component={PantryPage} options={{ headerBackVisible: false, animation: 'none', headerShown: false }}/>
+              <Stack.Screen
+                name="Pantry"
+                component={PantryPage}
+                options={{
+                  headerBackVisible: false,
+                  animation: "none",
+                  headerShown: false,
+                }}
+              />
               {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
             </Stack.Navigator>
           </NavigationContainer>
