@@ -117,26 +117,32 @@ const MainHomePage = ({ navigation }) => {
   const { userId } = useContext(UserContext);
 
   useEffect(() => {
-    getSuggestedRecipes(userId).then((data) => {
-      const parsedRecipes = data.map((rec) => ({
-        key: rec._id,
-        title: rec.title,
-        image: rec.image,
-      }));
-      setSuggestedRecipes(parsedRecipes);
-    });
-  }, [userId, setSuggestedRecipes]);
+    if (title == "Suggested Recipes") {
+      getSuggestedRecipes(userId).then((data) => {
+        const parsedRecipes = data.map((rec) => ({
+          key: rec._id,
+          title: rec.title,
+          image: rec.image,
+          spoonacularId: rec.spoonacularId,
+        }));
+        setSuggestedRecipes(parsedRecipes);
+      });
+    }
+  }, [userId, setSuggestedRecipes, title]);
 
   useEffect(() => {
-    getSavedRecipes(userId).then((data) => {
-      const parsedRecipes = data.map((rec) => ({
-        key: rec._id,
-        title: rec.title,
-        image: rec.image,
-      }));
-      setSavedRecipes(parsedRecipes);
-    });
-  }, [userId, setSavedRecipes]);
+    if (title == "My Recipes") {
+      getSavedRecipes(userId).then((data) => {
+        console.log(data.map((rec) => rec.title));
+        const parsedRecipes = data.map((rec) => ({
+          key: rec._id,
+          title: rec.title,
+          image: rec.image,
+        }));
+        setSavedRecipes(parsedRecipes);
+      });
+    }
+  }, [userId, setSavedRecipes, title]);
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);

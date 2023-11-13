@@ -10,3 +10,7 @@ export const getSuggestedRecipes = async (userId) => {
 export const getSavedRecipes = async (userId) => {
   return (await axios.get(URL + "/saved", { params: { userId } })).data;
 };
+
+export const saveRecipe = async (userId, recipeId) => {
+  return (await axios.post(URL + "/save", { userId, recipeId })).data;
+};

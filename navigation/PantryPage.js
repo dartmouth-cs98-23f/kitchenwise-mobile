@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import moment from "moment";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -46,6 +47,7 @@ const PantryItem = ({ name, expiration, image }) => (
       </View>
     )}
     <Image source={image} style={styles.itemImage} />
+
     <Text style={styles.itemName}>{name}</Text>
   </View>
 );
@@ -61,7 +63,9 @@ const PantryPage = () => {
         data.map((item) => ({
           id: item._id,
           name: item.name,
-          expiration: item?.expirationDate?.toString(),
+          expiration: item?.expirationDate
+            ? moment.utc(item?.expirationDate).format("MM/DD")
+            : null,
           image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
         }))
       );
@@ -172,11 +176,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#ff6e6e",
     elevation: 4,
+    zIndex: 4,
   },
   expirationText: {
     color: "#ff6e6e",
     fontWeight: "bold",
     elevation: 4,
+    zIndex: 4,
   },
   itemName: {
     fontSize: 16,
