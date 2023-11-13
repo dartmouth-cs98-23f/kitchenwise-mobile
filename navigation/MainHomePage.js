@@ -21,75 +21,86 @@ import RecipeModal from "../components/recipeScreen_components/RecipeModal";
 const recipes = [
   {
     key: "1",
-    title: "Recipe 1",
+    title: "Ramen",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgDhhy8ESPDa17yvq8uikiX6gjJXxy8eOXdg&usqp=CAU",
     difficulty: "Easy",
     cookTime: "30 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
+    ingredients : ["Beef Stock", "Eggs", "Noodles", "Beef"],
+    steps: ["Bring water to a rapid boil", "Add Vegetables", "Add Salt to taste"]
   },
   {
     key: "2",
-    title: "Recipe 2",
+    title: "Strawberry Parfait",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVTeQYk3K-xm33ZBXYvUXzeWgIXFVynKg3Gw&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "3",
-    title: "Recipe 2",
+    title: "Burger Supreme",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy5bLTDIaGCQWxp14-4cy2FWzDt59LOTaQCQ&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "4",
-    title: "Recipe 2",
+    title: "Waffles",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQam75tTNPk7iik2UnZQQdrmEp4rnG_U_dyWw&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "5",
-    title: "Recipe 2",
+    title: "Spaghetti 1",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRd12T4dshafLbevnN-QYAwTn--GhmqjY_gg&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "6",
-    title: "Recipe 2",
+    title: "Dessert",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CerEZRSBlTN-Ni75IBIMgtQ1SvND5cT3MA&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "7",
-    title: "Recipe 2",
+    title: "Pizza",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lT10tINHblp_sllc_o3eMZU32tF6K6DNxA&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "8",
-    title: "Recipe 2",
+    title: "Raspberry Cheesecake",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP1tVk95UBNwlif-CZ3SHtazYgdZm-1PjRBg&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
   {
     key: "9",
-    title: "Recipe 2",
+    title: "Sphagetti 2",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV2fYhkn84wH8NkZgKneOs4nTY5Brsz5Uag&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
   },
 ];
 
