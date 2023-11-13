@@ -28,16 +28,17 @@ const PantryItem = ({ name, expiration, image }) => (
   <SafeAreaView style={styles.pantryItem}>
     <Image source={image} style={styles.itemImage} />
     <View style={styles.expirationIndicator}>
-      <Text style={styles.expirationText}>{expiration}</Text>
+      <Text style={styles.expirationText}>{expiration || "Null"}</Text>
     </View>
     <Text style={styles.itemName}>{name}</Text>
   </SafeAreaView>
 );
 
+
 const PantryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [items, setItems] = useState([
-    { id: '1', name: 'Eggs', expiration: '11/15', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '1', name: 'Eggs', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
     { id: '2', name: 'Sausage', expiration: '11/14', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
     { id: '3', name: 'Baked Beans', expiration: '11/13', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
     { id: '4', name: 'Bacon', expiration: '11/12', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
