@@ -1,14 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import Navbar from './Navbar';
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const categories = ['Dairy', 'Fresh Produce', 'Canned', 'Fruits'];
-const items = [
-  { id: '1', name: 'Eggs', expiration: '11/15', image: require('../assets/splash.png') },
-  // Add other items similarly...
-];
+
 
 const CategoryMenu = ({ selectedCategory, onSelectCategory }) => (
   <FlatList
@@ -38,8 +35,15 @@ const PantryItem = ({ name, expiration, image }) => (
 );
 
 const PantryPage = () => {
-  const [selectedCategory, setSelectedCategory] = React.useState(categories[0]);
-
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [items, setItems] = useState([
+    { id: '1', name: 'Eggs', expiration: '11/15', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '2', name: 'Sausage', expiration: '11/14', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '3', name: 'Baked Beans', expiration: '11/13', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '4', name: 'Bacon', expiration: '11/12', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '5', name: 'Cereal', expiration: '11/11', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+    { id: '6', name: 'Rice', expiration: '11/10', image: require('../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg') },
+  ]);
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -88,7 +92,6 @@ const styles = StyleSheet.create({
   searchButton: {
     alignItems: "center",
     padding: 20,
-    // marginRight: "%",
     color: '#957E51',
   },
   categoryMenu: {
@@ -112,8 +115,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   pantryList: {
-    paddingHorizontal: 100,
-  },
+    paddingLeft: 30,
+    width: "max-content",
+    },
   columnWrapper: {
     color: '#4B5E4C',
   },
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     borderColor: '#4B5E4C',
     padding: 10,
     width: 150,
-    height: 200,
+    height: 150,
     alignItems: 'center',
     margin: 10,
     elevation: 3, 
