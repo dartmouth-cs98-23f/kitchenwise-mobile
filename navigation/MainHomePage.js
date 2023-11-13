@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   Modal,
+  SafeAreaView
 } from "react-native";
 import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
@@ -120,7 +121,7 @@ const MainHomePage = ({ navigation }) => {
       <StatusBar style="dark" />
 
       <Modal visible={modalVisible} animationType="slide" transparent={false}>
-        <View style={styles.recipeModalContainer}>
+        <SafeAreaView style={styles.recipeModalContainer}>
           <TouchableOpacity onPress={onBackPress}>
             <Ionicons
               name="arrow-back-outline"
@@ -133,11 +134,11 @@ const MainHomePage = ({ navigation }) => {
           <FlatList></FlatList>
           <Text style={styles.modalSubheader}> You need </Text>
           <FlatList></FlatList>
-        </View>
+        </SafeAreaView>
       </Modal>
       {/* <RevisionModal /> */}
 
-      <View style={styles.mainHomeContainer}>
+      <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
           <Text style={styles.mainHomeTitle}>my recipes</Text>
           <TouchableOpacity>
@@ -157,7 +158,7 @@ const MainHomePage = ({ navigation }) => {
             alwaysBounceVertical={true}
           />
         </View>
-      </View>
+      </SafeAreaView>
 
       <Navbar navigation={navigation}/>
     </>

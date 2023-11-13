@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import Navbar from './Navbar';
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const categories = ['Dairy', 'Fresh Produce', 'Canned', 'Fruits'];
 const items = [
@@ -27,13 +28,13 @@ const CategoryMenu = ({ selectedCategory, onSelectCategory }) => (
 );
 
 const PantryItem = ({ name, expiration, image }) => (
-  <View style={styles.pantryItem}>
+  <SafeAreaView style={styles.pantryItem}>
     <Image source={image} style={styles.itemImage} />
     <View style={styles.expirationIndicator}>
       <Text style={styles.expirationText}>{expiration}</Text>
     </View>
     <Text style={styles.itemName}>{name}</Text>
-  </View>
+  </SafeAreaView>
 );
 
 const PantryPage = () => {
@@ -41,7 +42,7 @@ const PantryPage = () => {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.header}>my items</Text>
           <TouchableOpacity>
@@ -61,7 +62,7 @@ const PantryPage = () => {
           columnWrapperStyle={styles.columnWrapper}
           style={styles.pantryList}
         />
-      </View>
+      </SafeAreaView>
       <Navbar />
     </>
   );
