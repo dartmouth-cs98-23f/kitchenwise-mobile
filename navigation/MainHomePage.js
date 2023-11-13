@@ -10,13 +10,13 @@ import {
   Image,
   Modal,
   TextInput,
+  SafeAreaView,
 } from "react-native";
 import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
 import RecipeModal from "../components/recipeScreen_components/RecipeModal";
-
 
 const recipes = [
   {
@@ -27,8 +27,12 @@ const recipes = [
     difficulty: "Easy",
     cookTime: "30 min",
     equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-    ingredients : ["Beef Stock", "Eggs", "Noodles", "Beef"],
-    steps: ["Bring water to a rapid boil", "Add Vegetables", "Add Salt to taste"]
+    ingredients: ["Beef Stock", "Eggs", "Noodles", "Beef"],
+    steps: [
+      "Bring water to a rapid boil",
+      "Add Vegetables",
+      "Add Salt to taste",
+    ],
   },
   {
     key: "2",
@@ -37,7 +41,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVTeQYk3K-xm33ZBXYvUXzeWgIXFVynKg3Gw&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "3",
@@ -46,7 +50,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy5bLTDIaGCQWxp14-4cy2FWzDt59LOTaQCQ&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "4",
@@ -55,7 +59,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQam75tTNPk7iik2UnZQQdrmEp4rnG_U_dyWw&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "5",
@@ -64,7 +68,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRd12T4dshafLbevnN-QYAwTn--GhmqjY_gg&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "6",
@@ -73,7 +77,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CerEZRSBlTN-Ni75IBIMgtQ1SvND5cT3MA&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "7",
@@ -82,7 +86,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lT10tINHblp_sllc_o3eMZU32tF6K6DNxA&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "8",
@@ -91,7 +95,7 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP1tVk95UBNwlif-CZ3SHtazYgdZm-1PjRBg&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
   {
     key: "9",
@@ -100,15 +104,15 @@ const recipes = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV2fYhkn84wH8NkZgKneOs4nTY5Brsz5Uag&usqp=CAU",
     difficulty: "Medium",
     cookTIime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"]
+    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
   },
 ];
 
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
-  const [title, setCurrTitle] = useState("My Recipes")
-  const [searchInput, setSearchInput] = useState("")
+  const [title, setCurrTitle] = useState("My Recipes");
+  const [searchInput, setSearchInput] = useState("");
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
@@ -129,7 +133,7 @@ const MainHomePage = ({ navigation }) => {
   };
 
   const renderItems = (itemData) => {
-    if (title== "My Recipes" && searchInput === "") {
+    if (title == "My Recipes" && searchInput === "") {
       return (
         <RecipeCard
           key={itemData.id}
@@ -137,7 +141,9 @@ const MainHomePage = ({ navigation }) => {
           onPress={onRecipePress}
         />
       );
-    } else if (itemData.item.title.toLowerCase().includes(searchInput.toLowerCase())) {
+    } else if (
+      itemData.item.title.toLowerCase().includes(searchInput.toLowerCase())
+    ) {
       return (
         <RecipeCard
           key={itemData.id}
@@ -161,9 +167,13 @@ const MainHomePage = ({ navigation }) => {
   return (
     <>
       <StatusBar style="dark" />
-      <RecipeModal modalState = {modalVisible} backFunction = {onBackPress} recipe = {currRecipe}/> 
+      <RecipeModal
+        modalState={modalVisible}
+        backFunction={onBackPress}
+        recipe={currRecipe}
+      />
       <RevisionModal />
-      <View style={styles.mainHomeContainer}>
+      <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
           <View style={styles.searchContainer}>
             <TextInput
@@ -182,16 +192,30 @@ const MainHomePage = ({ navigation }) => {
           </View>
           <View style={styles.titleContainer}>
             <TouchableOpacity onPress={onMyRecipesPress}>
-              <Text style={title==="My Recipes"? styles.mainHomeTitle : styles.titleSmall }>My Recipes</Text>
+              <Text
+                style={
+                  title === "My Recipes"
+                    ? styles.mainHomeTitle
+                    : styles.titleSmall
+                }
+              >
+                My Recipes
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onSuggestedPress}>
-              <Text style={title==="Suggested Recipes"? styles.mainHomeTitle : styles.titleSmall }>Suggested Recipes</Text>
+              <Text
+                style={
+                  title === "Suggested Recipes"
+                    ? styles.mainHomeTitle
+                    : styles.titleSmall
+                }
+              >
+                Suggested Recipes
+              </Text>
             </TouchableOpacity>
           </View>
-         
         </View>
         <View style={styles.recipeListContainer}>
-        
           <FlatList
             style={{ width: "100%" }}
             data={recipes}
@@ -200,7 +224,7 @@ const MainHomePage = ({ navigation }) => {
             alwaysBounceVertical={true}
           />
         </View>
-      </View>
+      </SafeAreaView>
 
       <Navbar />
     </>
@@ -217,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     width: "100%",
-    padding: "5%"
+    padding: "5%",
   },
   recipeListContainer: {
     width: "100%",
@@ -238,12 +262,12 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    height:"100%", 
-    borderColor: 'gray', 
-    borderWidth: 1, 
+    height: "100%",
+    borderColor: "gray",
+    borderWidth: 1,
     paddingHorizontal: 8,
     marginRight: "5%",
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchButton: {
     alignItems: "center",
@@ -252,7 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: "4%"
+    marginTop: "4%",
   },
   mainHomeTitle: {
     fontSize: 20,
@@ -263,7 +287,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "grey",
   },
- 
 });
 
 export default MainHomePage;
