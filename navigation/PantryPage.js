@@ -39,16 +39,20 @@ const CategoryMenu = ({ selectedCategory, onSelectCategory }) => (
   />
 );
 
-const PantryItem = ({ name, expiration, image }) => (
+const PantryItem = ({ name, expiration, image, quantity, unit }) => (
   <View style={styles.pantryItem}>
+    <View>
+      <Text style={styles.itemName}>{name}</Text>
+      <Text>
+        {quantity} {unit}
+      </Text>
+    </View>
     {expiration && (
       <View style={styles.expirationIndicator}>
+        <Text style={[styles.expirationText, { fontSize: 9 }]}>exp.</Text>
         <Text style={styles.expirationText}>{expiration}</Text>
       </View>
     )}
-    <Image source={image} style={styles.itemImage} />
-
-    <Text style={styles.itemName}>{name}</Text>
   </View>
 );
 
@@ -61,27 +65,24 @@ const PantryPage = () => {
       .then((data) => {
         setItems(
           data.map((item) => ({
+            ...item,
             id: item._id,
-            name: item.name,
             expiration: item?.expirationDate
               ? moment.utc(item?.expirationDate).format("MM/DD")
               : null,
-            image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
           }))
         );
       })
       .catch((err) => {
         console.log("Inventory polling failed - server not online");
       });
-  }, [userId]);
+  }, [userId, setItems]);
   useEffect(() => {
     // TODO: this is horrible and must be replaced next term
     refreshItems();
-    const interval = setInterval(() => {
-      refreshItems;
-    }, 2500);
+    const interval = setInterval(refreshItems, 2500);
     return () => clearInterval(interval);
-  }, [userId]);
+  }, [userId, refreshItems]);
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -103,8 +104,6 @@ const PantryPage = () => {
           data={items}
           renderItem={({ item }) => <PantryItem {...item} />}
           keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.columnWrapper}
           style={styles.pantryList}
           ListEmptyComponent={
             <Text style={styles.emptyComponent}>
@@ -159,7 +158,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   pantryList: {
-    paddingLeft: 30,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    flexDirection: "column",
   },
   columnWrapper: {
     color: "#4B5E4C",
@@ -168,12 +169,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     borderRadius: 20,
     borderColor: "#4B5E4C",
-    padding: 10,
-    width: 150,
-    height: 150,
     alignItems: "center",
-    margin: 10,
-    // elevation: 3,r
+    flexDirection: "row",
+    backgroundColor: "#eee",
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    justifyContent: "space-between",
+    marginVertical: 4,
   },
   itemImage: {
     width: 100,
@@ -204,7 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    marginTop: 5,
   },
   emptyComponent: {},
 });
