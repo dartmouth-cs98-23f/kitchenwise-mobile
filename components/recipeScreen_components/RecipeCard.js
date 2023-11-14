@@ -8,7 +8,6 @@ const RecipeCard = (props) => {
   const handleOnPress = () => {
     props.onPress(recipeData);
   };
-
   return (
     <View style={styles.card}>
       <TouchableOpacity onPress={handleOnPress} style={{ width: "100%" }}>
@@ -17,6 +16,11 @@ const RecipeCard = (props) => {
         <View style={styles.cardLabelContainer}>
           <Text style={styles.cardLabel}>{recipeData.title}</Text>
         </View>
+        {props.saved && (
+          <View style={styles.savedContainer}>
+            <Text style={styles.saved}>saved</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -30,6 +34,7 @@ const styles = StyleSheet.create({
     borderColor: "#DFBC8D",
     width: "40%",
     borderRadius: 20,
+    // backgroundColor: "#eee",
   },
   cardImage: {
     width: "100%",
@@ -44,6 +49,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     alignSelf: "center",
+  },
+  savedContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  saved: {
+    fontSize: 12,
+    color: "#555",
+    fontWeight: "light",
   },
 });
 

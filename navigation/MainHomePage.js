@@ -14,98 +14,13 @@ import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
 import RecipeModal from "../components/recipeScreen_components/RecipeModal";
-import { getSavedRecipes, getSuggestedRecipes } from "../api/recipe-api";
+import {
+  getSavedRecipes,
+  getSuggestedRecipes,
+  searchRecipes,
+} from "../api/recipe-api";
 import UserContext from "../context/user-context";
-
-const recipes = [
-  {
-    key: "1",
-    title: "Ramen",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgDhhy8ESPDa17yvq8uikiX6gjJXxy8eOXdg&usqp=CAU",
-    difficulty: "Easy",
-    cookTime: "30 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-    ingredients: ["Beef Stock", "Eggs", "Noodles", "Beef"],
-    steps: [
-      "Bring water to a rapid boil",
-      "Add Vegetables",
-      "Add Salt to taste",
-    ],
-  },
-  {
-    key: "2",
-    title: "Strawberry Parfait",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVTeQYk3K-xm33ZBXYvUXzeWgIXFVynKg3Gw&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "3",
-    title: "Burger Supreme",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy5bLTDIaGCQWxp14-4cy2FWzDt59LOTaQCQ&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "4",
-    title: "Waffles",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQam75tTNPk7iik2UnZQQdrmEp4rnG_U_dyWw&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "5",
-    title: "Spaghetti 1",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRd12T4dshafLbevnN-QYAwTn--GhmqjY_gg&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "6",
-    title: "Dessert",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CerEZRSBlTN-Ni75IBIMgtQ1SvND5cT3MA&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "7",
-    title: "Pizza",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lT10tINHblp_sllc_o3eMZU32tF6K6DNxA&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "8",
-    title: "Raspberry Cheesecake",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP1tVk95UBNwlif-CZ3SHtazYgdZm-1PjRBg&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-  {
-    key: "9",
-    title: "Sphagetti 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV2fYhkn84wH8NkZgKneOs4nTY5Brsz5Uag&usqp=CAU",
-    difficulty: "Medium",
-    cookTime: "45 min",
-    equipment: ["Bowls", "Wooden Spoon", "Knife", "Cutting Board"],
-  },
-];
+import RecipeContext from "../context/recipe-context";
 
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -113,40 +28,41 @@ const MainHomePage = ({ navigation }) => {
   const [title, setCurrTitle] = useState("Suggested Recipes");
   const [searchInput, setSearchInput] = useState("");
   const [suggestedRecipes, setSuggestedRecipes] = useState([]);
-  const [savedRecipes, setSavedRecipes] = useState([]);
   const { userId } = useContext(UserContext);
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const { savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes } =
+    useContext(RecipeContext);
 
   useEffect(() => {
     if (title == "Suggested Recipes") {
       getSuggestedRecipes(userId).then((data) => {
-        const parsedRecipes = data.map((rec) => ({
-          key: rec._id,
-          title: rec.title,
-          image: rec.image,
-          spoonacularId: rec.spoonacularId,
-        }));
+        const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
         setSuggestedRecipes(parsedRecipes);
+        console.log(parsedRecipes);
       });
     }
   }, [userId, setSuggestedRecipes, title]);
 
   useEffect(() => {
     if (title == "My Recipes") {
-      getSavedRecipes(userId).then((data) => {
-        const parsedRecipes = data.map((rec) => ({
-          key: rec._id,
-          title: rec.title,
-          image: rec.image,
-        }));
-        setSavedRecipes(parsedRecipes);
+      refreshSavedRecipes().then((recipes) => {
+        setSavedRecipes(recipes);
       });
     }
-  }, [userId, setSavedRecipes, title]);
+  }, [userId, setSavedRecipes, refreshSavedRecipes, title]);
+
+  const submitSearch = useCallback(() => {
+    const trimmedInput = searchInput.trim();
+    if (trimmedInput != "") {
+      searchRecipes(userId, trimmedInput).then((recipes) => {
+        setSuggestedRecipes(recipes);
+      });
+    }
+  }, [searchInput]);
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
     setCurrRecipe(recipe);
-    console.log(recipe); // could make a DB query request here
   };
 
   const onBackPress = () => {
@@ -160,19 +76,8 @@ const MainHomePage = ({ navigation }) => {
   const onSuggestedPress = () => {
     setCurrTitle("Suggested Recipes");
   };
-
   const renderItems = (itemData) => {
-    if (title == "My Recipes" && searchInput === "") {
-      return (
-        <RecipeCard
-          key={itemData.id}
-          recipe={itemData.item}
-          onPress={onRecipePress}
-        />
-      );
-    } else if (
-      itemData.item.title.toLowerCase().includes(searchInput.toLowerCase())
-    ) {
+    if (title == "My Recipes") {
       return (
         <RecipeCard
           key={itemData.id}
@@ -187,6 +92,10 @@ const MainHomePage = ({ navigation }) => {
           key={itemData.id}
           recipe={itemData.item}
           onPress={onRecipePress}
+          saved={
+            itemData?.item?.spoonacularId &&
+            itemData?.item?.spoonacularId in savedRecipeIds
+          }
         />
       );
     }
@@ -238,6 +147,7 @@ const MainHomePage = ({ navigation }) => {
                 name="search-outline"
                 size={36}
                 style={styles.searchButton}
+                onPress={submitSearch}
               />
             </TouchableOpacity>
           </View>
@@ -245,10 +155,25 @@ const MainHomePage = ({ navigation }) => {
         <View style={styles.recipeListContainer}>
           <FlatList
             style={{ width: "100%" }}
-            data={title == "My Recipes" ? savedRecipes : suggestedRecipes}
+            data={
+              title == "My Recipes"
+                ? savedRecipes.filter((rec) => rec.title.includes(searchInput))
+                : suggestedRecipes
+            }
             renderItem={renderItems}
             numColumns={2}
             alwaysBounceVertical={true}
+            ListEmptyComponent={
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.emptyComponent}>No recipes found.</Text>
+              </View>
+            }
           />
         </View>
       </SafeAreaView>
@@ -273,6 +198,7 @@ const styles = StyleSheet.create({
   },
   recipeListContainer: {
     width: "100%",
+    flex: 1,
   },
   goBackButton: {
     backgroundColor: "#000000",

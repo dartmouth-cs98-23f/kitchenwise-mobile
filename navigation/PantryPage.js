@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -56,10 +56,9 @@ const PantryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [items, setItems] = useState([]);
   const { userId } = useContext(UserContext);
-  useEffect(() => {
-    // TODO: this is horrible and must be replaced next term
-    const interval = setInterval(() => {
-      getAllItems(userId).then((data) => {
+  const refreshItems = useCallback(() => {
+    getAllItems(userId)
+      .then((data) => {
         setItems(
           data.map((item) => ({
             id: item._id,
@@ -70,7 +69,16 @@ const PantryPage = () => {
             image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
           }))
         );
+      })
+      .catch((err) => {
+        console.log("Inventory polling failed - server not online");
       });
+  }, [userId]);
+  useEffect(() => {
+    // TODO: this is horrible and must be replaced next term
+    refreshItems();
+    const interval = setInterval(() => {
+      refreshItems;
     }, 2500);
     return () => clearInterval(interval);
   }, [userId]);
@@ -98,6 +106,11 @@ const PantryPage = () => {
           numColumns={2}
           columnWrapperStyle={styles.columnWrapper}
           style={styles.pantryList}
+          ListEmptyComponent={
+            <Text style={styles.emptyComponent}>
+              No items in your inventory. Add some through Alexa.
+            </Text>
+          }
         />
       </SafeAreaView>
       <Navbar />
@@ -193,6 +206,7 @@ const styles = StyleSheet.create({
     color: "#333",
     marginTop: 5,
   },
+  emptyComponent: {},
 });
 
 export default PantryPage;
