@@ -36,9 +36,10 @@ const RevisionModal = () => {
             // if there is a new pending action, replace the current one
             if (pendingAction && pendingAction._id != currAction?._id) {
               setCurrAction(pendingAction);
-              // if there is no longer a pending action and we're still displaying one, reset it:
-              //   backend as the single source of truth
-            } else if (pendingAction == null && currAction != null) {
+            }
+            // if there is no longer a pending action and we're still displaying one, reset it:
+            //   backend as the single source of truth
+            else if (pendingAction == null && currAction != null) {
               setCurrAction(null);
               setActionId(null);
             }

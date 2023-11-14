@@ -11,6 +11,7 @@ function Button(props) {
         props.containerStyle,
       ]}
       onPress={props.onPress}
+      disabled={props?.disabled}
     >
       <Text
         style={[styles.buttonText, { color: props.textColor }, props.textStyle]}
