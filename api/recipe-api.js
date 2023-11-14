@@ -3,8 +3,9 @@ import { API_URL } from "./urls";
 
 const URL = API_URL + "/recipe";
 
-export const getSuggestedRecipes = async (userId) => {
-  return (await axios.get(URL + "/suggested", { params: { userId } })).data;
+export const getSuggestedRecipes = async (userId, refresh = false) => {
+  return (await axios.get(URL + "/suggested", { params: { userId, refresh } }))
+    .data;
 };
 
 export const getSavedRecipes = async (userId) => {

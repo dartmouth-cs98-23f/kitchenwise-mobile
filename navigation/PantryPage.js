@@ -152,10 +152,10 @@ const styles = StyleSheet.create({
     height: 40,
   },
   categoryItemActive: {
-    backgroundColor: "#4B5E4C",
+    // backgroundColor: "#4B5E4C",
+    color: "#957E51",
+    fontWeight: "600",
     borderRadius: 10,
-    color: "#fff",
-    paddingHorizontal: 10,
   },
   pantryList: {
     paddingHorizontal: 24,

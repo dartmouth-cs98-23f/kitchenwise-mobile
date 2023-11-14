@@ -21,34 +21,50 @@ import {
 } from "../api/recipe-api";
 import UserContext from "../context/user-context";
 import RecipeContext from "../context/recipe-context";
+import LoginButton from "../components/login_components/LoginButton";
 
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
-  const [title, setCurrTitle] = useState("Suggested Recipes");
+  const [currTitle, setCurrTitle] = useState("Suggested Recipes");
   const [searchInput, setSearchInput] = useState("");
   const [suggestedRecipes, setSuggestedRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { userId } = useContext(UserContext);
   const [savedRecipes, setSavedRecipes] = useState([]);
   const { savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes } =
     useContext(RecipeContext);
 
   useEffect(() => {
-    if (title == "Suggested Recipes") {
+    if (currTitle == "Suggested Recipes") {
+      setLoading(true);
       getSuggestedRecipes(userId).then((data) => {
         const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
         setSuggestedRecipes(parsedRecipes);
+        setLoading(false);
       });
     }
-  }, [userId, setSuggestedRecipes, title]);
+  }, [userId, setSuggestedRecipes, currTitle]);
 
   useEffect(() => {
-    if (title == "My Recipes") {
+    if (currTitle == "My Recipes") {
+      setLoading(true);
       refreshSavedRecipes().then((recipes) => {
         setSavedRecipes(recipes);
+        setLoading(false);
       });
     }
-  }, [userId, setSavedRecipes, refreshSavedRecipes, title]);
+  }, [userId, setSavedRecipes, refreshSavedRecipes, currTitle]);
+
+  const refreshSuggested = useCallback(() => {
+    setSuggestedRecipes([]);
+    setLoading(true);
+    getSuggestedRecipes(userId, true).then((data) => {
+      const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
+      setSuggestedRecipes(parsedRecipes);
+      setLoading(false);
+    });
+  }, [userId, setSuggestedRecipes, setLoading]);
 
   const submitSearch = useCallback(() => {
     const trimmedInput = searchInput.trim();
@@ -76,7 +92,7 @@ const MainHomePage = ({ navigation }) => {
     setCurrTitle("Suggested Recipes");
   };
   const renderItems = (itemData) => {
-    if (title == "My Recipes") {
+    if (currTitle == "My Recipes") {
       return (
         <RecipeCard
           key={itemData.id}
@@ -114,7 +130,7 @@ const MainHomePage = ({ navigation }) => {
             <TouchableOpacity onPress={onSuggestedPress}>
               <Text
                 style={
-                  title === "Suggested Recipes"
+                  currTitle === "Suggested Recipes"
                     ? styles.mainHomeTitle
                     : styles.titleSmall
                 }
@@ -125,7 +141,7 @@ const MainHomePage = ({ navigation }) => {
             <TouchableOpacity onPress={onMyRecipesPress}>
               <Text
                 style={
-                  title === "My Recipes"
+                  currTitle === "My Recipes"
                     ? styles.mainHomeTitle
                     : styles.titleSmall
                 }
@@ -155,12 +171,13 @@ const MainHomePage = ({ navigation }) => {
           <FlatList
             style={{ width: "100%" }}
             data={
-              title == "My Recipes"
+              currTitle == "My Recipes"
                 ? savedRecipes.filter((rec) => rec.title.includes(searchInput))
                 : suggestedRecipes
             }
             renderItem={renderItems}
             numColumns={2}
+            containerStyle={{ alignItems: "center" }}
             alwaysBounceVertical={true}
             ListEmptyComponent={
               <View
@@ -170,8 +187,22 @@ const MainHomePage = ({ navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={styles.emptyComponent}>No recipes found.</Text>
+                <Text style={styles.emptyComponent}>
+                  {loading ? "Loading..." : "No recipes found."}
+                </Text>
               </View>
+            }
+            ListFooterComponent={
+              currTitle == "Suggested Recipes" &&
+              !loading && (
+                <View style={{ flex: 1, alignItems: "center" }}>
+                  <LoginButton
+                    text="Get New Suggestions"
+                    containerStyle={{ width: "80%" }}
+                    onPress={refreshSuggested}
+                  />
+                </View>
+              )
             }
           />
         </View>

@@ -9,7 +9,10 @@ function LoginButton(props) {
       textColor={
         props.isBlack ? styles.buttonTextWhite : styles.buttonTextBlack
       }
-      containerStyle={props.isBlack ? styles.buttonBlack : styles.buttonWhite}
+      containerStyle={{
+        ...(props.isBlack ? styles.buttonBlack : styles.buttonWhite),
+        ...props.containerStyle,
+      }}
       disabled={props?.disabled}
     />
   );
