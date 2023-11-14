@@ -14,7 +14,7 @@ import InventoryContext from "../../context/inventory-context";
 import UserContext from "../../context/user-context";
 
 // How many seconds the modal stays open before autoconfirming
-const MAX_TIME_OPEN = 10;
+const MAX_TIME_OPEN = 15;
 
 const RevisionModal = () => {
   const [currAction, setCurrAction] = useState(null);
