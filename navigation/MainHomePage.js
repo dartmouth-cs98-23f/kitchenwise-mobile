@@ -38,7 +38,6 @@ const MainHomePage = ({ navigation }) => {
       getSuggestedRecipes(userId).then((data) => {
         const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
         setSuggestedRecipes(parsedRecipes);
-        console.log(parsedRecipes);
       });
     }
   }, [userId, setSuggestedRecipes, title]);
