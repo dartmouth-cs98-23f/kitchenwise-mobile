@@ -133,7 +133,6 @@ const MainHomePage = ({ navigation }) => {
   useEffect(() => {
     if (title == "My Recipes") {
       getSavedRecipes(userId).then((data) => {
-        console.log(data.map((rec) => rec.title));
         const parsedRecipes = data.map((rec) => ({
           key: rec._id,
           title: rec.title,

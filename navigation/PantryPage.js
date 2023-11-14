@@ -55,21 +55,24 @@ const PantryItem = ({ name, expiration, image }) => (
 const PantryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [items, setItems] = useState([]);
-  const { userInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
   useEffect(() => {
-    getAllItems(userId).then((data) => {
-      setItems(
-        data.map((item) => ({
-          id: item._id,
-          name: item.name,
-          expiration: item?.expirationDate
-            ? moment.utc(item?.expirationDate).format("MM/DD")
-            : null,
-          image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
-        }))
-      );
-    });
+    // TODO: this is horrible and must be replaced next term
+    const interval = setInterval(() => {
+      getAllItems(userId).then((data) => {
+        setItems(
+          data.map((item) => ({
+            id: item._id,
+            name: item.name,
+            expiration: item?.expirationDate
+              ? moment.utc(item?.expirationDate).format("MM/DD")
+              : null,
+            image: require("../assets/flatlay-iron-skillet-with-meat-and-other-food.jpg"),
+          }))
+        );
+      });
+    }, 2500);
+    return () => clearInterval(interval);
   }, [userId]);
   return (
     <>
