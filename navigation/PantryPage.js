@@ -55,6 +55,13 @@ const PantryPage = () => {
             />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity >
+          <Ionicons 
+          name="filter"
+          size={24}
+          style = {styles.filterButton}
+          />
+        </TouchableOpacity>
         <FlatList
           data={items}
           renderItem={({ item }) => <PantryItem {...item} />}
@@ -76,6 +83,7 @@ const styles = StyleSheet.create({
   pantryScreenContainer: {
     flex: 1,
     backgroundColor: "#fff",
+    marginBottom: 0,
   },
   headerContainer: {
     flexDirection: "row",
@@ -95,9 +103,14 @@ const styles = StyleSheet.create({
     color: "#957E51",
   },
   pantryList: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingHorizontal: "5%",
+    paddingVertical: 24,
   },
+  filterButton: {
+    color: "#957E51",
+    alignItems: "center",
+    paddingLeft: 40
+  }
 });
 
 export default PantryPage;
