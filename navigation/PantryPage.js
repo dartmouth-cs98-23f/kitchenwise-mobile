@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import moment from "moment";
 import Navbar from "./Navbar";
@@ -13,10 +14,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
+import LoginButton from "../components/login_components/LoginButton";
 
 const PantryPage = () => {
+  
+
+  const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
+  const [filters, setFilters] = useState([]);
   const { userId } = useContext(UserContext);
+
+  const filterButtonHanlder = () => {
+    setModalVisible(true);
+  };
+
+  const filterDoneHandler = () => {
+    setModalVisible(false);
+  }
+
   const refreshItems = useCallback(() => {
     getAllItems(userId)
       .then((data) => {
@@ -55,13 +70,41 @@ const PantryPage = () => {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={filterButtonHanlder} >
           <Ionicons 
           name="filter"
           size={24}
           style = {styles.filterButton}
           />
         </TouchableOpacity>
+        <Modal 
+          visible={modalVisible}
+          transparent={true}
+          animationType="fade"
+        >
+          <SafeAreaView style={styles.filterModalContainer}>
+            <View style={styles.filtersPanel}>
+              <View style={styles.filtersBlock}>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={filterDoneHandler}><Text>Done</Text></TouchableOpacity>
+              </View>
+           
+            </View>
+          </SafeAreaView>
+        </Modal>
         <FlatList
           data={items}
           renderItem={({ item }) => <PantryItem {...item} />}
@@ -110,6 +153,27 @@ const styles = StyleSheet.create({
     color: "#957E51",
     alignItems: "center",
     paddingLeft: 40
+  },
+  filtersPanel: {
+    backgroundColor: "#957E51",
+    padding: "5%",
+    width: "50%",
+    height: "100%",
+    borderRadius: 1,
+
+    alignItems: "center"
+  },
+  filtersBlock: {
+   marginTop: 50,
+  },
+  filters: {
+    margin: 15,
+    flexDirection: "row-reverse",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  filterSelect: {
+    margin: 15,
   }
 });
 
