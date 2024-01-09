@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./components/login_components/LoginScreen";
 import MainHomePage from "./navigation/MainHomePage";
-import ProfileScreen from "./components/profile_components/ProfileScreen";
+import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
 import InventoryContext, {
   defaultInventoryContext,
@@ -43,11 +43,11 @@ export default function App() {
               <Stack.Screen
                 name="MainHomePage"
                 component={MainHomePage}
-                options={{ title: "Main Home Page", headerBackVisible: false, headerShown: false, animation: 'none',  headerShown: false}}
+                options={{ title: "", headerBackVisible: false, headerShown: false, animation: 'none',  headerShown: false}}
               />
-              <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerBackVisible: false, animation: 'none',  headerShown: false }}/>
+              <Stack.Screen name="Profile" component={ProfilePage} options={{ title: "", headerBackVisible: false, animation: 'none',  headerShown: false }}/>
 
-              <Stack.Screen name="Pantry" component={PantryPage} options={{ headerBackVisible: false, animation: 'none', headerShown: false }}/>
+              <Stack.Screen name="Pantry" component={PantryPage} options={{ title: "", headerBackVisible: false, animation: 'none', headerShown: false }}/>
               {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
             </Stack.Navigator>
           </NavigationContainer>

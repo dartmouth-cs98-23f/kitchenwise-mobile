@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import Navbar from "../../navigation/Navbar";
+import Navbar from "./Navbar";
 
-const ProfileScreen = () => {
+const ProfilePage = () => {
   return (
     <>
       <View style={styles.container}>
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ProfilePage;
