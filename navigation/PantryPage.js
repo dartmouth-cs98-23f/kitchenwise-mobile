@@ -5,64 +5,37 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  Image,
+  Modal,
 } from "react-native";
 import moment from "moment";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import InventoryContext from "../context/inventory-context";
 import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
-
-const categories = ["Dairy", "Fresh Produce", "Canned", "Fruits"];
-
-const CategoryMenu = ({ selectedCategory, onSelectCategory }) => (
-  <FlatList
-    horizontal
-    data={categories}
-    renderItem={({ item }) => (
-      <TouchableOpacity
-        style={styles.categoryItem}
-        onPress={() => onSelectCategory(item)}
-      >
-        <Text
-          style={item === selectedCategory ? styles.categoryItemActive : null}
-        >
-          {item}
-        </Text>
-      </TouchableOpacity>
-    )}
-    keyExtractor={(item) => item}
-    showsHorizontalScrollIndicator={false}
-    style={styles.categoryMenu}
-  />
-);
-
-const PantryItem = ({ name, expiration, image, quantity, unit }) => (
-  <View style={styles.pantryItem}>
-    <View>
-      <Text style={styles.itemName}>{name}</Text>
-      <Text>
-        {quantity} {unit}
-      </Text>
-    </View>
-    {expiration && (
-      <View style={styles.expirationIndicator}>
-        <Text style={[styles.expirationText, { fontSize: 9 }]}>exp.</Text>
-        <Text style={styles.expirationText}>{expiration}</Text>
-      </View>
-    )}
-  </View>
-);
+import PantryItem from "../components/pantry_components/PantryItem";
+import LoginButton from "../components/login_components/LoginButton";
 
 const PantryPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  
+
+  const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
+  const [filters, setFilters] = useState([]);
   const { userId } = useContext(UserContext);
+
+  const filterButtonHanlder = () => {
+    setModalVisible(true);
+  };
+
+  const filterDoneHandler = () => {
+    setModalVisible(false);
+  }
+
   const refreshItems = useCallback(() => {
     getAllItems(userId)
       .then((data) => {
+        // Data passes "_id": (String), "expirationDate" (optional Date?), "name": (String), "quantity": (int), "tags": (List), "unit": (String)
         setItems(
           data.map((item) => ({
             ...item,
@@ -83,11 +56,12 @@ const PantryPage = () => {
     const interval = setInterval(refreshItems, 2500);
     return () => clearInterval(interval);
   }, [userId, refreshItems]);
+  
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.pantryScreenContainer}>
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>my items</Text>
+          <Text style={styles.header}>My Items</Text>
           <TouchableOpacity>
             <Ionicons
               name="search-outline"
@@ -96,10 +70,41 @@ const PantryPage = () => {
             />
           </TouchableOpacity>
         </View>
-        <CategoryMenu
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+        <TouchableOpacity onPress={filterButtonHanlder} >
+          <Ionicons 
+          name="filter"
+          size={24}
+          style = {styles.filterButton}
+          />
+        </TouchableOpacity>
+        <Modal 
+          visible={modalVisible}
+          transparent={true}
+          animationType="fade"
+        >
+          <SafeAreaView style={styles.filterModalContainer}>
+            <View style={styles.filtersPanel}>
+              <View style={styles.filtersBlock}>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.filters}>
+                  <Text>Filter 1</Text>
+                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={filterDoneHandler}><Text>Done</Text></TouchableOpacity>
+              </View>
+           
+            </View>
+          </SafeAreaView>
+        </Modal>
         <FlatList
           data={items}
           renderItem={({ item }) => <PantryItem {...item} />}
@@ -118,97 +123,58 @@ const PantryPage = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  pantryScreenContainer: {
     flex: 1,
     backgroundColor: "#fff",
+    marginBottom: 0,
   },
   headerContainer: {
     flexDirection: "row",
   },
   header: {
+    flex: 1,
     fontSize: 32,
     fontWeight: "500",
-    padding: 20,
-    textAlign: "center",
+    padding: 10,
     color: "#957E51",
-    paddingRight: 175,
+    paddingLeft: 40,
   },
   searchButton: {
-    alignItems: "center",
-    padding: 20,
-    color: "#957E51",
-  },
-  categoryMenu: {
-    flexDirection: "row",
-    color: "#4B5E4C",
-    borderColor: "#4B5E4C",
-    maxHeight: 40,
-    borderBottomWidth: 1,
-  },
-  categoryItem: {
+    flex: 1,
     padding: 10,
-    borderRadius: 10,
-    color: "#4B5E4C",
-    height: 40,
-  },
-  categoryItemActive: {
-    // backgroundColor: "#4B5E4C",
+    alignItems: "center",
     color: "#957E51",
-    fontWeight: "600",
-    borderRadius: 10,
   },
   pantryList: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    flexDirection: "column",
+    paddingHorizontal: "5%",
+    paddingVertical: 24,
   },
-  columnWrapper: {
-    color: "#4B5E4C",
-  },
-  pantryItem: {
-    backgroundColor: "#f9f9f9",
-    borderRadius: 20,
-    borderColor: "#4B5E4C",
+  filterButton: {
+    color: "#957E51",
     alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#eee",
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    justifyContent: "space-between",
-    marginVertical: 4,
+    paddingLeft: 40
   },
-  itemImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
+  filtersPanel: {
+    backgroundColor: "#957E51",
+    padding: "5%",
+    width: "50%",
+    height: "100%",
+    borderRadius: 1,
+
+    alignItems: "center"
   },
-  expirationIndicator: {
-    position: "absolute",
-    right: 0,
-    backgroundColor: "white",
-    borderRadius: 50,
-    width: 50,
-    height: 50,
+  filtersBlock: {
+   marginTop: 50,
+  },
+  filters: {
+    margin: 15,
+    flexDirection: "row-reverse",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#ff6e6e",
-    elevation: 4,
-    zIndex: 4,
   },
-  expirationText: {
-    color: "#ff6e6e",
-    fontWeight: "bold",
-    elevation: 4,
-    zIndex: 4,
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  emptyComponent: {},
+  filterSelect: {
+    margin: 15,
+  }
 });
 
 export default PantryPage;
