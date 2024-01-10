@@ -1,5 +1,4 @@
-import { React, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { React, useEffect, useState, useContext, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,160 +6,209 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
-  Image,
-  Modal,
-  SafeAreaView
+  TextInput,
+  SafeAreaView,
 } from "react-native";
 import RecipeCard from "../components/recipeScreen_components/RecipeCard";
 import Navbar from "./Navbar";
 import { Ionicons } from "@expo/vector-icons";
 import RevisionModal from "../components/modals/RevisionModal";
-import { NavigationContainerRefContext } from "@react-navigation/native";
-
-const recipes = [
-  {
-    key: "1",
-    title: "Recipe 1",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgDhhy8ESPDa17yvq8uikiX6gjJXxy8eOXdg&usqp=CAU",
-    difficulty: "Easy",
-    cookTime: "30 min",
-  },
-  {
-    key: "2",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVTeQYk3K-xm33ZBXYvUXzeWgIXFVynKg3Gw&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "3",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy5bLTDIaGCQWxp14-4cy2FWzDt59LOTaQCQ&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "4",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQam75tTNPk7iik2UnZQQdrmEp4rnG_U_dyWw&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "5",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRd12T4dshafLbevnN-QYAwTn--GhmqjY_gg&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "6",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8CerEZRSBlTN-Ni75IBIMgtQ1SvND5cT3MA&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "7",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lT10tINHblp_sllc_o3eMZU32tF6K6DNxA&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "8",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP1tVk95UBNwlif-CZ3SHtazYgdZm-1PjRBg&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-  {
-    key: "9",
-    title: "Recipe 2",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmV2fYhkn84wH8NkZgKneOs4nTY5Brsz5Uag&usqp=CAU",
-    difficulty: "Medium",
-    cookTIime: "45 min",
-  },
-];
+import RecipeModal from "../components/recipeScreen_components/RecipeModal";
+import {
+  getSavedRecipes,
+  getSuggestedRecipes,
+  searchRecipes,
+} from "../api/recipe-api";
+import UserContext from "../context/user-context";
+import RecipeContext from "../context/recipe-context";
+import LoginButton from "../components/login_components/LoginButton";
 
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currRecipe, setCurrRecipe] = useState({});
+  const [currTitle, setCurrTitle] = useState("Suggested Recipes");
+  const [searchInput, setSearchInput] = useState("");
+  const [suggestedRecipes, setSuggestedRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { userId } = useContext(UserContext);
+  const [savedRecipes, setSavedRecipes] = useState([]);
+  const { savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes } =
+    useContext(RecipeContext);
+
+  useEffect(() => {
+    if (currTitle == "Suggested Recipes") {
+      setLoading(true);
+      getSuggestedRecipes(userId).then((data) => {
+        const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
+        setSuggestedRecipes(parsedRecipes);
+        setLoading(false);
+      });
+    }
+  }, [userId, setSuggestedRecipes, currTitle]);
+
+  useEffect(() => {
+    if (currTitle == "My Recipes") {
+      setLoading(true);
+      refreshSavedRecipes().then((recipes) => {
+        setSavedRecipes(recipes);
+        setLoading(false);
+      });
+    }
+  }, [userId, setSavedRecipes, refreshSavedRecipes, currTitle]);
+
+  const refreshSuggested = useCallback(() => {
+    setSuggestedRecipes([]);
+    setLoading(true);
+    getSuggestedRecipes(userId, true).then((data) => {
+      const parsedRecipes = data.map((rec) => ({ ...rec, id: rec._id }));
+      setSuggestedRecipes(parsedRecipes);
+      setLoading(false);
+    });
+  }, [userId, setSuggestedRecipes, setLoading]);
+
+  const submitSearch = useCallback(() => {
+    const trimmedInput = searchInput.trim();
+    if (trimmedInput != "") {
+      searchRecipes(userId, trimmedInput).then((recipes) => {
+        setSuggestedRecipes(recipes);
+      });
+    }
+  }, [searchInput]);
 
   const onRecipePress = (recipe) => {
     setModalVisible(true);
     setCurrRecipe(recipe);
-    console.log(recipe); // could make a DB query request here
   };
 
   const onBackPress = () => {
     setModalVisible(false);
   };
 
+  const onMyRecipesPress = () => {
+    setCurrTitle("My Recipes");
+  };
+
+  const onSuggestedPress = () => {
+    setCurrTitle("Suggested Recipes");
+  };
   const renderItems = (itemData) => {
-    return (
-      <RecipeCard
-        key={itemData.id}
-        recipe={itemData.item}
-        onPress={onRecipePress}
-      />
-    );
+    if (currTitle == "My Recipes") {
+      return (
+        <RecipeCard
+          key={itemData.id}
+          recipe={itemData.item}
+          onPress={onRecipePress}
+        />
+      );
+    } else {
+      // TODO: Need to send an API call to Spoonacular to search for suggested recipes, if the search is blank render randmon/top recupes, else send a request for recipes that match search
+      return (
+        <RecipeCard
+          key={itemData.id}
+          recipe={itemData.item}
+          onPress={onRecipePress}
+          saved={
+            itemData?.item?.spoonacularId &&
+            itemData?.item?.spoonacularId in savedRecipeIds
+          }
+        />
+      );
+    }
   };
 
   return (
     <>
       <StatusBar style="dark" />
-
-      <Modal visible={modalVisible} animationType="slide" transparent={false}>
-        <SafeAreaView style={styles.recipeModalContainer}>
-          <TouchableOpacity onPress={onBackPress}>
-            <Ionicons
-              name="arrow-back-outline"
-              size={36}
-              style={styles.backButton}
-            />
-          </TouchableOpacity>
-          <Image style={styles.image} source={{ uri: currRecipe.image }} />
-          <Text style={styles.modalSubheader}> You have </Text>
-          <FlatList></FlatList>
-          <Text style={styles.modalSubheader}> You need </Text>
-          <FlatList></FlatList>
-        </SafeAreaView>
-      </Modal>
-      {/* <RevisionModal /> */}
-
+      <RecipeModal
+        modalState={modalVisible}
+        backFunction={onBackPress}
+        recipe={currRecipe}
+      />
       <SafeAreaView style={styles.mainHomeContainer}>
         <View style={styles.mainHomeHeaderContainer}>
-          <Text style={styles.mainHomeTitle}>my recipes</Text>
-          <TouchableOpacity>
-            <Ionicons
-              name="search-outline"
-              size={36}
-              style={styles.searchButton}
+          <View style={styles.titleContainer}>
+            <TouchableOpacity onPress={onSuggestedPress}>
+              <Text
+                style={
+                  currTitle === "Suggested Recipes"
+                    ? styles.mainHomeTitle
+                    : styles.titleSmall
+                }
+              >
+                Suggested Recipes
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onMyRecipesPress}>
+              <Text
+                style={
+                  currTitle === "My Recipes"
+                    ? styles.mainHomeTitle
+                    : styles.titleSmall
+                }
+              >
+                My Recipes
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Type something..."
+              value={searchInput}
+              onChangeText={(text) => setSearchInput(text)}
             />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Ionicons
+                name="search-outline"
+                size={36}
+                style={styles.searchButton}
+                onPress={submitSearch}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.recipeListContainer}>
           <FlatList
             style={{ width: "100%" }}
-            data={recipes}
+            data={
+              currTitle == "My Recipes"
+                ? savedRecipes.filter((rec) => rec.title.includes(searchInput))
+                : suggestedRecipes
+            }
             renderItem={renderItems}
             numColumns={2}
+            containerStyle={{ alignItems: "center" }}
             alwaysBounceVertical={true}
+            ListEmptyComponent={
+              <View
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.emptyComponent}>
+                  {loading ? "Loading..." : "No recipes found."}
+                </Text>
+              </View>
+            }
+            ListFooterComponent={
+              currTitle == "Suggested Recipes" &&
+              !loading && (
+                <View style={{ flex: 1, alignItems: "center" }}>
+                  <LoginButton
+                    text="Get New Suggestions"
+                    containerStyle={{ width: "80%" }}
+                    onPress={refreshSuggested}
+                  />
+                </View>
+              )
+            }
           />
         </View>
       </SafeAreaView>
 
-      <Navbar navigation={navigation}/>
+      <Navbar navigation={navigation} />
     </>
   );
 };
@@ -172,33 +220,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   mainHomeHeaderContainer: {
-    flexDirection: "row",
-  },
-  mainHomeTitle: {
-    fontSize: 32,
-    fontWeight: '500',
-    padding: 20,
-    textAlign: 'center',
-    color: '#957E51',
-    paddingRight: 170,
-
+    flexDirection: "column",
+    justifyContent: "space-between",
+    width: "100%",
+    padding: "5%",
+    gap: 24,
   },
   recipeListContainer: {
     width: "100%",
-  },
-  searchButton: {
-    alignItems: "center",
-    color: '#957E51',
-    paddingTop: 20,
-  },
-  recipeModalContainer: {
     flex: 1,
-    // backgroundColor: "yellow", for debugging
-    justifyContent: "flex-start",
-    backgroundColor: "#f8f8f8",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingBottom: 60, // Add padding to avoid overlap with the Navbar
   },
   goBackButton: {
     backgroundColor: "#000000",
@@ -209,22 +239,37 @@ const styles = StyleSheet.create({
   },
   goBackButtonText: {
     color: "#FFFFFF",
-    // fontWeight: 400,
   },
-  image: {
-    width: "80",
-    height: "30%",
-    margin: 5,
+  searchContainer: {
+    flexDirection: "row",
+    // marginBottom: "5%",
   },
-  backButton: {
-    margin: "5%",
-    marginTop: "10%",
+  searchInput: {
+    flex: 1,
+    height: "100%",
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    marginRight: "5%",
+    borderRadius: 10,
   },
-  modalSubheader: {
-    color: "#353434d9",
+  searchButton: {
+    alignItems: "center",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    // marginTop: "4%",
+  },
+  mainHomeTitle: {
     fontSize: 20,
+    color: "#957E51",
     fontWeight: "600",
-    margin: "5%",
+  },
+  titleSmall: {
+    fontSize: 20,
+    color: "grey",
   },
 });
 

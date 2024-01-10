@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import Navbar from "./Navbar";
+import Navbar from "../../navigation/Navbar";
 
-const ProfilePage = () => {
+const ProfileScreen = () => {
   return (
     <>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <Image source={require('../assets/profile_photo.png')} style={styles.profileImage} />
+          <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
           <Text style={styles.nameText}>John Doe</Text>
           <Text style={styles.emailText}>john.doe@example.com</Text>
         </View>
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfilePage;
+export default ProfileScreen;

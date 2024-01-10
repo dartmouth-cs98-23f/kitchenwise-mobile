@@ -14,7 +14,7 @@ import InventoryContext from "../../context/inventory-context";
 import UserContext from "../../context/user-context";
 
 // How many seconds the modal stays open before autoconfirming
-const MAX_TIME_OPEN = 10;
+const MAX_TIME_OPEN = 15;
 
 const RevisionModal = () => {
   const [currAction, setCurrAction] = useState(null);
@@ -36,9 +36,10 @@ const RevisionModal = () => {
             // if there is a new pending action, replace the current one
             if (pendingAction && pendingAction._id != currAction?._id) {
               setCurrAction(pendingAction);
-              // if there is no longer a pending action and we're still displaying one, reset it:
-              //   backend as the single source of truth
-            } else if (pendingAction == null && currAction != null) {
+            }
+            // if there is no longer a pending action and we're still displaying one, reset it:
+            //   backend as the single source of truth
+            else if (pendingAction == null && currAction != null) {
               setCurrAction(null);
               setActionId(null);
             }

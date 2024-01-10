@@ -4,11 +4,13 @@ import { API_URL } from "./urls";
 const URL = API_URL + "/addaction";
 
 export const getPendingAction = async (userId) => {
-  return (
+  const pendingAction = (
     await axios.get(`${URL}/pending`, {
       params: { userId },
     })
   ).data;
+  if (pendingAction == "") return null;
+  return pendingAction;
 };
 
 export const reviseAction = async (action) => {
