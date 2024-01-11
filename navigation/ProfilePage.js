@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const ProfileScreen = () => {
+const ProfilePage = () => {
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
           <Image source={require('../assets/profile_photo.png')} style={styles.profileImage} />
           <Text style={styles.nameText}>John Doe</Text>
@@ -37,7 +38,7 @@ const ProfileScreen = () => {
             <Text style={styles.buttonText}>About</Text>
           </TouchableOpacity>
         </ScrollView>
-      </View>
+      </SafeAreaView>
       <Navbar />
     </>
   );
@@ -83,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ProfilePage;
