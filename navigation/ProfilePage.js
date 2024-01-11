@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
-import Navbar from "../../navigation/Navbar";
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import Navbar from "./Navbar";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const ProfileScreen = () => {
+const ProfilePage = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
-          <Image source={require('../../assets/profile_photo.png')} style={styles.profileImage} />
+          <Image source={require('../assets/profile_photo.png')} style={styles.profileImage} />
           <Text style={styles.nameText}>John Doe</Text>
           <Text style={styles.emailText}>john.doe@example.com</Text>
         </View>
@@ -83,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ProfilePage;
