@@ -3,11 +3,15 @@ import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
+import { useNavigation } from '@react-navigation/native';
+import LoginButton from "../components/login_components/LoginButton";
 
-const AlexaPage = ({ navigation }) => {
+const AlexaPage = () => {
   const [recording, setRecording] = React.useState();
   const [recordings, setRecordings] = React.useState([]);
   const [message, setMessage] = React.useState("");
+
+  const navigation = useNavigation();
 
   async function startRecording() {
     try {
@@ -70,11 +74,12 @@ const AlexaPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
-      <Button
-        title={recording ? 'Stop Recording' : 'Start Recording'}
-        onPress={recording ? stopRecording : startRecording} />
+      <LoginButton
+            text={recording ? 'Stop Recording' : 'Start Recording'}
+            containerStyle={{ width: "80%" }}
+            onPress={recording ? stopRecording : startRecording}
+            />
       {getRecordingLines()}
-      <StatusBar style="auto" />
     </View>
   );
 }

@@ -102,10 +102,10 @@ export default function App() {
                 <Stack.Screen
                   name="Alexa"
                   component={AlexaPage}
-                  options={{ title: "",
-                    headerBackVisible: false,
+                  options={{ title: "My Alexa",
+                    headerBackVisible: true,
                     animation: "none",
-                    headerShown: false,
+                    headerShown: true,
                   }}
                 />
                 {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
