@@ -21,7 +21,7 @@ const AlexaButton = () => {
 const styles = StyleSheet.create({
     buttonContainer: {
       position: 'absolute',
-      bottom: 16,
+      bottom: 70,
       right: 16,
       backgroundColor: 'rgba(0, 168, 225, 0.9)', // Transparent Amazon blue color
       borderRadius: 35, 

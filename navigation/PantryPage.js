@@ -15,6 +15,7 @@ import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
 import LoginButton from "../components/login_components/LoginButton";
+import AlexaButton from '../components/alexa_components/AlexaButton';
 
 const PantryPage = () => {
   
@@ -116,6 +117,7 @@ const PantryPage = () => {
             </Text>
           }
         />
+        <AlexaButton />
       </SafeAreaView>
       <Navbar />
     </>
