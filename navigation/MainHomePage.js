@@ -22,6 +22,7 @@ import {
 import UserContext from "../context/user-context";
 import RecipeContext from "../context/recipe-context";
 import LoginButton from "../components/login_components/LoginButton";
+import AlexaButton from '../components/alexa_components/AlexaButton';
 
 const MainHomePage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -206,6 +207,7 @@ const MainHomePage = ({ navigation }) => {
             }
           />
         </View>
+        <AlexaButton  navigation={navigation} />
       </SafeAreaView>
 
       <Navbar navigation={navigation} />
