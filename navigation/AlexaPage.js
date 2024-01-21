@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import { useNavigation } from '@react-navigation/native';
 import LoginButton from "../components/login_components/LoginButton";
+import LoginWithAmazonButton from '../components/alexa_components/LoginWithAmazon';
 
 const AlexaPage = () => {
   const [recording, setRecording] = React.useState();
@@ -72,15 +73,16 @@ const AlexaPage = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>{message}</Text>
       <LoginButton
             text={recording ? 'Stop Recording' : 'Start Recording'}
             containerStyle={{ width: "80%" }}
             onPress={recording ? stopRecording : startRecording}
             />
+      <LoginWithAmazonButton />
       {getRecordingLines()}
-    </View>
+    </SafeAreaView>
   );
 }
 
