@@ -1,12 +1,19 @@
 // LoginWithAmazonButton.js
 import React from 'react';
 import { TouchableOpacity, Image, View, SafeAreaView } from 'react-native';
+// @ts-ignore
 import LoginWithAmazon from 'react-native-amazon-authentication';
+import {
+    NativeEventEmitter
+  } from 'react-native';
+  
+  const eventEmitter = new NativeEventEmitter(LoginWithAmazon);
 
 const LoginWithAmazonButton = () => {
   const handleLoginWithAmazon = () => {
     // Handle the Login with Amazon action
     console.log('Login with Amazon clicked');
+    LoginWithAmazon.login();
     // You can implement additional logic here if needed
   };
 
