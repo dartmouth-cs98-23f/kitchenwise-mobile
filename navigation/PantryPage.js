@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
-import LoginButton from "../components/login_components/LoginButton";
+import PantrySearchModal from "../components/pantry_components/PantrySearchModal";
 
 const PantryPage = () => {
   
@@ -33,7 +33,9 @@ const PantryPage = () => {
   }
 
   const refreshItems = useCallback(() => {
-    getAllItems(userId)
+
+ 
+      getAllItems(userId)
       .then((data) => {
         // Data passes "_id": (String), "expirationDate" (optional Date?), "name": (String), "quantity": (int), "tags": (List), "unit": (String)
         setItems(
@@ -49,6 +51,8 @@ const PantryPage = () => {
       .catch((err) => {
         console.log("Inventory polling failed - server not online");
       });
+
+    
   }, [userId, setItems]);
   useEffect(() => {
     // TODO: this is horrible and must be replaced next term
@@ -62,7 +66,7 @@ const PantryPage = () => {
       <SafeAreaView style={styles.pantryScreenContainer}>
         <View style={styles.headerContainer}>
           <Text style={styles.header}>My Items</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={filterButtonHanlder}>
             <Ionicons
               name="search-outline"
               size={36}
@@ -70,41 +74,7 @@ const PantryPage = () => {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={filterButtonHanlder} >
-          <Ionicons 
-          name="filter"
-          size={24}
-          style = {styles.filterButton}
-          />
-        </TouchableOpacity>
-        <Modal 
-          visible={modalVisible}
-          transparent={true}
-          animationType="fade"
-        >
-          <SafeAreaView style={styles.filterModalContainer}>
-            <View style={styles.filtersPanel}>
-              <View style={styles.filtersBlock}>
-                <TouchableOpacity style={styles.filters}>
-                  <Text>Filter 1</Text>
-                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filters}>
-                  <Text>Filter 1</Text>
-                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.filters}>
-                  <Text>Filter 1</Text>
-                  <Ionicons name="square-outline" size={18} style={styles.filterSelect}/>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TouchableOpacity onPress={filterDoneHandler}><Text>Done</Text></TouchableOpacity>
-              </View>
-           
-            </View>
-          </SafeAreaView>
-        </Modal>
+       <PantrySearchModal filterDoneHandler={filterDoneHandler} visible={modalVisible}/>
         <FlatList
           data={items}
           renderItem={({ item }) => <PantryItem {...item} />}
@@ -130,6 +100,8 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: "row",
+    marginBottom: 10,
+    padding: 20,
   },
   header: {
     flex: 1,
@@ -149,18 +121,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: "5%",
     paddingVertical: 24,
   },
-  filterButton: {
-    color: "#957E51",
-    alignItems: "center",
-    paddingLeft: 40
-  },
-  filtersPanel: {
+  searchPanel: {
     backgroundColor: "#957E51",
     padding: "5%",
     width: "50%",
     height: "100%",
     borderRadius: 1,
-
     alignItems: "center"
   },
   filtersBlock: {
