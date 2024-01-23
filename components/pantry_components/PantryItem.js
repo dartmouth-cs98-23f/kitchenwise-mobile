@@ -1,6 +1,10 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 
+const editOnPress = () => {
+
+}
+
 const PantryItem = ({ name, expiration, image, quantity, unit }) => (
   <View style={styles.pantryItemContainer}>
     <Image style={styles.itemImage}></Image>
@@ -10,7 +14,7 @@ const PantryItem = ({ name, expiration, image, quantity, unit }) => (
         {quantity} {unit} {expiration ? "exp." + expiration : null }
       </Text>
     </View>
-    <TouchableOpacity style={styles.editButton}>
+    <TouchableOpacity style={styles.editButton} onPress={editOnPress}>
       <Ionicons name="create-outline" size={20} />
     </TouchableOpacity>
   </View>

@@ -10,3 +10,4 @@ export const getUserInventories = async (userId) => {
 export const getAllItems = async (userId) => {
   return (await axios.get(URL + "/allitems", { params: { userId } })).data;
 };
+
