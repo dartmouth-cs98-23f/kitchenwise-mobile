@@ -13,8 +13,8 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		5FF686792B5DB65400C9B749 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF686782B5DB65400C9B749 /* Security.framework */; };
 		5FF6867B2B5DB65D00C9B749 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF6867A2B5DB65D00C9B749 /* SafariServices.framework */; };
-		5FF6867D2B5DB69900C9B749 /* LoginWithAmazon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF6867C2B5DB69900C9B749 /* LoginWithAmazon.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		5FF6867E2B5DB69900C9B749 /* LoginWithAmazon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF6867C2B5DB69900C9B749 /* LoginWithAmazon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FF6867D2B5DB69900C9B749 /* A in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF6867C2B5DB69900C9B749 /* A */; settings = {ATTRIBUTES = (Required, ); }; };
+		5FF6867E2B5DB69900C9B749 /* A in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF6867C2B5DB69900C9B749 /* A */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		88CF8085A9094D008ABD27AA /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8364C506ABD4893AB3A9438 /* noop-file.swift */; };
 		96905EF65AED1B983A6B3ABC /* libPods-kitchenwisemobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-kitchenwisemobile.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
@@ -28,7 +28,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5FF6867E2B5DB69900C9B749 /* LoginWithAmazon.framework in Embed Frameworks */,
+				5FF6867E2B5DB69900C9B749 /* A in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,7 +45,7 @@
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-kitchenwisemobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-kitchenwisemobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FF686782B5DB65400C9B749 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		5FF6867A2B5DB65D00C9B749 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
-		5FF6867C2B5DB69900C9B749 /* LoginWithAmazon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LoginWithAmazon.framework; sourceTree = "<group>"; };
+		5FF6867C2B5DB69900C9B749 /* A */ = {isa = PBXFileReference; lastKnownFileType = folder; name = A; path = LoginWithAmazon.framework/Versions/A; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-kitchenwisemobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kitchenwisemobile.debug.xcconfig"; path = "Target Support Files/Pods-kitchenwisemobile/Pods-kitchenwisemobile.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-kitchenwisemobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kitchenwisemobile.release.xcconfig"; path = "Target Support Files/Pods-kitchenwisemobile/Pods-kitchenwisemobile.release.xcconfig"; sourceTree = "<group>"; };
 		80DAA79555744B94ADA4E20C /* kitchenwisemobile-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "kitchenwisemobile-Bridging-Header.h"; path = "kitchenwisemobile/kitchenwisemobile-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -61,7 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FF6867D2B5DB69900C9B749 /* LoginWithAmazon.framework in Frameworks */,
+				5FF6867D2B5DB69900C9B749 /* A in Frameworks */,
 				5FF686792B5DB65400C9B749 /* Security.framework in Frameworks */,
 				96905EF65AED1B983A6B3ABC /* libPods-kitchenwisemobile.a in Frameworks */,
 				5FF6867B2B5DB65D00C9B749 /* SafariServices.framework in Frameworks */,
@@ -90,7 +90,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5FF6867C2B5DB69900C9B749 /* LoginWithAmazon.framework */,
+				5FF6867C2B5DB69900C9B749 /* A */,
 				5FF6867A2B5DB65D00C9B749 /* SafariServices.framework */,
 				5FF686782B5DB65400C9B749 /* Security.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
@@ -377,6 +377,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kitchenwisemobile/kitchenwisemobile.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K27K88QBSL;
 				ENABLE_BITCODE = NO;
@@ -403,6 +405,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kitchenwise.kitchenwise-mobile";
 				PRODUCT_NAME = kitchenwisemobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "kitchenwisemobile/kitchenwisemobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -419,6 +422,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kitchenwisemobile/kitchenwisemobile.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K27K88QBSL;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -440,6 +445,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kitchenwise.kitchenwise-mobile";
 				PRODUCT_NAME = kitchenwisemobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "kitchenwisemobile/kitchenwisemobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
