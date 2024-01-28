@@ -5,6 +5,7 @@ import LoginScreen from "./components/login_components/LoginScreen";
 import MainHomePage from "./navigation/MainHomePage";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
+import ShoppingListPage from "./navigation/ShoppingListPage";
 import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
@@ -87,10 +88,18 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-
                 <Stack.Screen
                   name="Pantry"
                   component={PantryPage}
+                  options={{ title: "",
+                    headerBackVisible: false,
+                    animation: "none",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="ShoppingList"
+                  component={ShoppingListPage}
                   options={{ title: "",
                     headerBackVisible: false,
                     animation: "none",
