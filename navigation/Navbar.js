@@ -19,6 +19,10 @@ const Navbar = () => {
         navigation.navigate('Pantry');
     }
 
+    const navigateToShoppingList = () => {
+        navigation.navigate('ShoppingList')
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -27,6 +31,9 @@ const Navbar = () => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={navigateToMainHomePage}>
                     <Ionicons name="home-outline" size={24} color="#957E51" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Ionicons name="cart-outline" size={24} color="#957E51" onPress={navigateToShoppingList} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
                     <Ionicons name="person-outline" size={24} color="#957E51" />
