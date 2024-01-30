@@ -15,6 +15,7 @@ import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
 import PantrySearchModal from "../components/pantry_components/PantrySearchModal";
+import AlexaButton from '../components/alexa_components/AlexaButton';
 
 const PantryPage = () => {
   
@@ -86,6 +87,7 @@ const PantryPage = () => {
             </Text>
           }
         />
+        <AlexaButton />
       </SafeAreaView>
       <Navbar />
     </>

@@ -13,6 +13,7 @@ import RecipeContext, { defaultRecipeContext } from "./context/recipe-context";
 import { getUserInventories } from "./api/inventory-api";
 import RevisionModal from "./components/modals/RevisionModal";
 import { getSavedRecipes } from "./api/recipe-api";
+import AlexaPage from "./navigation/AlexaPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -91,6 +92,16 @@ export default function App() {
                 <Stack.Screen
                   name="Pantry"
                   component={PantryPage}
+                  options={{ title: "",
+                    headerBackVisible: false,
+                    animation: "none",
+                    headerShown: false,
+                  }}
+                />
+
+                <Stack.Screen
+                  name="Alexa"
+                  component={AlexaPage}
                   options={{ title: "",
                     headerBackVisible: false,
                     animation: "none",
