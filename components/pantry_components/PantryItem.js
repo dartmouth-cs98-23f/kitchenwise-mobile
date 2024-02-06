@@ -1,27 +1,35 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, SafeAreaView, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+  SafeAreaView,
+  TextInput,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from 'react';
-
+import { useState } from "react";
 
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
 
 const PantryItem = ({ name, expiration, image, quantity, unit }) => {
   const [editItem, setEditItem] = useState(false);
-  const [inputQntText, setInputQntText] = useState('');
-  const [inputExpText, setExpInputText] = useState('');
+  const [inputQntText, setInputQntText] = useState("");
+  const [inputExpText, setExpInputText] = useState("");
 
   const editOnPress = () => {
     setEditItem(true);
     console.log(editItem);
-  }
+  };
 
   const onEditDonePress = () => {
     setEditItem(false);
-  }
+  };
 
   const handleQntInputChange = (text) => {
     setInputQntText(text);
@@ -32,79 +40,81 @@ const PantryItem = ({ name, expiration, image, quantity, unit }) => {
 
   return (
     <View style={styles.pantryItemContainer}>
-    <Image style={styles.itemImage}></Image>
-    <View style={styles.itemInfoContainer}>
       <Text style={styles.itemName}>{toTitleCase(name)}</Text>
-      <Text style={styles.itemInfoText}>
-        {quantity} {unit} {expiration ? "exp." + expiration : null }
+      {expiration ? (
+        <Text style={{ width: 48, minWidth: "20%" }}>
+          {expiration ? "exp." + expiration : null}
+        </Text>
+      ) : null}
+      <Text
+        style={{
+          width: 48,
+          textAlign: "right",
+          minWidth: "20%",
+        }}
+      >
+        {quantity} {unit}
       </Text>
+
+      {/* <TouchableOpacity style={styles.editButton} onPress={editOnPress}>
+        <Ionicons name="create-outline" size={20} />
+      </TouchableOpacity> */}
+
+      {/* {editItem && (
+        <Modal>
+          <SafeAreaView style={styles.editScreen}>
+            <Text style={styles.editIteamHeader}>{toTitleCase(name)}</Text>
+            <Image style={styles.editImg}></Image>
+            <View style={styles.editInfoContainer}>
+              <Text style={styles.editItemSubheader}>Quantity</Text>
+              <TextInput
+                placeholder={quantity.toString()}
+                onChangeText={handleQntInputChange}
+                value={inputQntText}
+                keyboardType="numeric"
+              />
+              <Text style={styles.editItemSubheader}>Expiration Date</Text>
+              <TextInput
+                placeholder={
+                  expiration ? "exp." + expiration.toString() : "None"
+                }
+                onChangeText={handleExpInputChange}
+                value={inputExpText}
+              />
+            </View>
+            <TouchableOpacity style={styles.editDone} onPress={onEditDonePress}>
+              <Text style={styles.doneText}>DONE</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </Modal>
+      )} */}
     </View>
-
-    <TouchableOpacity style={styles.editButton} onPress={editOnPress}>
-      <Ionicons name="create-outline" size={20} />
-    </TouchableOpacity>
-
-
-    { editItem && 
-      <Modal >
-        <SafeAreaView style={styles.editScreen}>
-        <Text style={styles.editIteamHeader}>{toTitleCase(name)}</Text>
-        <Image style={styles.editImg}></Image>
-        <View style={styles.editInfoContainer}>
-        <Text style={styles.editItemSubheader}>Quantity</Text>
-          <TextInput 
-            placeholder={quantity.toString()} 
-            onChangeText={handleQntInputChange}
-            value={inputQntText}
-            keyboardType='numeric'
-          />
-          <Text style={styles.editItemSubheader}>Expiration Date</Text>
-          <TextInput 
-            placeholder={expiration ? "exp." + expiration.toString() : "None" } 
-            onChangeText={handleExpInputChange}
-            value={inputExpText}
-          />
-        </View>
-        <TouchableOpacity style={styles.editDone} onPress={onEditDonePress}>
-          <Text style={styles.doneText}>
-            DONE
-          </Text>
-        </TouchableOpacity>
-        </SafeAreaView>
-      </Modal>
-      
-    }
-
-    </View>
-  )
-
-  };
+  );
+};
 
 const styles = StyleSheet.create({
   pantryItemContainer: {
     borderRadius: 10,
     alignItems: "center",
-    alignSelf: 'center',
+    alignSelf: "center",
     flexDirection: "row",
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginVertical: 4,
     elevation: 4,
-    shadowColor: 'black',
-    shadowOpacity: 0.15,
-    shadowOffset: { width: 0, height: 2},
-    shadowRadius: 8,
-    backgroundColor: 'white',
-    overflow: Platform.OS === 'android' ? 'hidden' : 'visible',
-    maxWidth: "98%"
+    backgroundColor: "#FAFAFA",
+    // overflow: Platform.OS === "android" ? "hidden" : "visible",
+    width: "100%",
   },
   itemName: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#333",
+    flexGrow: 1,
+    paddingRight: 16,
+    maxWidth: "80%",
   },
   itemInfoText: {
-    color: "#666"
+    color: "#666",
   },
   itemImage: {
     flex: 1,
@@ -115,10 +125,10 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   itemInfoContainer: {
-    flex: 3
+    flex: 3,
   },
   editButton: {
-    justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
     flex: 1,
   },
@@ -132,29 +142,28 @@ const styles = StyleSheet.create({
     marginVertical: "10%",
   },
   editIteamHeader: {
-    fontSize: '40%',
+    fontSize: "40%",
     marginLeft: "5%",
-    marginTop: '5%',
+    marginTop: "5%",
   },
   editItemSubheader: {
-    fontSize: '25%',
-    marginTop: '10%',
+    fontSize: "25%",
+    marginTop: "10%",
   },
   editInfoContainer: {
     marginLeft: "5%",
   },
   editDone: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: "black",
     marginHorizontal: "40%",
-    marginVertical: '10%',
+    marginVertical: "10%",
     padding: "2%",
-    borderRadius: "5%"
+    borderRadius: "5%",
   },
   doneText: {
-    color: 'white',
-  }
+    color: "white",
+  },
 });
-
 
 export default PantryItem;
