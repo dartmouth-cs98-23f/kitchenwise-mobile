@@ -64,7 +64,7 @@ const LoginScreen = ({ navigation }) => {
               // TODO : Add Auth here later
               sendLogin();
               closeLoginModal();
-              navigation.navigate("MainHomePage");
+              navigation.navigate("Pantry");
             }}
           />
           <LoginButton

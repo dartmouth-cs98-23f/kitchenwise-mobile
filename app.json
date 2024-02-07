@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.muffinner.kitchenwise-mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +26,30 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Lato-Black.otf",
+            "./assets/fonts/Lato-BlackItalic.otf",
+            "./assets/fonts/Lato-Bold.otf",
+            "./assets/fonts/Lato-BoldItalic.otf",
+            "./assets/fonts/Lato-Italic.otf",
+            "./assets/fonts/Lato-Light.otf",
+            "./assets/fonts/Lato-LightItalic.otf",
+            "./assets/fonts/Lato-Regular.otf",
+            "./assets/fonts/Lato-Thin.otf",
+            "./assets/fonts/Lato-ThinItalic.otf"
+          ]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "066aafb0-123e-4861-94aa-b876d8bb6c01"
+      }
     }
   }
 }
