@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import themeStyles from "../../styles";
 import { useMemo } from "react";
 
@@ -30,14 +30,18 @@ const PillRow = ({
     [selectedItems, items]
   );
   return (
-    <View style={styles.rowContainer}>
+    <ScrollView
+      contentContainerStyle={styles.rowContainer}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+    >
       {selectedItems.map((item, i) => (
         <Pill title={item} key={i} color={selectedColor} width={width} />
       ))}
       {unselectedItems.map((item, i) => (
         <Pill title={item} key={i} width={width} />
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

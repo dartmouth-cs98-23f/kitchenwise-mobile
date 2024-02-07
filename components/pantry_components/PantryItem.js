@@ -42,17 +42,11 @@ const PantryItem = ({ name, expiration, image, quantity, unit }) => {
     <View style={styles.pantryItemContainer}>
       <Text style={styles.itemName}>{toTitleCase(name)}</Text>
       {expiration ? (
-        <Text style={{ width: 48, minWidth: "20%" }}>
+        <Text style={[styles.itemInfoText]}>
           {expiration ? "exp." + expiration : null}
         </Text>
       ) : null}
-      <Text
-        style={{
-          width: 48,
-          textAlign: "right",
-          minWidth: "20%",
-        }}
-      >
+      <Text style={[styles.itemInfoText]}>
         {quantity} {unit}
       </Text>
 
@@ -98,9 +92,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     flexDirection: "row",
-    paddingHorizontal: 12,
     paddingVertical: 8,
     marginVertical: 4,
+    paddingHorizontal: 12,
     elevation: 4,
     backgroundColor: "#FAFAFA",
     // overflow: Platform.OS === "android" ? "hidden" : "visible",
@@ -114,15 +108,9 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
   itemInfoText: {
-    color: "#666",
-  },
-  itemImage: {
-    flex: 1,
-    backgroundColor: "#ccc",
-    height: 60,
-    width: 25,
-    marginVertical: 2,
-    marginRight: 20,
+    color: "#333",
+    width: "20%",
+    textAlign: "right",
   },
   itemInfoContainer: {
     flex: 3,

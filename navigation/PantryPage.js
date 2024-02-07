@@ -60,7 +60,7 @@ const PantryPage = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.pantryScreenContainer}>
+      <SafeAreaView style={themeStyles.components.screenContainer}>
         <View style={{ display: "flex", gap: 8 }}>
           <View style={styles.headerContainer}>
             <Text style={[themeStyles.text.h1, styles.header]}>

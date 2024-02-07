@@ -9,6 +9,11 @@ const themeStyles = StyleSheet.create({
       fontSize: 32,
       color: "#353434",
     },
+    h3: {
+      fontFamily: "LatoBold",
+      fontWeight: 500,
+      fontSize: 18,
+    },
     h4: {
       fontWeight: "500",
       fontSize: 26,
@@ -30,6 +35,15 @@ const themeStyles = StyleSheet.create({
     failure: "#F22424",
     interactableBackground: "#F2F2F2",
     interactableText: "#AAAAAA",
+  },
+  components: {
+    screenContainer: {
+      flex: 1,
+      backgroundColor: "#fff",
+      marginBottom: 0,
+      paddingTop: 24,
+      paddingHorizontal: 16,
+    },
   },
 });
 
