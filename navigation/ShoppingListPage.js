@@ -21,7 +21,7 @@ const ShoppingListItem = ({ name, amount }) => {
       <View style={styles.listItemRight}>
         <Text style={styles.listItemText}>{amount || "1"}</Text>
         <TouchableOpacity>
-          <Ionicons name="ellipse-outline" size={30} />
+          <Ionicons name="ellipse-outline" size={24} />
         </TouchableOpacity>
       </View>
     </View>

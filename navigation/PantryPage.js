@@ -18,6 +18,8 @@ import PantryItem from "../components/pantry_components/PantryItem";
 import PantrySearchModal from "../components/pantry_components/PantrySearchModal";
 import SearchBar from "../components/pantry_components/SearchBar";
 import PillRow from "../components/pantry_components/PillRow";
+import VoiceBubble from "../components/pantry_components/VoiceBubble";
+import AddBubble from "../components/pantry_components/AddBubble";
 
 const PantryPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -114,6 +116,8 @@ const PantryPage = () => {
           }
         />
       </SafeAreaView>
+      <VoiceBubble />
+      <AddBubble />
       <Navbar />
     </>
   );

@@ -8,6 +8,7 @@ import MainHomePage from "./navigation/MainHomePage";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
+import NarrationPage from "./navigation/NarrationPage";
 import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
@@ -23,6 +24,7 @@ export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     Lato: require("./assets/fonts/Lato-Regular.ttf"),
     LatoBold: require("./assets/fonts/Lato-Bold.ttf"),
+    Inter: require("./assets/fonts/Inter-Regular.ttf"),
   });
   const [userInventories, setUserInventories] = useState(
     defaultInventoryContext.userInventories
@@ -97,6 +99,16 @@ export default function App() {
                 <Stack.Screen
                   name="ShoppingList"
                   component={ShoppingListPage}
+                  options={{
+                    title: "",
+                    headerBackVisible: false,
+                    animation: "none",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Narration"
+                  component={NarrationPage}
                   options={{
                     title: "",
                     headerBackVisible: false,
