@@ -13,6 +13,8 @@ import InventoryContext, {
 } from "./context/inventory-context";
 import UserContext, { defaultUserContext } from "./context/user-context";
 import RecipeContext, { defaultRecipeContext } from "./context/recipe-context";
+import ShoppingListContext, { defaultShoppingContext } from "./context/shoppingList-context";
+import { getUserShoppingLists } from "./api/shoppingList-api";
 import { getUserInventories } from "./api/inventory-api";
 import RevisionModal from "./components/modals/RevisionModal";
 import { getSavedRecipes } from "./api/recipe-api";
@@ -28,6 +30,10 @@ export default function App() {
     defaultInventoryContext.userInventories
   );
 
+  const [userShoppingLists, setUserShoppingLists] = useState(
+    defaultShoppingContext.userShoppingLists
+  );  
+
   const [userId, setUserId] = useState(defaultUserContext.userId);
   useEffect(() => {
     if (userId)
@@ -37,6 +43,15 @@ export default function App() {
         }
       });
   }, [userId, setUserInventories]);
+
+  useEffect(() => {
+    if (userId)
+      getUserShoppingLists(userId).then((shoppingLists) => {
+        if (shoppingLists) {
+          setUserShoppingLists(shoppingLists);
+        }
+      });
+  }, [userId, setUserShoppingLists]);
 
   const [savedRecipeIds, setSavedRecipeIds] = useState(
     defaultRecipeContext.savedRecipeIds
@@ -66,47 +81,51 @@ export default function App() {
           <RecipeContext.Provider
             value={{ savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes }}
           >
-            <RevisionModal />
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Home"
-                  component={LoginScreen}
-                  options={{ title: "Welcome", headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Profile"
-                  component={ProfilePage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Pantry"
-                  component={PantryPage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="ShoppingList"
-                  component={ShoppingListPage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
-              </Stack.Navigator>
-            </NavigationContainer>
+            <ShoppingListContext.Provider 
+              value={{ userShoppingLists, setUserShoppingLists }} 
+            >
+              <RevisionModal />
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Home"
+                    component={LoginScreen}
+                    options={{ title: "Welcome", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Profile"
+                    component={ProfilePage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Pantry"
+                    component={PantryPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="ShoppingList"
+                    component={ShoppingListPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </ShoppingListContext.Provider>
           </RecipeContext.Provider>
         </InventoryContext.Provider>
       </UserContext.Provider>

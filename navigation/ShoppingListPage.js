@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -10,9 +10,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import themeStyles from "../styles";
-
+import UserContext from "../context/user-context";
 import Navbar from "./Navbar";
 import SearchBar from "../components/pantry_components/SearchBar";
+import { createNewShoppingList } from "../api/shoppingList-api";
 
 const ShoppingListItem = ({ name, amount }) => {
   return (
@@ -20,7 +21,7 @@ const ShoppingListItem = ({ name, amount }) => {
       <Text style={styles.listItemText}>{name}</Text>
       <View style={styles.listItemRight}>
         <Text style={styles.listItemText}>{amount || "1"}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity >
           <Ionicons name="ellipse-outline" size={30} />
         </TouchableOpacity>
       </View>
@@ -29,12 +30,22 @@ const ShoppingListItem = ({ name, amount }) => {
 };
 
 const ShoppingListPage = () => {
-  const [dairyItems, setDairyItems] = useState(["Item1", "item2"]);
+  const { userId } = useContext(UserContext);
+  const [dairyItems, setDairyItems] = useState([]);
+  const [isListAvailable,setListAvailable] = useState(false);
+  const [isListEmpty, setListEmpty] = useState(false);
 
   const updateList = (item) => {
     setDairyItems([...dairyItems, item]);
   };
 
+  const createList = useCallback( () => {
+    setListAvailable(true);
+    createNewShoppingList(userId,"list 1").then( (data) => {
+      data.shoppingListItem.map((item) => {setDairyItems(item)});
+      console.log(data);
+    });
+  });
   //TODO: pull in the recipes from the back end, should each category be dynamic?
   return (
     <>
@@ -43,13 +54,24 @@ const ShoppingListPage = () => {
           Your Shopping List
         </Text>
         <SearchBar />
-        <View style={{ marginTop: 12 }}>
-          <Text style={themeStyles.text.h3}>Dairy</Text>
-          <View style={styles.line} />
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
+            
+          {!isListAvailable &&
+          <TouchableOpacity onPress={createList}>
+          <Text>Create New List</Text>
+          </TouchableOpacity> 
+          }
 
+          {isListAvailable &&
+            <View style={{ marginTop: 12 }}>
+            <Text style={themeStyles.text.h3}>Category</Text>
+            <View style={styles.line} />
+            {dairyItems.map((item) => (
+              <ShoppingListItem name={item} />
+            ))}
+            </View>
+          }
+          
+          {/*
           <Text style={themeStyles.text.h3}>Deli</Text>
           <View style={styles.line} />
           {dairyItems.map((item) => (
@@ -79,7 +101,7 @@ const ShoppingListPage = () => {
           {dairyItems.map((item) => (
             <ShoppingListItem name={item} />
           ))}
-        </View>
+         */}
       </SafeAreaView>
       <Navbar />
     </>
