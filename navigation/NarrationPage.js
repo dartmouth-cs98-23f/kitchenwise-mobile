@@ -54,13 +54,13 @@ const NarrationPage = ({ navigation }) => {
   const [whisperLoaded, setWhisperLoaded] = useState(false);
   const [assets, error] = useAssets([require("../assets/ggml-tiny.en.bin")]);
   useEffect(() => {
-    // if (error) {
-    //   console.error(error);
-    // } else {
-    //   if (assets?.[0]?.downloaded) {
-    //     setModelPath(assets[0].localUri);
-    //   }
-    // }
+    if (error) {
+      console.error(error);
+    } else {
+      if (assets?.[0]?.downloaded) {
+        setModelPath(assets[0].localUri);
+      }
+    }
   }, [assets]);
   const onCancel = useCallback(() => {
     navigation.navigate("Pantry");
