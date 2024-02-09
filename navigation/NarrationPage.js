@@ -18,6 +18,8 @@ const cleanTranscription = (transcribedString) => {
   transcribedString = transcribedString.replace(/ *\[[^)]*\] */g, "");
   transcribedString = transcribedString.replace(/ *\([^)]*\) */g, "");
 
+  transcribedString = transcribedString.replace(".", "");
+  transcribedString = transcribedString.replace(",", "");
   transcribedString = transcribedString.trim();
   return transcribedString;
 };
