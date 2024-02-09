@@ -20,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.muffinner.kitchenwisemobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,7 +41,7 @@
             "./assets/fonts/Lato-Regular.ttf",
             "./assets/fonts/Lato-Thin.ttf",
             "./assets/fonts/Lato-ThinItalic.ttf",
-            "./assets/fonts/Inter.ttf"
+            "./assets/fonts/Inter-Regular.ttf"
           ]
         }
       ]
