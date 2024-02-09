@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useFonts, processFontFamily } from "expo-font";
+import { useFonts } from "expo-font";
 
 import LoginScreen from "./components/login_components/LoginScreen";
-import MainHomePage from "./navigation/MainHomePage";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";

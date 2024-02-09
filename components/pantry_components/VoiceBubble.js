@@ -23,7 +23,7 @@ const VoiceBubble = () => {
 };
 
 const styles = StyleSheet.create({
-  bubblePosition: { width: 48, height: 48, bottom: 72 + 32, right: 12 },
+  bubblePosition: { bottom: 72 + 32, right: 12 },
 });
 
 export default VoiceBubble;

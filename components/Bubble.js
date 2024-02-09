@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
   bubbleContainer: {
     position: "absolute",
     backgroundColor: themeStyles.colors.interactableBackground,
-
-    borderRadius: "50%",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
