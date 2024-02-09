@@ -1,12 +1,16 @@
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import themeStyles from "../../styles.js";
 
-const SearchBar = () => {
+const SearchBar = ({ onChange }) => {
   return (
     <TouchableOpacity style={styles.searchContainer}>
       <Ionicons name="search" color={themeStyles.colors.interactableText} />
-      <Text style={styles.searchPlaceholder}>Search</Text>
+      <TextInput
+        placeholderTextColor={themeStyles.colors.interactableText}
+        placeholder="Search"
+        onChangeText={onChange}
+      ></TextInput>
     </TouchableOpacity>
   );
 };
@@ -21,9 +25,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 12,
     gap: 8,
-  },
-  searchPlaceholder: {
-    color: themeStyles.colors.interactableText,
   },
 });
 
