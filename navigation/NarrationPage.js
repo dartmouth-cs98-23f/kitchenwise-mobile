@@ -34,9 +34,7 @@ const parseCommand = (rawCommand) => {
 
 const NarrationPage = ({ navigation }) => {
   const [modelPath, setModelPath] = useState(null);
-  const [spokenText, setSpokenText] = useState(
-    "Add 5 oz of ground beef to my fridge. Add five cups of ice cream to my freezer"
-  );
+  const [spokenText, setSpokenText] = useState("");
   const [parsedCommands, setParsedCommands] = useState([]);
   useEffect(() => {
     const newParsedCommands = [];
