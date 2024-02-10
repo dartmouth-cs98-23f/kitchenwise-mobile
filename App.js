@@ -5,6 +5,7 @@ import LoginScreen from "./components/login_components/LoginScreen";
 import MainHomePage from "./navigation/MainHomePage";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
+import InventoryStatisticsPage from "./navigation/InventoryStatisticsPage";
 import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
@@ -96,6 +97,15 @@ export default function App() {
                     animation: "none",
                     headerShown: false,
                   }}
+                />
+
+                <Stack.Screen
+                  name="InventoryStatistics"
+                  component={InventoryStatisticsPage}
+                  options={{ 
+                    title: "",
+                    headerBackVisible: true,
+                  }} 
                 />
                 {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
               </Stack.Navigator>

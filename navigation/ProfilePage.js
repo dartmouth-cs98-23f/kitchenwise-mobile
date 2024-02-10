@@ -2,8 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 const ProfilePage = () => {
+  const navigation = useNavigation();
+
+  const navigateToInventoryStatisticsPage = () => {
+    navigation.navigate('InventoryStatistics');
+}
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -14,8 +20,8 @@ const ProfilePage = () => {
         </View>
         <ScrollView style={styles.scrollView}>
           {/* Your touchable opacity buttons go here */}
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Eating Preferences</Text>
+          <TouchableOpacity style={styles.button} onPress={navigateToInventoryStatisticsPage}>
+            <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
