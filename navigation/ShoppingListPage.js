@@ -1,169 +1,123 @@
 import React, { useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import themeStyles from "../styles";
+
 import Navbar from "./Navbar";
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import SearchBar from "../components/pantry_components/SearchBar";
 
+const ShoppingListItem = ({ name, amount }) => {
+  return (
+    <View style={styles.listItemContainer}>
+      <Text style={styles.listItemText}>{name}</Text>
+      <View style={styles.listItemRight}>
+        <Text style={styles.listItemText}>{amount || "1"}</Text>
+        <TouchableOpacity>
+          <Ionicons name="ellipse-outline" size={24} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
-
-
-const ShoppingListPage = () => { 
-  const [dairyItems, setDairyItems] = useState(['Item1', "item2"]);  
+const ShoppingListPage = () => {
+  const [dairyItems, setDairyItems] = useState(["Item1", "item2"]);
 
   const updateList = (item) => {
     setDairyItems([...dairyItems, item]);
-  }
+  };
 
-
-  //TODO: pull in the recipes from the back end, should each category be dynamic? 
+  //TODO: pull in the recipes from the back end, should each category be dynamic?
   return (
     <>
-      <SafeAreaView style={styles.listContainer}>
-      <Text style={styles.title}>Your Shopping List</Text>
-      <TextInput 
-        style={styles.searchBar} 
-        placeholder="Search"
-      >
-      </TextInput>
-      <View>
-          <Text style={styles.headerText}>Dairy</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-               <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <TouchableOpacity>
-                    <Ionicons name="ellipse-outline" size={30} />
-                  </TouchableOpacity>
-                
-                </View>
-            </View>
-          )}
-          />
+      <SafeAreaView style={themeStyles.components.screenContainer}>
+        <Text style={[themeStyles.text.h1, { marginBottom: 8 }]}>
+          Your Shopping List
+        </Text>
+        <SearchBar />
+        <View style={{ marginTop: 12 }}>
+          <Text style={themeStyles.text.h3}>Dairy</Text>
+          <View style={styles.line} />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
 
-          <Text style={styles.headerText}>Deli</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-                <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <Ionicons name="ellipse-outline" size={30} />
-                </View>
-            </View>
-          )}
-          />
+          <Text style={themeStyles.text.h3}>Deli</Text>
+          <View style={styles.line} />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
 
-          <Text style={styles.headerText}>Produce</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-                <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <Ionicons name="ellipse-outline" size={30} />
-                </View>
-            </View>
-          )}
-          />
+          <Text style={themeStyles.text.h3}>Produce</Text>
+          <View style={styles.line} />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
 
-           <Text style={styles.headerText}>Meat & Fish</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-                <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <Ionicons name="ellipse-outline" size={30} />
-                </View>
-            </View>
-          )}
-          />
+          <Text style={themeStyles.text.h3}>Meat & Fish</Text>
+          <View style={styles.line} />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
+          <Text style={themeStyles.text.h3}>Bakery</Text>
+          <View style={styles.line} />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
 
-          <Text style={styles.headerText}>Bakery</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-                <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <Ionicons name="ellipse-outline" size={30} />
-                </View>
-            </View>
-          )}
-          />
+          <Text style={themeStyles.text.h3}>Household</Text>
+          <View style={styles.line} />
 
-          <Text style={styles.headerText}>Household</Text>
-          <View style={styles.line}/>
-          <FlatList 
-          data={dairyItems}
-          renderItem={({ item }) => (
-            <View style={styles.listItemContainer}>
-                <Text style={styles.listItemText}>{item}</Text>
-                <View style={styles.listItemRight}>
-                  <Text style={styles.listItemText}>1 amount</Text>
-                  <Ionicons name="ellipse-outline" size={30} />
-                </View>
-            </View>
-          )}
-          />
+          {dairyItems.map((item) => (
+            <ShoppingListItem name={item} />
+          ))}
         </View>
-
       </SafeAreaView>
-      <Navbar/>
+      <Navbar />
     </>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    margin: "5%"
-  },
   searchBar: {
-    borderColor: "gray",
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    marginRight: "5%",
-    borderRadius: 10,
+    // borderColor: "gray",
+    // borderWidth: 1,
+    // paddingHorizontal: 8,
+    // paddingVertical: 8,
+    // marginRight: "5%",
+    // borderRadius: 10,
   },
   line: {
-    borderBottomColor: 'black',
+    borderBottomColor: "black",
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   headerText: {
     fontSize: 20,
     marginTop: 10,
   },
-  title: {
-    fontSize: 40,
-    marginVertical: 10,
-  },
   listItemContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 3,
   },
   listItemText: {
     fontSize: 16,
-    marginHorizontal: 10
+    fontFamily: "Lato",
   },
   listItemRight: {
-    flexDirection: 'row',
+    fontFamily: "Lato",
+    flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
 export default ShoppingListPage;

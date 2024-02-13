@@ -1,63 +1,72 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import themeStyles from "../styles";
 
 const Navbar = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [selectedPage, setSelectedPage] = useState(null);
 
-    const navigateToProfile = () => {
-        navigation.navigate('Profile');
-    };
+  const navigateToProfile = () => {
+    navigation.navigate("Profile");
+    setSelectedPage("Profile");
+  };
 
-    const navigateToMainHomePage = () => {
-        // Use the navigate function to go to the MainHomePage
-        navigation.navigate('MainHomePage');
-    };
+  const navigateToPantryPage = () => {
+    navigation.navigate("Pantry");
+    setSelectedPage("Pantry");
+  };
 
-    const navigateToPantryPage = () => {
-        navigation.navigate('Pantry');
-    }
+  const navigateToShoppingList = () => {
+    navigation.navigate("ShoppingList");
+    setSelectedPage("ShoppingList");
+  };
 
-    const navigateToShoppingList = () => {
-        navigation.navigate('ShoppingList')
-    }
-
-    return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.button} onPress={navigateToPantryPage}>
-                    <Ionicons name="file-tray-stacked-outline" size={24} color="#957E51" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={navigateToMainHomePage}>
-                    <Ionicons name="home-outline" size={24} color="#957E51" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Ionicons name="cart-outline" size={24} color="#957E51" onPress={navigateToShoppingList} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
-                    <Ionicons name="person-outline" size={24} color="#957E51" />
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
-    );
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <TouchableOpacity>
+          <Ionicons
+            name="cart-outline"
+            size={24}
+            color={themeStyles.colors.uninteractableText}
+            onPress={navigateToShoppingList}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={navigateToPantryPage}>
+          <Ionicons
+            name="file-tray-stacked-outline"
+            size={24}
+            color={themeStyles.colors.uninteractableText}
+            stroke
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color={themeStyles.colors.uninteractableText}
+          />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        backgroundColor: '#fff', // Match the navbar background
-    },
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: 60,
-        borderTopWidth: 1,
-        borderTopColor: '#957E51',
-    },
-    button: {
-        alignItems: 'center',
-    },
+  safeArea: {
+    backgroundColor: themeStyles.colors.uninteractableBackground,
+  },
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: 60,
+  },
+  button: {
+    alignItems: "center",
+  },
 });
 
 export default Navbar;

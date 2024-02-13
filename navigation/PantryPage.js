@@ -9,20 +9,27 @@ import {
 } from "react-native";
 import moment from "moment";
 import Navbar from "./Navbar";
+import themeStyles from "../styles";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
 import PantrySearchModal from "../components/pantry_components/PantrySearchModal";
+import SearchBar from "../components/pantry_components/SearchBar";
+import PillRow from "../components/pantry_components/PillRow";
+import VoiceBubble from "../components/pantry_components/VoiceBubble";
+import AddBubble from "../components/pantry_components/AddBubble";
+import InventoryContext from "../context/inventory-context";
 
 const PantryPage = () => {
-  
-
   const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
-  const [filters, setFilters] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedInventories, setSelectedInventories] = useState(new Set());
   const { userId } = useContext(UserContext);
+  const { userInventories } = useContext(InventoryContext);
 
   const filterButtonHanlder = () => {
     setModalVisible(true);
@@ -30,12 +37,10 @@ const PantryPage = () => {
 
   const filterDoneHandler = () => {
     setModalVisible(false);
-  }
+  };
 
   const refreshItems = useCallback(() => {
-
- 
-      getAllItems(userId)
+    getAllItems(userId)
       .then((data) => {
         // Data passes "_id": (String), "expirationDate" (optional Date?), "name": (String), "quantity": (int), "tags": (List), "unit": (String)
         setItems(
@@ -51,32 +56,96 @@ const PantryPage = () => {
       .catch((err) => {
         console.log("Inventory polling failed - server not online");
       });
-
-    
   }, [userId, setItems]);
+
   useEffect(() => {
     // TODO: this is horrible and must be replaced next term
     refreshItems();
     const interval = setInterval(refreshItems, 2500);
     return () => clearInterval(interval);
   }, [userId, refreshItems]);
-  
+
+  useEffect(() => {
+    let newFilteredItems = items;
+    if (searchText)
+      newFilteredItems = newFilteredItems.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    newFilteredItems = newFilteredItems.filter((item) =>
+      selectedInventories.has(item.inventoryTitle)
+    );
+    setFilteredItems(newFilteredItems);
+  }, [items]);
+  const onInventorySelect = useCallback((inventoryName) => {
+    setSelectedInventories((prev) => {
+      prev.add(inventoryName);
+      return prev;
+    });
+  }, []);
+  const onInventoryDeselect = useCallback((inventoryName) => {
+    setSelectedInventories((prev) => {
+      prev.delete(inventoryName);
+      return prev;
+    });
+  }, []);
+
+  const onSearchChange = useCallback((newSearchText) => {
+    if (newSearchText && newSearchText.length > 0) setSearchText(newSearchText);
+    else setSearchText(null);
+  }, []);
+
   return (
     <>
-      <SafeAreaView style={styles.pantryScreenContainer}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>My Items</Text>
-          <TouchableOpacity onPress={filterButtonHanlder}>
-            <Ionicons
-              name="search-outline"
-              size={36}
-              style={styles.searchButton}
+      <SafeAreaView style={themeStyles.components.screenContainer}>
+        <View style={{ display: "flex", gap: 8 }}>
+          <View style={styles.headerContainer}>
+            <Text style={[themeStyles.text.h1, styles.header]}>
+              My Inventory
+            </Text>
+          </View>
+          <SearchBar onChange={onSearchChange} />
+          <PillRow
+            items={[
+              "Vegetarian",
+              "Dairy",
+              "Fruit",
+              "Meat",
+              "Vegetables",
+              "Cereal",
+              "Dessert",
+              "Sauces",
+              "Condiments",
+            ]}
+            selectedItems={[]}
+            selectedColor="#466646"
+            width={80}
+          />
+          {userInventories && (
+            <PillRow
+              items={userInventories.map((inv) => inv.title)}
+              selectedItems={userInventories
+                .map((inv) => inv.title)
+                .filter((name) => selectedInventories.has(name))}
+              selectedColor="#5C81A0"
+              width={100}
+              onItemSelect={onInventorySelect}
+              onItemDeselect={onInventoryDeselect}
             />
-          </TouchableOpacity>
+          )}
+          <View
+            style={{
+              borderBottomColor: "#D9D9D9",
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              marginBottom: 8,
+            }}
+          />
+          <PantrySearchModal
+            filterDoneHandler={filterDoneHandler}
+            visible={modalVisible}
+          />
         </View>
-       <PantrySearchModal filterDoneHandler={filterDoneHandler} visible={modalVisible}/>
         <FlatList
-          data={items}
+          data={filteredItems}
           renderItem={({ item }) => <PantryItem {...item} />}
           keyExtractor={(item) => item.id}
           style={styles.pantryList}
@@ -87,6 +156,8 @@ const PantryPage = () => {
           }
         />
       </SafeAreaView>
+      <VoiceBubble />
+      <AddBubble />
       <Navbar />
     </>
   );
@@ -97,41 +168,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     marginBottom: 0,
+    paddingTop: 24,
+    paddingHorizontal: 16,
   },
   headerContainer: {
     flexDirection: "row",
-    marginBottom: 10,
-    padding: 20,
   },
   header: {
     flex: 1,
-    fontSize: 32,
-    fontWeight: "500",
-    padding: 10,
-    color: "#957E51",
-    paddingLeft: 40,
   },
   searchButton: {
     flex: 1,
-    padding: 10,
     alignItems: "center",
     color: "#957E51",
   },
-  pantryList: {
-    paddingHorizontal: "5%",
-    paddingVertical: 24,
-  },
+  pantryList: {},
   searchPanel: {
     backgroundColor: "#957E51",
     padding: "5%",
     width: "50%",
     height: "100%",
     borderRadius: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
-  filtersBlock: {
-   marginTop: 50,
-  },
+  filtersBlock: {},
   filters: {
     margin: 15,
     flexDirection: "row-reverse",
@@ -140,7 +200,7 @@ const styles = StyleSheet.create({
   },
   filterSelect: {
     margin: 15,
-  }
+  },
 });
 
 export default PantryPage;
