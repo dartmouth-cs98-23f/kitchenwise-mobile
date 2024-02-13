@@ -32,8 +32,7 @@ const MainHomePage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const { userId } = useContext(UserContext);
   const [savedRecipes, setSavedRecipes] = useState([]);
-  const { savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes } =
-    useContext(RecipeContext);
+  
 
   useEffect(() => {
     if (currTitle == "Suggested Recipes") {

@@ -16,7 +16,7 @@ import themeStyles from "../styles";
 import UserContext from "../context/user-context";
 import Navbar from "./Navbar";
 import SearchBar from "../components/pantry_components/SearchBar";
-import { createNewShoppingList } from "../api/shoppingList-api";
+import { createNewShoppingList, addItemToList, getUserShoppingListItems } from "../api/shoppingList-api";
 
 const ShoppingListItem = ({ name, amount }) => {
   return (
@@ -38,10 +38,17 @@ const ShoppingListPage = () => {
   const [isListAvailable, setListAvailable] = useState(false);
   const [isListEmpty, setListEmpty] = useState(false);
   const [additemModal, setAddItemModal] = useState(false);
+  const [itemToAdd, setItemToAdd] = useState('');
+  const [amountToAdd, setAmountToAdd] = useState('');
 
-  const addToList = (item) => {
-    setListItems([...listItems, item]);
+  const addToList = () => {
+    addItemToList(userId, "list 1", itemToAdd, amountToAdd).then((data) => {
+      setListItems(data.shoppingListItems);
+    });
+    setAddItemModal(false);
   };
+
+  console.log(listItems);
 
   const promptAddItem = () => {
     setAddItemModal(true);
@@ -52,13 +59,17 @@ const ShoppingListPage = () => {
   }
 
   const createList = useCallback(() => {
+
+    createNewShoppingList(userId, "list 1").then(() => {
+      addItemToList(userId, "list 1", itemToAdd, amountToAdd).then((data) => {
+        setListItems(data.shoppingListItems);
+      })
+    }
+
+    )
+
+    setAddItemModal(false);
     setListAvailable(true);
-
-    createNewShoppingList(userId, "list 1").then((data) => {
-
-      data.shoppingListItem.map((item) => { setDairyItems(item) });
-      console.log(data);
-    });
   });
   //TODO: pull in the recipes from the back end, should each category be dynamic?
   return (
@@ -72,7 +83,7 @@ const ShoppingListPage = () => {
 
         {!isListAvailable &&
           <View style={styles.startContainer}>
-            <TouchableOpacity onPress={createList} style={styles.importButton}>
+            <TouchableOpacity style={styles.importButton}>
               <Text>Import List</Text>
             </TouchableOpacity>
             <Text>Or</Text>
@@ -86,12 +97,11 @@ const ShoppingListPage = () => {
           <View style={styles.additemModalContainer}>
             <Text style={styles.addModalTitle}>Add Item</Text>
             <View style={styles.addInputContainer}>
-              <TextInput placeholder="Food Name" style={styles.addModalInput}/>
-              <TextInput placeholder="Amount" style={styles.addModalInput}/>
+              <TextInput placeholder="Food Name" style={styles.addModalInput} onChangeText={(food) => setItemToAdd(food)} />
+              <TextInput placeholder="Amount" style={styles.addModalInput} onChangeText={(amount) => setAmountToAdd(amount)} />
             </View>
-
             <View style={styles.addModalButtonsContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={isListAvailable ? addToList : createList}>
                 <Text>CONFIRM</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={cancelAdd}>
@@ -102,21 +112,16 @@ const ShoppingListPage = () => {
         </Modal>
 
 
-        <ScrollView>
-          {isListAvailable &&
-            <View style={{ marginTop: 12 }}>
-              <Text style={themeStyles.text.h3}>Category</Text>
-              <View style={styles.line} />
-              {dairyItems.map((item) => (
-                <ShoppingListItem name={item} />
-              ))}
-            </View>
-          }
-        </ScrollView>
-
-
+       
+        {isListAvailable &&
+          <View style={styles.listContainer}>
+            <Text style={themeStyles.text.h3}>Category</Text>
+            <View style={styles.line} />
+            <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</>
+          </View>
+        }
         <View style={styles.editContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={promptAddItem}>
             <Ionicons name="add-circle" size={40} color="#53D6FF" />
           </TouchableOpacity>
 
@@ -196,7 +201,8 @@ const styles = StyleSheet.create({
   },
   editContainer: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    flex: 1,
   },
   importButton: {
     backgroundColor: '#F2F2F2',
@@ -205,7 +211,8 @@ const styles = StyleSheet.create({
   },
   startContainer: {
     margin: 20,
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 10
   },
   additemModalContainer: {
     marginTop: "100%",
@@ -229,11 +236,15 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     justifyContent: "space-around"
   },
-  addModalInput : {
+  addModalInput: {
     flex: 1,
     backgroundColor: "#F2F2F2",
     padding: 5,
     marginHorizontal: 2
+  },
+  listContainer: {
+    marginVertical: 12,
+    flex: 10
   }
 });
 
