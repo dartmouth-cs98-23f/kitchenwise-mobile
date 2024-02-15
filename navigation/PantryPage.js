@@ -21,6 +21,9 @@ import PillRow from "../components/pantry_components/PillRow";
 import VoiceBubble from "../components/pantry_components/VoiceBubble";
 import AddBubble from "../components/pantry_components/AddBubble";
 import InventoryContext from "../context/inventory-context";
+import BottomModal from "../components/modals/BottomModal";
+import DeleteModal from "../components/pantry_components/DeleteModal";
+import EditModal from "../components/pantry_components/EditModal";
 
 const PantryPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,6 +33,11 @@ const PantryPage = () => {
   const [selectedInventories, setSelectedInventories] = useState(new Set());
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
+
+  useEffect(() => {
+    if (userInventories)
+      setSelectedInventories(new Set(userInventories.map((inv) => inv.title)));
+  }, [userInventories]);
 
   const filterButtonHanlder = () => {
     setModalVisible(true);
@@ -75,7 +83,7 @@ const PantryPage = () => {
       selectedInventories.has(item.inventoryTitle)
     );
     setFilteredItems(newFilteredItems);
-  }, [items]);
+  }, [items, selectedInventories]);
   const onInventorySelect = useCallback((inventoryName) => {
     setSelectedInventories((prev) => {
       prev.add(inventoryName);
@@ -155,6 +163,8 @@ const PantryPage = () => {
             </Text>
           }
         />
+        <DeleteModal visible={false} />
+        <EditModal visible={false} />
       </SafeAreaView>
       <VoiceBubble />
       <AddBubble />

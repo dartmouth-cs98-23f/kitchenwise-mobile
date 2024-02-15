@@ -10,7 +10,7 @@ import CommandRow from "../components/narration_components/CommandRow";
 
 const transcriptionOptions = {
   language: "en",
-  duration: 2500,
+  duration: 2000,
 };
 
 const cleanTranscription = (transcribedString) => {
@@ -125,16 +125,17 @@ const NarrationPage = ({ navigation }) => {
                   stopRecording();
                   setIsRecording(false);
                 }}
+                containerStyle={styles.button}
               />
             )
           ) : (
             <>
-              <Button text="Confirm" containerStyle={styles.button} />
               <Button
                 text="Cancel"
                 containerStyle={styles.button}
                 onPress={onCancel}
               />
+              <Button text="Confirm" containerStyle={styles.button} />
             </>
           )
         ) : (
