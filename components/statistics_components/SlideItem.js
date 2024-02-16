@@ -24,7 +24,7 @@ const SlideItem = ({ item}) => {
   if (item.foodGroupBreakdown) {
     foodGroupBreakdown = item.foodGroupBreakdown.map((group) => ({
       ...group,
-      weight: replacePlaceholders(group.weight, item),
+      quantity: replacePlaceholders(group.quantity, item),
     }));
   }
 
@@ -33,13 +33,13 @@ const SlideItem = ({ item}) => {
   if (item.caloricBreakdown) {
     caloricBreakdown = item.caloricBreakdown.map((group) => ({
       ...group,
-      weight: replacePlaceholders(group.weight, item),
+      quantity: replacePlaceholders(group.quantity, item),
     }));
   }
 
   // Determine background color based on index
   const cardColors = ['#336699', '#993366', '#669933', '#996633', '#339966'];
-  const backgroundColor = cardColors[item.id % cardColors.length];
+  const backgroundColor = cardColors[item.statisticId % cardColors.length];
 
   return (
     <View style={[styles.card, { backgroundColor }]}>
@@ -50,7 +50,7 @@ const SlideItem = ({ item}) => {
           <Text style={styles.list}>
             {foodGroupBreakdown.map((group, index) => (
               <Text key={index}>
-                • {group.category}: {group.unit === '$' ? `${group.unit}${group.weight}` : `${group.weight}${group.unit === '%' ? group.unit : ` ${group.unit}`}`}
+                • {group.category}: {group.unit === '$' ? `${group.unit}${group.quantity}` : `${group.quantity}${group.unit === '%' ? group.unit : ` ${group.unit}`}`}
                 {"\n"}
               </Text>
             ))}
@@ -63,7 +63,7 @@ const SlideItem = ({ item}) => {
           <Text style={styles.list}>
             {caloricBreakdown.map((group, index) => (
               <Text key={index}>
-                • {group.category}: {group.unit === '$' ? `${group.unit}${group.weight}` : `${group.weight}${group.unit === '%' ? group.unit : ` ${group.unit}`}`}
+                • {group.category}: {group.unit === '$' ? `${group.unit}${group.quantity}` : `${group.quantity}${group.unit === '%' ? group.unit : ` ${group.unit}`}`}
                 {"\n"}
               </Text>
             ))}

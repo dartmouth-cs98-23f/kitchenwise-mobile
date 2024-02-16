@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 const ProfilePage = () => {
   const navigation = useNavigation();
 
-  const navigateToInventoryStatisticsPage = () => {
+  const navigateToStatisticsPage = () => {
     navigation.navigate('InventoryStatistics');
 }
   return (
@@ -20,7 +20,7 @@ const ProfilePage = () => {
         </View>
         <ScrollView style={styles.scrollView}>
           {/* Your touchable opacity buttons go here */}
-          <TouchableOpacity style={styles.button} onPress={navigateToInventoryStatisticsPage}>
+          <TouchableOpacity style={styles.button} onPress={navigateToStatisticsPage}>
             <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
           </TouchableOpacity>
