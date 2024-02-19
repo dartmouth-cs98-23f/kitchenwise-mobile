@@ -18,14 +18,24 @@ import Navbar from "./Navbar";
 import SearchBar from "../components/pantry_components/SearchBar";
 import { createNewShoppingList, addItemToList, getUserShoppingListItems } from "../api/shoppingList-api";
 
-const ShoppingListItem = ({ name, amount }) => {
+const ShoppingListItem = ({ name, amount, selectItems }) => {
+  const [isSelected, setIsSelected] = useState(false);
+
+
+  const itemPressed = () => {
+    selectItems(name);
+    let toggle = isSelected ? false : true;
+    setIsSelected(toggle);
+  }
+
+  let style = isSelected ? "ellipse" : "ellipse-outline"
   return (
     <View style={styles.listItemContainer}>
       <Text style={styles.listItemText}>{name}</Text>
       <View style={styles.listItemRight}>
         <Text style={styles.listItemText}>{amount || "1"}</Text>
-        <TouchableOpacity >
-          <Ionicons name="ellipse-outline" size={30} />
+        <TouchableOpacity onPress={itemPressed}>
+          <Ionicons name={style} size={30} />
         </TouchableOpacity>
       </View>
     </View>
@@ -40,6 +50,7 @@ const ShoppingListPage = () => {
   const [additemModal, setAddItemModal] = useState(false);
   const [itemToAdd, setItemToAdd] = useState('');
   const [amountToAdd, setAmountToAdd] = useState('');
+  const [pendingDeletions, setPendingDeletions] = useState([]);
 
   const addToList = () => {
     addItemToList(userId, "list 1", itemToAdd, amountToAdd).then((data) => {
@@ -56,15 +67,21 @@ const ShoppingListPage = () => {
     setAddItemModal(false);
   }
 
-  const createList = useCallback(() => {
+  const selectItems = (item) => {
+    if (pendingDeletions.includes(item)) {
+      setPendingDeletions((prev) => prev.filter((pendingItem) => pendingItem !== item));
+    } else {
+      setPendingDeletions([...pendingDeletions, item]);
+    }
+  }
 
+
+  const createList = useCallback(() => {
     createNewShoppingList(userId, "list 1").then(() => {
       addItemToList(userId, "list 1", itemToAdd, amountToAdd).then((data) => {
         setListItems(data.shoppingListItems);
       })
-    }
-
-    )
+    })
 
     setAddItemModal(false);
     setListAvailable(true);
@@ -110,7 +127,7 @@ const ShoppingListPage = () => {
         </Modal>
 
 
-       
+
         {isListAvailable &&
           <View style={styles.listContainer}>
             <Text style={themeStyles.text.h3}>Category</Text>
@@ -119,7 +136,7 @@ const ShoppingListPage = () => {
             <View style={styles.list}>
               <FlatList
                 data={listItems}
-                renderItem={({item}) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>}
+                renderItem={({ item }) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id} selectItems={selectItems} />}
                 keyExtractor={item => item._id}
               />
             </View>
@@ -129,7 +146,6 @@ const ShoppingListPage = () => {
           <TouchableOpacity onPress={promptAddItem}>
             <Ionicons name="add-circle" size={40} color="#53D6FF" />
           </TouchableOpacity>
-
           <TouchableOpacity>
             <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={40} color="black" />
           </TouchableOpacity>
