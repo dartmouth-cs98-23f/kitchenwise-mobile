@@ -83,7 +83,7 @@ const PantryPage = () => {
       selectedInventories.has(item.inventoryTitle)
     );
     setFilteredItems(newFilteredItems);
-  }, [items, selectedInventories]);
+  }, [items, selectedInventories, searchText]);
   const onInventorySelect = useCallback((inventoryName) => {
     setSelectedInventories((prev) => {
       prev.add(inventoryName);
@@ -146,10 +146,6 @@ const PantryPage = () => {
               borderBottomWidth: StyleSheet.hairlineWidth,
               marginBottom: 8,
             }}
-          />
-          <PantrySearchModal
-            filterDoneHandler={filterDoneHandler}
-            visible={modalVisible}
           />
         </View>
         <FlatList

@@ -9,7 +9,15 @@ import {
   TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import themeStyles from "../../styles";
 
 function toTitleCase(str) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -17,87 +25,135 @@ function toTitleCase(str) {
   });
 }
 
+const MAX_DRAG = 56;
+const springConfig = {
+  duration: 200,
+  overshootClamping: true,
+  dampingRatio: 1.7,
+};
+
 const PantryItem = ({ name, expiration, image, quantity, unit }) => {
-  const [editItem, setEditItem] = useState(false);
-  const [inputQntText, setInputQntText] = useState("");
-  const [inputExpText, setExpInputText] = useState("");
-
-  const editOnPress = () => {
-    setEditItem(true);
-    console.log(editItem);
-  };
-
-  const onEditDonePress = () => {
-    setEditItem(false);
-  };
-
-  const handleQntInputChange = (text) => {
-    setInputQntText(text);
-  };
-  const handleExpInputChange = (text) => {
-    setInputExpText(text);
-  };
-
+  const amountPanned = useSharedValue(0);
+  const swiped = useSharedValue(false);
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      if (!swiped.value) {
+        if (Math.abs(e.translationX) >= MAX_DRAG - 16) {
+          amountPanned.value = withSpring(
+            Math.sign(e.translationX) * MAX_DRAG,
+            springConfig
+          );
+          swiped.value = true;
+        } else amountPanned.value = e.translationX;
+      }
+    })
+    .onEnd(() => {
+      if (!swiped.value) {
+        amountPanned.value = withSpring(0, springConfig);
+      }
+    });
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: 1 * amountPanned.value }],
+    };
+  });
+  const onInfoPress = useCallback(() => {
+    swiped.value = false;
+    amountPanned.value = withSpring(0, springConfig);
+  }, []);
   return (
-    <View style={styles.pantryItemContainer}>
-      <Text style={styles.itemName}>{toTitleCase(name)}</Text>
-      {expiration ? (
-        <Text style={[styles.itemInfoText]}>
-          {expiration ? "exp." + expiration : null}
-        </Text>
-      ) : null}
-      <Text style={[styles.itemInfoText]}>
-        {quantity} {unit}
-      </Text>
-
-      {/* <TouchableOpacity style={styles.editButton} onPress={editOnPress}>
-        <Ionicons name="create-outline" size={20} />
-      </TouchableOpacity> */}
-
-      {/* {editItem && (
-        <Modal>
-          <SafeAreaView style={styles.editScreen}>
-            <Text style={styles.editIteamHeader}>{toTitleCase(name)}</Text>
-            <Image style={styles.editImg}></Image>
-            <View style={styles.editInfoContainer}>
-              <Text style={styles.editItemSubheader}>Quantity</Text>
-              <TextInput
-                placeholder={quantity.toString()}
-                onChangeText={handleQntInputChange}
-                value={inputQntText}
-                keyboardType="numeric"
-              />
-              <Text style={styles.editItemSubheader}>Expiration Date</Text>
-              <TextInput
-                placeholder={
-                  expiration ? "exp." + expiration.toString() : "None"
-                }
-                onChangeText={handleExpInputChange}
-                value={inputExpText}
-              />
-            </View>
-            <TouchableOpacity style={styles.editDone} onPress={onEditDonePress}>
-              <Text style={styles.doneText}>DONE</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
-      )} */}
-    </View>
+    <GestureDetector gesture={panGesture}>
+      <View style={styles.pantryItemContainer}>
+        <Animated.View
+          style={[styles.infoLayer, animatedStyles]}
+          onPress={onInfoPress}
+        >
+          <TouchableOpacity
+            width="100%"
+            height="100%"
+            activeOpacity={1}
+            style={styles.innerInfoLayer}
+            onPress={onInfoPress}
+          >
+            <Text style={styles.itemName}>{toTitleCase(name)}</Text>
+            {expiration ? (
+              <Text style={[styles.itemInfoText]}>
+                {expiration ? "exp." + expiration : null}
+              </Text>
+            ) : null}
+            <Text style={[styles.itemInfoText]}>
+              {quantity} {unit}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={styles.backLayer}>
+          <View
+            style={[
+              styles.modifyButton,
+              {
+                backgroundColor: themeStyles.colors.success,
+              },
+            ]}
+          >
+            <Ionicons size={28} name="create-outline" color="white" />
+          </View>
+          <View
+            style={[
+              styles.modifyButton,
+              {
+                backgroundColor: themeStyles.colors.failure,
+              },
+            ]}
+          >
+            <Ionicons size={32} name="trash-outline" color="white" />
+          </View>
+        </View>
+      </View>
+    </GestureDetector>
   );
 };
 
 const styles = StyleSheet.create({
   pantryItemContainer: {
     borderRadius: 10,
+    marginVertical: 4,
+    elevation: 4,
+
+    // overflow: Platform.OS === "android" ? "hidden" : "visible",
+    width: "100%",
+    height: 56,
+    overflow: "hidden",
+  },
+  backLayer: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    elevation: 0,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  modifyButton: {
+    width: 56,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoLayer: {
+    elevation: 3,
+    zIndex: 3,
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+
+    paddingHorizontal: 12,
+    backgroundColor: "#FAFAFA",
+  },
+  innerInfoLayer: {
     alignItems: "center",
     alignSelf: "center",
     flexDirection: "row",
-    paddingVertical: 8,
-    marginVertical: 4,
-    paddingHorizontal: 12,
-    elevation: 4,
-    backgroundColor: "#FAFAFA",
-    // overflow: Platform.OS === "android" ? "hidden" : "visible",
+    height: "100%",
     width: "100%",
   },
   itemName: {

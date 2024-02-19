@@ -16,6 +16,7 @@ import RecipeContext, { defaultRecipeContext } from "./context/recipe-context";
 import { getUserInventories } from "./api/inventory-api";
 import RevisionModal from "./components/modals/RevisionModal";
 import { getSavedRecipes } from "./api/recipe-api";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,57 +68,58 @@ export default function App() {
           <RecipeContext.Provider
             value={{ savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes }}
           >
-            <RevisionModal />
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Home"
-                  component={LoginScreen}
-                  options={{ title: "Welcome", headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Profile"
-                  component={ProfilePage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Pantry"
-                  component={PantryPage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="ShoppingList"
-                  component={ShoppingListPage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Narration"
-                  component={NarrationPage}
-                  options={{
-                    title: "",
-                    headerBackVisible: false,
-                    animation: "none",
-                    headerShown: false,
-                  }}
-                />
-                {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
-              </Stack.Navigator>
-            </NavigationContainer>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Home"
+                    component={LoginScreen}
+                    options={{ title: "Welcome", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Profile"
+                    component={ProfilePage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Pantry"
+                    component={PantryPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="ShoppingList"
+                    component={ShoppingListPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Narration"
+                    component={NarrationPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+                  {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </GestureHandlerRootView>
           </RecipeContext.Provider>
         </InventoryContext.Provider>
       </UserContext.Provider>
