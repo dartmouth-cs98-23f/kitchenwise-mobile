@@ -48,8 +48,6 @@ const ShoppingListPage = () => {
     setAddItemModal(false);
   };
 
-  console.log(listItems);
-
   const promptAddItem = () => {
     setAddItemModal(true);
   }
@@ -117,7 +115,14 @@ const ShoppingListPage = () => {
           <View style={styles.listContainer}>
             <Text style={themeStyles.text.h3}>Category</Text>
             <View style={styles.line} />
-            <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</>
+            {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */}
+            <View style={styles.list}>
+              <FlatList
+                data={listItems}
+                renderItem={({item}) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>}
+                keyExtractor={item => item._id}
+              />
+            </View>
           </View>
         }
         <View style={styles.editContainer}>
@@ -130,37 +135,6 @@ const ShoppingListPage = () => {
           </TouchableOpacity>
         </View>
 
-        {/*
-          <Text style={themeStyles.text.h3}>Deli</Text>
-          <View style={styles.line} />
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
-
-          <Text style={themeStyles.text.h3}>Produce</Text>
-          <View style={styles.line} />
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
-
-          <Text style={themeStyles.text.h3}>Meat & Fish</Text>
-          <View style={styles.line} />
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
-          <Text style={themeStyles.text.h3}>Bakery</Text>
-          <View style={styles.line} />
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
-
-          <Text style={themeStyles.text.h3}>Household</Text>
-          <View style={styles.line} />
-
-          {dairyItems.map((item) => (
-            <ShoppingListItem name={item} />
-          ))}
-         */}
       </SafeAreaView>
       <Navbar />
     </>
@@ -244,7 +218,12 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     marginVertical: 12,
-    flex: 10
+    flex: 10,
+
+  },
+  list: {
+
+
   }
 });
 
