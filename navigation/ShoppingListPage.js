@@ -51,6 +51,7 @@ const ShoppingListPage = () => {
   const [itemToAdd, setItemToAdd] = useState('');
   const [amountToAdd, setAmountToAdd] = useState('');
   const [pendingDeletions, setPendingDeletions] = useState([]);
+  const [selectionModal, setSelectionModal] = useState(false);
 
   const addToList = () => {
     addItemToList(userId, "list 1", itemToAdd, amountToAdd).then((data) => {
@@ -61,6 +62,11 @@ const ShoppingListPage = () => {
 
   const promptAddItem = () => {
     setAddItemModal(true);
+  }
+
+  const toggleSelection = () => {
+    selectionModal ? setSelectionModal(false) : setSelectionModal(true);
+    console.log(selectionModal)
   }
 
   const cancelAdd = () => {
@@ -75,6 +81,9 @@ const ShoppingListPage = () => {
     }
   }
 
+  const cancelSelectionModal = () => {
+    setSelectionModal(false);
+  }
 
   const createList = useCallback(() => {
     createNewShoppingList(userId, "list 1").then(() => {
@@ -86,11 +95,12 @@ const ShoppingListPage = () => {
     setAddItemModal(false);
     setListAvailable(true);
   });
+
   //TODO: pull in the recipes from the back end, should each category be dynamic?
   const refreshItems = useCallback(() => {
-    getUserShoppingListItems(userId,"list 1")
+    getUserShoppingListItems(userId, "list 1")
       .then((data) => {
-        if (data.length > 0){
+        if (data.length > 0) {
           setListAvailable(true);
         } else {
           setListAvailable(false);
@@ -115,7 +125,6 @@ const ShoppingListPage = () => {
         </Text>
         <SearchBar />
 
-
         {!isListAvailable &&
           <View style={styles.startContainer}>
             <TouchableOpacity style={styles.importButton}>
@@ -123,10 +132,11 @@ const ShoppingListPage = () => {
             </TouchableOpacity>
             <Text>Or</Text>
             <TouchableOpacity onPress={promptAddItem} style={styles.importButton}>
-              <Text >Add New Item</Text>
+              <Text>Add New Item</Text>
             </TouchableOpacity>
           </View>
         }
+
 
         <Modal transparent={true} visible={additemModal}>
           <View style={styles.additemModalContainer}>
@@ -146,8 +156,6 @@ const ShoppingListPage = () => {
           </View>
         </Modal>
 
-
-
         {isListAvailable &&
           <View style={styles.listContainer}>
             <Text style={themeStyles.text.h3}>Category</Text>
@@ -162,13 +170,33 @@ const ShoppingListPage = () => {
             </View>
           </View>
         }
+
         <View style={styles.editContainer}>
           <TouchableOpacity onPress={promptAddItem}>
             <Ionicons name="add-circle" size={40} color="#53D6FF" />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={40} color="black" />
-          </TouchableOpacity>
+          {!selectionModal &&
+            <TouchableOpacity onPress={toggleSelection}>
+              <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={40} color="black" />
+            </TouchableOpacity>
+          }
+
+          {
+            selectionModal &&
+            
+            <View style={styles.moreContainer} >
+              <TouchableOpacity style={styles.moreOption}>
+                <Text>Update Inventory</Text>
+              </TouchableOpacity>
+              <TouchableOpacity styles={styles.moreOption}>
+                <Text>Clear List</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.moreOption} onPress={cancelSelectionModal}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+         
+          }
         </View>
 
       </SafeAreaView>
@@ -212,7 +240,9 @@ const styles = StyleSheet.create({
   editContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    flex: 1,
+    alignItems: "center",
+    flex: 1.3,
+
   },
   importButton: {
     backgroundColor: '#F2F2F2',
@@ -255,12 +285,23 @@ const styles = StyleSheet.create({
   listContainer: {
     marginVertical: 12,
     flex: 10,
-
   },
-  list: {
-
+  moreContainer: {
+    backgroundColor: "#F2F2F2",
+    padding: 1,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  moreOption: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 2
+  },
+  moreText: {
 
   }
+
 });
 
 export default ShoppingListPage;
