@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import Navbar from "./Navbar";
 import Button from "../components/form_components/Button";
@@ -10,10 +11,42 @@ import themeStyles from "../styles";
 import InventoryContext from "../context/inventory-context";
 import InventoryPill from "../components/profile_components/InventoryPill";
 import AddInventoryPill from "../components/profile_components/AddInventoryPill";
+import CreateModal from "../components/profile_components/CreateModal";
+import { createInventory, getUserInventories } from "../api/inventory-api";
+import UserContext from "../context/user-context";
 
 const ProfilePage = () => {
-  const { userInventories } = useContext(InventoryContext);
+  const { userInventories, setUserInventories } = useContext(InventoryContext);
+  const { userId } = useContext(UserContext);
   const [editingInventories, setEditingInventories] = useState(false);
+  const [creatingInventory, setCreatingInventory] = useState(false);
+
+  const onSubmit = useCallback(
+    (inventoryName) => {
+      createInventory(userId, inventoryName)
+        .then(() => {
+          getUserInventories(userId)
+            .then((inventories) => {
+              if (inventories) {
+                setUserInventories(inventories);
+                setCreatingInventory(false);
+              }
+            })
+            .catch((err) => {
+              throw err;
+            });
+        })
+        .catch((err) => {
+          showMessage({
+            message: "Error",
+            description: err.response.data.message,
+            type: "danger",
+          });
+          setCreatingInventory(false);
+        });
+    },
+    [getUserInventories, setUserInventories, setCreatingInventory]
+  );
   return (
     <>
       <SafeAreaView style={themeStyles.components.screenContainer}>
@@ -52,11 +85,10 @@ const ProfilePage = () => {
                 contentContainerStyle={styles.pillsContainerEditing}
                 style={{ overflow: "visible" }}
                 scrollEnabled={false}
-                onDragBegin={() => {
-                  console.log("E");
-                }}
               />
-              {editingInventories && <AddInventoryPill />}
+              {editingInventories && (
+                <AddInventoryPill onPress={() => setCreatingInventory(true)} />
+              )}
             </>
           ) : (
             <View style={[styles.pillsContainer, styles.pillsContainerStatic]}>
@@ -74,6 +106,11 @@ const ProfilePage = () => {
         </View>
       </SafeAreaView>
       <Navbar />
+      <CreateModal
+        visible={creatingInventory}
+        onSubmit={onSubmit}
+        onClose={() => setCreatingInventory(false)}
+      />
     </>
   );
 };

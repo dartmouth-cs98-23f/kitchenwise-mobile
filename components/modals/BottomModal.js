@@ -1,8 +1,13 @@
 import { Modal, Text, StyleSheet, View } from "react-native";
+import { useEffect, useState } from "react";
 import Button from "../form_components/Button";
 import themeStyles from "../../styles";
 
 const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(false);
+  }, [visible]);
   return (
     <Modal visible={visible} transparent>
       <View style={styles.modalContainer}>
@@ -11,14 +16,31 @@ const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
           <Text style={themeStyles.text.h2}>{title}</Text>
           <View>{children}</View>
           <View style={styles.buttonRow}>
-            <Button text="Cancel" containerStyle={{ width: "50%" }} />
-            <Button
-              text="Confirm"
-              containerStyle={{
-                width: "50%",
-                backgroundColor: themeStyles.colors.interactableBackground,
-              }}
-            />
+            {loading ? (
+              <Text style={styles.loadingText}>Loading...</Text>
+            ) : (
+              <>
+                <Button
+                  text="Cancel"
+                  containerStyle={{ width: "50%" }}
+                  onPress={() => {
+                    onCancel();
+                    setLoading(true);
+                  }}
+                />
+                <Button
+                  text="Confirm"
+                  containerStyle={{
+                    width: "50%",
+                    backgroundColor: themeStyles.colors.interactableBackground,
+                  }}
+                  onPress={() => {
+                    onConfirm();
+                    setLoading(true);
+                  }}
+                />
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -28,7 +50,7 @@ const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
 
 const styles = StyleSheet.create({
   modalContainer: { flex: 1, justifyContent: "center" },
-  topPadding: { flexGrow: 1 },
+  topPadding: { flexGrow: 1, backgroundColor: "#D9D9D9", opacity: 0.4 },
   modalContent: {
     backgroundColor: "white",
     width: "100%",
@@ -38,7 +60,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 8,
   },
-  buttonRow: { display: "flex", flexDirection: "row", width: "100%" },
+  buttonRow: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: { height: 48 },
 });
 
 export default BottomModal;

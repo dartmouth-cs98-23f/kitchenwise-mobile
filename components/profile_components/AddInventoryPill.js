@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import themeStyles from "../../styles";
-const AddInventoryPill = () => {
+const AddInventoryPill = ({ onPress }) => {
   return (
-    <View style={styles.pillContainer}>
+    <TouchableOpacity style={styles.pillContainer} onPress={onPress}>
       <Text style={styles.titleText}>Add</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
