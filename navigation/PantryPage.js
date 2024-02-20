@@ -1,36 +1,29 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import moment from "moment";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import Navbar from "./Navbar";
 import themeStyles from "../styles";
-import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 import UserContext from "../context/user-context";
 import { getAllItems } from "../api/inventory-api";
 import PantryItem from "../components/pantry_components/PantryItem";
-import PantrySearchModal from "../components/pantry_components/PantrySearchModal";
 import SearchBar from "../components/pantry_components/SearchBar";
 import PillRow from "../components/pantry_components/PillRow";
 import VoiceBubble from "../components/pantry_components/VoiceBubble";
 import AddBubble from "../components/pantry_components/AddBubble";
 import InventoryContext from "../context/inventory-context";
-import BottomModal from "../components/modals/BottomModal";
 import DeleteModal from "../components/pantry_components/DeleteModal";
 import EditModal from "../components/pantry_components/EditModal";
+import { createRemoveAction } from "../api/removeaction-api";
+import { showMessage } from "react-native-flash-message";
 
 const PantryPage = () => {
-  const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchText, setSearchText] = useState(null);
   const [selectedInventories, setSelectedInventories] = useState(new Set());
+  const [deletingItem, setDeletingItem] = useState(null);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
 
@@ -38,14 +31,6 @@ const PantryPage = () => {
     if (userInventories)
       setSelectedInventories(new Set(userInventories.map((inv) => inv.title)));
   }, [userInventories]);
-
-  const filterButtonHanlder = () => {
-    setModalVisible(true);
-  };
-
-  const filterDoneHandler = () => {
-    setModalVisible(false);
-  };
 
   const refreshItems = useCallback(() => {
     getAllItems(userId)
@@ -102,6 +87,29 @@ const PantryPage = () => {
     else setSearchText(null);
   }, []);
 
+  const onBeginDelete = useCallback(
+    (foodItem) => {
+      setDeletingItem(foodItem);
+    },
+    [setDeletingItem]
+  );
+
+  const onConfirmDelete = useCallback(() => {
+    createRemoveAction(deletingItem, deletingItem.inventoryId, userId)
+      .then(() => {
+        refreshItems();
+        setDeletingItem(null);
+      })
+      .catch((err) => {
+        console.error(err);
+        showMessage({
+          message: "Error",
+          description: "",
+          type: "danger",
+        });
+      });
+  }, [deletingItem, userId, refreshItems, setDeletingItem]);
+
   return (
     <>
       <SafeAreaView style={themeStyles.components.screenContainer}>
@@ -150,7 +158,9 @@ const PantryPage = () => {
         </View>
         <FlatList
           data={filteredItems}
-          renderItem={({ item }) => <PantryItem {...item} />}
+          renderItem={({ item }) => (
+            <PantryItem foodItem={item} onDelete={onBeginDelete} />
+          )}
           keyExtractor={(item) => item.id}
           style={styles.pantryList}
           ListEmptyComponent={
@@ -159,7 +169,10 @@ const PantryPage = () => {
             </Text>
           }
         />
-        <DeleteModal visible={false} />
+        <DeleteModal
+          visible={deletingItem != null}
+          onSubmit={onConfirmDelete}
+        />
         <EditModal visible={false} />
       </SafeAreaView>
       <VoiceBubble />

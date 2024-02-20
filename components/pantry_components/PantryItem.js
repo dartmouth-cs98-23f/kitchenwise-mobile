@@ -32,7 +32,8 @@ const springConfig = {
   dampingRatio: 1.7,
 };
 
-const PantryItem = ({ name, expiration, image, quantity, unit }) => {
+const PantryItem = ({ foodItem, onDelete, onEdit }) => {
+  const { name, expiration, quantity, unit } = foodItem;
   const amountPanned = useSharedValue(0);
   const swiped = useSharedValue(false);
   const panGesture = Gesture.Pan()
@@ -87,26 +88,28 @@ const PantryItem = ({ name, expiration, image, quantity, unit }) => {
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.backLayer}>
-          <View
+          <TouchableOpacity
             style={[
               styles.modifyButton,
               {
                 backgroundColor: themeStyles.colors.success,
               },
             ]}
+            onPress={onEdit}
           >
             <Ionicons size={28} name="create-outline" color="white" />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
               styles.modifyButton,
               {
                 backgroundColor: themeStyles.colors.failure,
               },
             ]}
+            onPress={() => onDelete(foodItem)}
           >
             <Ionicons size={32} name="trash-outline" color="white" />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </GestureDetector>
