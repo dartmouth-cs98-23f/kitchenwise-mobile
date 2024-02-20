@@ -11,7 +11,7 @@ function LoginButton(props) {
       }
       containerStyle={[
         props.isBlack ? styles.buttonBlack : styles.buttonWhite,
-        { width: "100%", borderRadius: 100 },
+        { width: "100%", borderRadius: 100, marginBottom: 12 },
         props.containerStyle,
       ]}
       disabled={props?.disabled}

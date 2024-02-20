@@ -10,7 +10,7 @@ const AddInventoryPill = () => {
 
 const styles = StyleSheet.create({
   pillContainer: {
-    width: 80,
+    width: "100%",
     height: 40,
     display: "flex",
     justifyContent: "center",
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "dashed",
     borderRadius: 3,
+    marginTop: 12,
   },
   titleText: {
     fontSize: 12,
