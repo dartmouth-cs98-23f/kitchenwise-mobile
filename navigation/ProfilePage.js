@@ -14,16 +14,20 @@ import AddInventoryPill from "../components/profile_components/AddInventoryPill"
 import CreateModal from "../components/profile_components/CreateModal";
 import {
   createInventory,
+  deleteInventory,
   getUserInventories,
   renameInventory,
 } from "../api/inventory-api";
 import UserContext from "../context/user-context";
+import DeleteModal from "../components/profile_components/DeleteModal";
 
 const ProfilePage = () => {
   const { userInventories, setUserInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
   const [editingInventories, setEditingInventories] = useState(false);
   const [creatingInventory, setCreatingInventory] = useState(false);
+  // ID of the inventory currently being deleted, null if none are
+  const [inventoryDeleting, setInventoryDeleting] = useState(null);
   const refreshInventories = useCallback(async () => {
     getUserInventories(userId)
       .then((inventories) => {
@@ -52,7 +56,7 @@ const ProfilePage = () => {
           setCreatingInventory(false);
         });
     },
-    [refreshInventories, setCreatingInventory]
+    [userId, refreshInventories, setCreatingInventory]
   );
   const onRename = useCallback(
     (invId, newTitle) => {
@@ -60,8 +64,34 @@ const ProfilePage = () => {
         refreshInventories();
       });
     },
-    [refreshInventories]
+    [userId, refreshInventories]
   );
+  const onStartDelete = useCallback(
+    (inventory) => {
+      setInventoryDeleting(inventory);
+    },
+    [setInventoryDeleting]
+  );
+  const onConfirmDelete = useCallback(
+    (destinationInventoryId) => {
+      deleteInventory(userId, inventoryDeleting._id, destinationInventoryId)
+        .then(() => {
+          refreshInventories().then(() => {
+            setInventoryDeleting(null);
+          });
+        })
+        .catch(() => {
+          showMessage({
+            message: "Error",
+            description: "Unable to remove inventory",
+            type: "danger",
+          });
+          setInventoryDeleting(null);
+        });
+    },
+    [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
+  );
+
   return (
     <>
       <SafeAreaView style={themeStyles.components.screenContainer}>
@@ -92,14 +122,14 @@ const ProfilePage = () => {
             <>
               {/* TODO: dragging doesn't work */}
               <DraggableFlatList
-                data={userInventories.sort(
-                  (a, b) => a._id.toString() > b._id.toString()
-                )}
+                data={userInventories}
                 renderItem={({ item }) => (
                   <InventoryPill
                     name={item.title}
                     editing
                     onChange={(newText) => onRename(item._id, newText)}
+                    onDelete={() => onStartDelete(item)}
+                    deleteable={userInventories.length > 1}
                   />
                 )}
                 keyExtractor={(inv) => inv._id}
@@ -131,6 +161,13 @@ const ProfilePage = () => {
         visible={creatingInventory}
         onSubmit={onSubmit}
         onClose={() => setCreatingInventory(false)}
+      />
+      <DeleteModal
+        visible={inventoryDeleting != null}
+        inventoryTitle={inventoryDeleting?.title}
+        inventories={userInventories}
+        onSubmit={onConfirmDelete}
+        onClose={() => setInventoryDeleting(null)}
       />
     </>
   );

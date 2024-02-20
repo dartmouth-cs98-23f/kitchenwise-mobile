@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "../form_components/Input";
 import themeStyles from "../../styles";
 import { useState } from "react";
 
-const InventoryPill = ({ name, editing, onChange }) => {
+const InventoryPill = ({ name, editing, onChange, onDelete, deleteable }) => {
   const [tempValue, setTempValue] = useState(name);
   return (
     <View
@@ -26,10 +26,10 @@ const InventoryPill = ({ name, editing, onChange }) => {
       ) : (
         <Text style={styles.titleText}>{name}</Text>
       )}
-      {editing && (
-        <View style={styles.deleteBubble}>
+      {editing && deleteable && (
+        <TouchableOpacity style={styles.deleteBubble} onPress={onDelete}>
           <Ionicons name="close-outline" color="white" size={18} />
-        </View>
+        </TouchableOpacity>
       )}
     </View>
   );
