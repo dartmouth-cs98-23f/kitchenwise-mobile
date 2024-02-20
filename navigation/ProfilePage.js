@@ -12,7 +12,11 @@ import InventoryContext from "../context/inventory-context";
 import InventoryPill from "../components/profile_components/InventoryPill";
 import AddInventoryPill from "../components/profile_components/AddInventoryPill";
 import CreateModal from "../components/profile_components/CreateModal";
-import { createInventory, getUserInventories } from "../api/inventory-api";
+import {
+  createInventory,
+  getUserInventories,
+  renameInventory,
+} from "../api/inventory-api";
 import UserContext from "../context/user-context";
 
 const ProfilePage = () => {
@@ -20,21 +24,24 @@ const ProfilePage = () => {
   const { userId } = useContext(UserContext);
   const [editingInventories, setEditingInventories] = useState(false);
   const [creatingInventory, setCreatingInventory] = useState(false);
-
+  const refreshInventories = useCallback(async () => {
+    getUserInventories(userId)
+      .then((inventories) => {
+        if (inventories) {
+          setUserInventories(inventories);
+        }
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }, [getUserInventories, setUserInventories]);
   const onSubmit = useCallback(
-    (inventoryName) => {
-      createInventory(userId, inventoryName)
+    (inventoryTitle) => {
+      createInventory(userId, inventoryTitle)
         .then(() => {
-          getUserInventories(userId)
-            .then((inventories) => {
-              if (inventories) {
-                setUserInventories(inventories);
-                setCreatingInventory(false);
-              }
-            })
-            .catch((err) => {
-              throw err;
-            });
+          refreshInventories().then(() => {
+            setCreatingInventory(false);
+          });
         })
         .catch((err) => {
           showMessage({
@@ -45,7 +52,15 @@ const ProfilePage = () => {
           setCreatingInventory(false);
         });
     },
-    [getUserInventories, setUserInventories, setCreatingInventory]
+    [refreshInventories, setCreatingInventory]
+  );
+  const onRename = useCallback(
+    (invId, newTitle) => {
+      renameInventory(userId, invId, newTitle).then((data) => {
+        refreshInventories();
+      });
+    },
+    [refreshInventories]
   );
   return (
     <>
@@ -77,9 +92,15 @@ const ProfilePage = () => {
             <>
               {/* TODO: dragging doesn't work */}
               <DraggableFlatList
-                data={userInventories}
-                renderItem={(inv) => (
-                  <InventoryPill name={inv.item.title} editing />
+                data={userInventories.sort(
+                  (a, b) => a._id.toString() > b._id.toString()
+                )}
+                renderItem={({ item }) => (
+                  <InventoryPill
+                    name={item.title}
+                    editing
+                    onChange={(newText) => onRename(item._id, newText)}
+                  />
                 )}
                 keyExtractor={(inv) => inv._id}
                 contentContainerStyle={styles.pillsContainerEditing}

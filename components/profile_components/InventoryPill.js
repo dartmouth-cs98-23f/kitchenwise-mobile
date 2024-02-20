@@ -2,8 +2,10 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Input from "../form_components/Input";
 import themeStyles from "../../styles";
+import { useState } from "react";
 
-const InventoryPill = ({ name, editing }) => {
+const InventoryPill = ({ name, editing, onChange }) => {
+  const [tempValue, setTempValue] = useState(name);
   return (
     <View
       style={[
@@ -13,8 +15,13 @@ const InventoryPill = ({ name, editing }) => {
     >
       {editing ? (
         <Input
-          value={name}
+          value={tempValue}
           style={{ height: 36, borderWidth: 0, flexGrow: 1 }}
+          onChangeText={(text) => setTempValue(text)}
+          onEndEditing={(e) => {
+            onChange(e.nativeEvent.text);
+            // setTempValue(name);
+          }}
         />
       ) : (
         <Text style={styles.titleText}>{name}</Text>

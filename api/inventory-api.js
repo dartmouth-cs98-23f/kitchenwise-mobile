@@ -14,3 +14,8 @@ export const getAllItems = async (userId) => {
 export const createInventory = async (userId, title) => {
   return (await axios.post(URL + "/create", { userId, title })).data;
 };
+
+export const renameInventory = async (userId, inventoryId, newTitle) => {
+  return (await axios.patch(URL + "/rename", { userId, inventoryId, newTitle }))
+    .data;
+};

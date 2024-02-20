@@ -10,6 +10,8 @@ function Input(props) {
       defaultValue={props.defaultValue}
       keyboardType={props.keyboardType}
       onChangeText={props.onChangeText}
+      onEndEditing={props.onEndEditing}
+      onBlur={props.onBlur}
     ></TextInput>
   );
 }
