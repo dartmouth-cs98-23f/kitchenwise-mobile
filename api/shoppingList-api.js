@@ -19,3 +19,7 @@ export const addItemToList = async (userId, title, foodItem, foodAmount) => {
 export const getUserShoppingListItems = async (userId, title) => {
   return (await axios.get(URL + "/allitems", { params: {userId, title}})).data;
 };
+
+export const deleteShoppingItem = async (userId, title, itemId) => {
+  return (await axios.delete(URL + "/delete",  { userId, title, itemId} )).data;
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext } from "react";
+import React, { useCallback, useState, useContext, useEffect } from "react";
 import {
   FlatList,
   Modal,
@@ -87,6 +87,26 @@ const ShoppingListPage = () => {
     setListAvailable(true);
   });
   //TODO: pull in the recipes from the back end, should each category be dynamic?
+  const refreshItems = useCallback(() => {
+    getUserShoppingListItems(userId,"list 1")
+      .then((data) => {
+        if (data.length > 0){
+          setListAvailable(true);
+        } else {
+          setListAvailable(false);
+        }
+        setListItems((data));
+      })
+      .catch((err) => {
+        console.log("Shopping polling failed - server not online");
+      });
+  }, [userId, setListItems]);
+  useEffect(() => {
+    // TODO: this is horrible and must be replaced next term
+    refreshItems();
+    const interval = setInterval(refreshItems, 2500);
+    return () => clearInterval(interval);
+  }, [userId, refreshItems]);
   return (
     <>
       <SafeAreaView style={themeStyles.components.screenContainer}>
