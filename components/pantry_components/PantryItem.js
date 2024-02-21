@@ -62,6 +62,10 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
     swiped.value = false;
     amountPanned.value = withSpring(0, springConfig);
   }, []);
+  const resetPan = useCallback(() => {
+    amountPanned.value = 0;
+    swiped.value = false;
+  }, []);
   return (
     <GestureDetector gesture={panGesture}>
       <View style={styles.pantryItemContainer}>
@@ -95,7 +99,10 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
                 backgroundColor: themeStyles.colors.success,
               },
             ]}
-            onPress={onEdit}
+            onPress={() => {
+              onEdit(foodItem);
+              resetPan();
+            }}
           >
             <Ionicons size={28} name="create-outline" color="white" />
           </TouchableOpacity>
@@ -106,7 +113,10 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
                 backgroundColor: themeStyles.colors.failure,
               },
             ]}
-            onPress={() => onDelete(foodItem)}
+            onPress={() => {
+              onDelete(foodItem);
+              resetPan();
+            }}
           >
             <Ionicons size={32} name="trash-outline" color="white" />
           </TouchableOpacity>

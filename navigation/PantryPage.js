@@ -17,6 +17,7 @@ import DeleteModal from "../components/pantry_components/DeleteModal";
 import EditModal from "../components/pantry_components/EditModal";
 import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
+import { editFoodItem } from "../api/fooditem-api";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -24,6 +25,7 @@ const PantryPage = () => {
   const [searchText, setSearchText] = useState(null);
   const [selectedInventories, setSelectedInventories] = useState(new Set());
   const [deletingItem, setDeletingItem] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
 
@@ -98,7 +100,6 @@ const PantryPage = () => {
     createRemoveAction(deletingItem, deletingItem.inventoryId, userId)
       .then(() => {
         refreshItems();
-        setDeletingItem(null);
       })
       .catch((err) => {
         console.error(err);
@@ -107,8 +108,39 @@ const PantryPage = () => {
           description: "",
           type: "danger",
         });
+      })
+      .finally(() => {
+        setDeletingItem(null);
       });
   }, [deletingItem, userId, refreshItems, setDeletingItem]);
+
+  const onBeginEdit = useCallback(
+    (foodItem) => {
+      setEditingItem(foodItem);
+    },
+    [setEditingItem]
+  );
+
+  const onConfirmEdit = useCallback(
+    (newItem) => {
+      editFoodItem(editingItem.inventoryId, editingItem._id, newItem)
+        .then(() => {
+          refreshItems();
+        })
+        .catch((err) => {
+          console.error(err);
+          showMessage({
+            message: "Error",
+            description: "",
+            type: "danger",
+          });
+        })
+        .finally(() => {
+          setEditingItem(null);
+        });
+    },
+    [refreshItems, editingItem, setDeletingItem]
+  );
 
   return (
     <>
@@ -159,7 +191,11 @@ const PantryPage = () => {
         <FlatList
           data={filteredItems}
           renderItem={({ item }) => (
-            <PantryItem foodItem={item} onDelete={onBeginDelete} />
+            <PantryItem
+              foodItem={item}
+              onDelete={onBeginDelete}
+              onEdit={onBeginEdit}
+            />
           )}
           keyExtractor={(item) => item.id}
           style={styles.pantryList}
@@ -172,8 +208,15 @@ const PantryPage = () => {
         <DeleteModal
           visible={deletingItem != null}
           onSubmit={onConfirmDelete}
+          onClose={() => setDeletingItem(null)}
         />
-        <EditModal visible={false} />
+        <EditModal
+          visible={editingItem != null}
+          foodItem={editingItem}
+          inventories={userInventories}
+          onClose={() => setEditingItem(null)}
+          onSubmit={onConfirmEdit}
+        />
       </SafeAreaView>
       <VoiceBubble />
       <AddBubble />

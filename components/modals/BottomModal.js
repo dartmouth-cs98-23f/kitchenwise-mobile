@@ -13,7 +13,9 @@ const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
       <View style={styles.modalContainer}>
         <View style={styles.topPadding}></View>
         <View style={styles.modalContent}>
-          <Text style={themeStyles.text.h2}>{title}</Text>
+          <Text style={[themeStyles.text.h2, { marginBottom: 8 }]}>
+            {title}
+          </Text>
           <View>{children}</View>
           <View style={styles.buttonRow}>
             {loading ? (
