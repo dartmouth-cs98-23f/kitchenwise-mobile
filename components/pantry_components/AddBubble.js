@@ -3,9 +3,9 @@ import { Ionicons } from "@expo/vector-icons";
 import Bubble from "../Bubble.js";
 import { StyleSheet } from "react-native";
 
-const AddBubble = ({}) => {
+const AddBubble = ({ onPress }) => {
   return (
-    <Bubble positionStyle={styles.bubblePosition}>
+    <Bubble positionStyle={styles.bubblePosition} onPress={onPress}>
       <Ionicons name="add" size={32} color="#000" />
     </Bubble>
   );

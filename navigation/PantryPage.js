@@ -17,7 +17,7 @@ import DeleteModal from "../components/pantry_components/DeleteModal";
 import EditModal from "../components/pantry_components/EditModal";
 import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
-import { editFoodItem } from "../api/fooditem-api";
+import { addFoodItem, editFoodItem } from "../api/fooditem-api";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -26,6 +26,7 @@ const PantryPage = () => {
   const [selectedInventories, setSelectedInventories] = useState(new Set());
   const [deletingItem, setDeletingItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
+  const [creatingItem, setCreatingItem] = useState(false);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
 
@@ -142,6 +143,24 @@ const PantryPage = () => {
     [refreshItems, editingItem, setDeletingItem]
   );
 
+  const onCreate = useCallback((foodItem) => {
+    addFoodItem(userId, foodItem.inventoryId, foodItem)
+      .then(() => {
+        refreshItems();
+      })
+      .catch((err) => {
+        console.error(err);
+        showMessage({
+          message: "Error",
+          description: "",
+          type: "danger",
+        });
+      })
+      .finally(() => {
+        setCreatingItem(false);
+      });
+  }, []);
+
   return (
     <>
       <SafeAreaView style={themeStyles.components.screenContainer}>
@@ -207,6 +226,12 @@ const PantryPage = () => {
         />
         <DeleteModal
           visible={deletingItem != null}
+          foodString={
+            deletingItem &&
+            (deletingItem?.unit
+              ? `${deletingItem.quantity} ${deletingItem.unit} of ${deletingItem.name}`
+              : `${deletingItem.quantity} ${deletingItem.name}`)
+          }
           onSubmit={onConfirmDelete}
           onClose={() => setDeletingItem(null)}
         />
@@ -217,9 +242,16 @@ const PantryPage = () => {
           onClose={() => setEditingItem(null)}
           onSubmit={onConfirmEdit}
         />
+        <EditModal
+          visible={creatingItem}
+          inventories={userInventories}
+          onClose={() => setCreatingItem(false)}
+          onSubmit={onCreate}
+          creating
+        />
       </SafeAreaView>
       <VoiceBubble />
-      <AddBubble />
+      <AddBubble onPress={() => setCreatingItem(true)} />
       <Navbar />
     </>
   );
