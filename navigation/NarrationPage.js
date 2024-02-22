@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { initWhisper } from "whisper.rn";
 import { useAssets } from "expo-asset";
@@ -7,10 +7,12 @@ import { useAssets } from "expo-asset";
 import themeStyles from "../styles";
 import { Button } from "../components/form_components";
 import CommandRow from "../components/narration_components/CommandRow";
+import { addFoodItems } from "../api/fooditem-api";
+import UserContext from "../context/user-context";
 
 const transcriptionOptions = {
   language: "en",
-  duration: 2500,
+  duration: 2000,
 };
 
 const cleanTranscription = (transcribedString) => {
@@ -35,6 +37,7 @@ const parseCommand = (rawCommand) => {
 };
 
 const NarrationPage = ({ navigation }) => {
+  const { userId } = useContext(UserContext);
   const [modelPath, setModelPath] = useState(null);
   const [spokenText, setSpokenText] = useState("");
   const [parsedCommands, setParsedCommands] = useState([]);
@@ -65,6 +68,14 @@ const NarrationPage = ({ navigation }) => {
   const onCancel = useCallback(() => {
     navigation.navigate("Pantry");
   }, []);
+  const onConfirm = useCallback(() => {
+    console.log(parsedCommands);
+    addFoodItems(userId, parsedCommands)
+      .then(() => {
+        navigation.navigate("Pantry");
+      })
+      .catch(() => {});
+  }, [parsedCommands]);
   const subscribeCallback = useCallback((evt) => {
     const { isCapturing, data, processTime, recordingTime } = evt;
     console.log(data);
@@ -125,15 +136,20 @@ const NarrationPage = ({ navigation }) => {
                   stopRecording();
                   setIsRecording(false);
                 }}
+                containerStyle={styles.button}
               />
             )
           ) : (
             <>
-              <Button text="Confirm" containerStyle={styles.button} />
               <Button
                 text="Cancel"
                 containerStyle={styles.button}
                 onPress={onCancel}
+              />
+              <Button
+                text="Confirm"
+                containerStyle={styles.button}
+                onPress={onConfirm}
               />
             </>
           )

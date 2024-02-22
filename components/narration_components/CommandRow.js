@@ -1,8 +1,10 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { Input } from "../form_components";
+import themeStyles from "../../styles";
 
-const CommandRow = ({ quantity, name, location }) => {
+const CommandRow = ({ quantity, name, location, onDelete }) => {
   return (
     <View style={styles.rowContainer}>
       <Text style={styles.conjunctionText}>Add</Text>
@@ -11,6 +13,13 @@ const CommandRow = ({ quantity, name, location }) => {
       <Input value={name} style={styles.input} />
       <Text style={styles.conjunctionText}>to</Text>
       <Input value={location} style={styles.input} />
+      <TouchableOpacity>
+        <Ionicons
+          name="remove-circle-outline"
+          size={24}
+          color={themeStyles.colors.uninteractableText}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -30,7 +39,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   conjunctionText: {
-    height: 36,
     fontSize: 14,
   },
 });

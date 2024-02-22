@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import themeStyles from "../../styles";
-const AddInventoryPill = () => {
+const AddInventoryPill = ({ onPress }) => {
   return (
-    <View style={styles.pillContainer}>
+    <TouchableOpacity style={styles.pillContainer} onPress={onPress}>
       <Text style={styles.titleText}>Add</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   pillContainer: {
-    width: 80,
+    width: "100%",
     height: 40,
     display: "flex",
     justifyContent: "center",
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "dashed",
     borderRadius: 3,
+    marginTop: 12,
   },
   titleText: {
     fontSize: 12,
