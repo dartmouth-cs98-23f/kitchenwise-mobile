@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    paddingHorizontal: 4,
   },
   pillText: {
     fontFamily: "Lato",

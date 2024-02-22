@@ -13,12 +13,21 @@ export const editFoodItem = async (inventoryId, foodItemId, newFoodItem) => {
   ).data;
 };
 
-export const addFoodItem = async (userId, inventoryId, foodItem) => {
+export const addFoodItem = async (userId, foodItem, inventoryId = null) => {
   return (
     await axios.post(URL + "/additem", {
       userId,
-      inventoryId,
       foodItem,
+      inventoryId,
+    })
+  ).data;
+};
+
+export const addFoodItems = async (userId, foodItems, inventoryName) => {
+  return (
+    await axios.post(URL + "/additems", {
+      userId,
+      foodItems,
     })
   ).data;
 };
