@@ -70,7 +70,7 @@ const SlideItem = ({ item}) => {
           </Text>
         </View>
       )}
-      <Text style={styles.month}>{item.peakMonth}</Text>
+      <Text style={styles.month}>{item.peakMonth || ""}</Text>
     </View>
   );
 };

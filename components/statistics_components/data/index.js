@@ -69,17 +69,9 @@ export default [
   },
   {
     statisticId: 7,
-    title: "Nutritional Consumption Comparison",
+    title: "User Rankings",
     description: "You are in the top {{consumerPercentage}}% of Kitchenwise users",
-    caloricBreakdown: [
-      { category: "Carbs", quantity: "{{carbsPercent}}", unit: "%" },
-      { category: "Protein", quantity: "{{proteinPercent}}", unit: "%" },
-      { category: "Fat", quantity: "{{fatPercent}}", unit: "%" },
-    ],
     peakMonth: "",
     consumerPercentage: "12",
-    carbsPercent: "10",
-    proteinPercent: "40",
-    fatPercent: "50",
   },
 ];
