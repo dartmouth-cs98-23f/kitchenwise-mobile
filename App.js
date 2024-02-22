@@ -8,6 +8,7 @@ import FlashMessage from "react-native-flash-message";
 import LoginScreen from "./components/login_components/LoginScreen";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
+import InventoryStatisticsPage from "./navigation/InventoryStatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
 import NarrationPage from "./navigation/NarrationPage";
 import InventoryContext, {
@@ -92,6 +93,15 @@ export default function App() {
                     animation: "none",
                     headerShown: false,
                   }}
+                />
+
+                <Stack.Screen
+                  name="InventoryStatistics"
+                  component={InventoryStatisticsPage}
+                  options={{ 
+                    title: "",
+                    headerBackVisible: true,
+                  }} 
                 />
                 {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
               </Stack.Navigator>

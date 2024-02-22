@@ -155,6 +155,35 @@ const ProfilePage = () => {
         <View>
           <Text style={themeStyles.text.h2}>Settings</Text>
         </View>
+        <ScrollView style={styles.scrollView}>
+          {/* Your touchable opacity buttons go here */}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={navigateToInventoryStatisticsPage}
+          >
+            <Text style={styles.buttonText}>Inventory Statistics</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Add to Alexa</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Connect to Instacart</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Help</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Settings</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>About</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
       <Navbar />
       <CreateModal
