@@ -1,0 +1,85 @@
+// file with dummy data. 
+// TODO: Populate from backend
+export default [
+  {
+    id: 1,
+    title: "Food Inventory Growth",
+    description: "You’ve added {{addedValue}} lbs of food to your inventory this year.",
+    foodGroupBreakdown: [
+      { category: "Grains", weight: "{{grainsValue}}", unit: "lbs" },
+      { category: "Fruits", weight: "{{fruitsValue}}", unit: "lbs" },
+      { category: "Vegetables", weight: "{{vegetablesValue}}", unit: "lbs"},
+      { category: "Protein", weight: "{{proteinValue}}", unit: "lbs" },
+      { category: "Dairy", weight: "{{dairyValue}}", unit: "lbs" }
+    ],
+    peakMonth: "",
+    addedValue: "1000",
+    grainsValue: "20",
+    fruitsValue: "199",
+    vegetablesValue: "419",
+    proteinValue: "22",
+    dairyValue: "372",
+  },
+  {
+    id: 2,
+    title: "Monetary Value of Inventory Growth",
+    description: "You’ve added approximately ${{addedValue}} worth of food to your inventory this year.",
+    foodGroupBreakdown: [
+      { category: "Grains", weight: "{{grainsValue}}", unit: "$" },
+      { category: "Fruits", weight: "{{fruitsValue}}", unit: "$" },
+      { category: "Vegetables", weight: "{{vegetablesValue}}", unit: "$"},
+      { category: "Protein", weight: "{{proteinValue}}", unit: "$" },
+      { category: "Dairy", weight: "{{dairyValue}}", unit: "$" }
+    ],
+    peakMonth: "",
+    addedValue: "1000",
+    grainsValue: "20",
+    fruitsValue: "199",
+    vegetablesValue: "419",
+    proteinValue: "22",
+    dairyValue: "372",
+  },
+  {
+    id: 3,
+    title: "Macronutrient Composition",
+    description: "You’ve added {{carbsValue}}% of carbs, {{proteinValue}}% of protein, and {{fatValue}}% of fat to your inventory this year.",
+    peakMonth: "",
+    carbsValue: "10",
+    proteinValue: "40",
+    fatValue: "50",
+  },
+  {
+    id: 4,
+    title: "Peak Inventory Addition Month",
+    description: "You added the most items to your inventory in:",
+    peakMonth: "March",
+  },
+  {
+    id: 5,
+    title: "Peak Consumption Month",
+    description: "You consumed the most items from your inventory in:",
+    peakMonth: "April",
+  },
+  {
+    id: 6,
+    title: "Unique Items Added",
+    description: "You’ve added {{uniqueItems}} different items to your inventory this year.",
+    peakMonth: "",
+    uniqueItems: "8",
+  },
+  {
+    id: 7,
+    title: "Nutritional Consumption Comparison",
+    description: "You are in the top {{consumerPercentage}}% of Kitchenwise users",
+    caloricBreakdown: [
+      { category: "Carbs", weight: "{{carbsValue}}", unit: "%" },
+      { category: "Protein", weight: "{{proteinValue}}", unit: "%" },
+      { category: "Fat", weight: "{{fatValue}}", unit: "%" },
+    ],
+    peakMonth: "",
+    consumerPercentage: "12",
+    carbsValue: "10",
+    proteinValue: "40",
+    fatValue: "50",
+  },
+];

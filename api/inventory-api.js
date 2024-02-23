@@ -11,3 +11,25 @@ export const getAllItems = async (userId) => {
   return (await axios.get(URL + "/allitems", { params: { userId } })).data;
 };
 
+export const createInventory = async (userId, title) => {
+  return (await axios.post(URL + "/create", { userId, title })).data;
+};
+
+export const renameInventory = async (userId, inventoryId, newTitle) => {
+  return (await axios.patch(URL + "/rename", { userId, inventoryId, newTitle }))
+    .data;
+};
+
+export const deleteInventory = async (
+  userId,
+  inventoryId,
+  destinationInventoryId
+) => {
+  return await axios.delete(URL + "/delete", {
+    params: {
+      userId,
+      inventoryId,
+      destinationInventoryId,
+    },
+  });
+};

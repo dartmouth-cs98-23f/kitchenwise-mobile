@@ -9,6 +9,10 @@ const themeStyles = StyleSheet.create({
       fontSize: 32,
       color: "#353434",
     },
+    h2: {
+      fontFamily: "Inter",
+      fontSize: 24,
+    },
     h3: {
       fontFamily: "LatoBold",
       fontWeight: 500,
@@ -33,8 +37,11 @@ const themeStyles = StyleSheet.create({
   colors: {
     success: "#158013",
     failure: "#F22424",
+
     interactableBackground: "#F2F2F2",
     interactableText: "#AAAAAA",
+    uninteractableBackground: "#FAFAFA",
+    uninteractableText: "#616161",
   },
   components: {
     screenContainer: {
@@ -43,6 +50,7 @@ const themeStyles = StyleSheet.create({
       marginBottom: 0,
       paddingTop: 24,
       paddingHorizontal: 16,
+      height: "100%",
     },
   },
 });

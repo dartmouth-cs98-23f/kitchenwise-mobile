@@ -1,26 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import themeStyles from "../styles";
 
 const Navbar = () => {
   const navigation = useNavigation();
+  const [selectedPage, setSelectedPage] = useState(null);
 
   const navigateToProfile = () => {
     navigation.navigate("Profile");
-  };
-
-  const navigateToMainHomePage = () => {
-    // Use the navigate function to go to the MainHomePage
-    navigation.navigate("MainHomePage");
+    setSelectedPage("Profile");
   };
 
   const navigateToPantryPage = () => {
     navigation.navigate("Pantry");
+    setSelectedPage("Pantry");
   };
 
   const navigateToShoppingList = () => {
     navigation.navigate("ShoppingList");
+    setSelectedPage("ShoppingList");
   };
 
   return (
@@ -30,7 +30,7 @@ const Navbar = () => {
           <Ionicons
             name="cart-outline"
             size={24}
-            color="#957E51"
+            color={themeStyles.colors.uninteractableText}
             onPress={navigateToShoppingList}
           />
         </TouchableOpacity>
@@ -38,11 +38,16 @@ const Navbar = () => {
           <Ionicons
             name="file-tray-stacked-outline"
             size={24}
-            color="#957E51"
+            color={themeStyles.colors.uninteractableText}
+            stroke
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={navigateToProfile}>
-          <Ionicons name="person-outline" size={24} color="#957E51" />
+          <Ionicons
+            name="person-outline"
+            size={24}
+            color={themeStyles.colors.uninteractableText}
+          />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -51,15 +56,13 @@ const Navbar = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: "#fff", // Match the navbar background
+    backgroundColor: themeStyles.colors.uninteractableBackground,
   },
   container: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     height: 60,
-    borderTopWidth: 1,
-    borderTopColor: "#957E51",
   },
   button: {
     alignItems: "center",

@@ -10,6 +10,8 @@ function Input(props) {
       defaultValue={props.defaultValue}
       keyboardType={props.keyboardType}
       onChangeText={props.onChangeText}
+      onEndEditing={props.onEndEditing}
+      onBlur={props.onBlur}
     ></TextInput>
   );
 }
@@ -18,9 +20,8 @@ const styles = StyleSheet.create({
   input: {
     padding: 8,
     width: "100%",
-    borderColor: "#cccccc",
-    borderWidth: 1,
-    marginBottom: 15,
+
+    backgroundColor: "#F2F2F2",
     color: "black",
     height: 48,
     borderRadius: 8,

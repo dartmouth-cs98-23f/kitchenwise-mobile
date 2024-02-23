@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useFonts, processFontFamily } from "expo-font";
+import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import FlashMessage from "react-native-flash-message";
 
 import LoginScreen from "./components/login_components/LoginScreen";
-import MainHomePage from "./navigation/MainHomePage";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
+import InventoryStatisticsPage from "./navigation/InventoryStatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
+import NarrationPage from "./navigation/NarrationPage";
 import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
 import UserContext, { defaultUserContext } from "./context/user-context";
 import RecipeContext, { defaultRecipeContext } from "./context/recipe-context";
-import ShoppingListContext, { defaultShoppingContext } from "./context/shoppingList-context";
+import ShoppingListContext, {
+  defaultShoppingContext,
+} from "./context/shoppingList-context";
 import { getUserShoppingLists } from "./api/shoppingList-api";
 import { getUserInventories } from "./api/inventory-api";
-import RevisionModal from "./components/modals/RevisionModal";
-import { getSavedRecipes } from "./api/recipe-api";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,15 +28,14 @@ export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     Lato: require("./assets/fonts/Lato-Regular.ttf"),
     LatoBold: require("./assets/fonts/Lato-Bold.ttf"),
+    Inter: require("./assets/fonts/Inter-Regular.ttf"),
   });
   const [userInventories, setUserInventories] = useState(
     defaultInventoryContext.userInventories
   );
-
-  
   const [userShoppingLists, setUserShoppingLists] = useState(
     defaultShoppingContext.userShoppingLists
-  );  
+  );
 
   const [userId, setUserId] = useState(defaultUserContext.userId);
   useEffect(() => {
@@ -54,38 +56,17 @@ export default function App() {
       });
   }, [userId, setUserShoppingLists]);
 
-  const [savedRecipeIds, setSavedRecipeIds] = useState(
-    defaultRecipeContext.savedRecipeIds
-  );
-  const refreshSavedRecipes = useCallback(async () => {
-    const parsedRecipes = (await getSavedRecipes(userId)).map((rec) => ({
-      ...rec,
-      id: rec._id,
-    }));
-    setSavedRecipeIds(
-      parsedRecipes.reduce((prev, curr) => {
-        return { ...prev, [curr.spoonacularId]: curr.id };
-      }, {})
-    );
-    return parsedRecipes;
-  }, [setSavedRecipeIds, userId]);
-  useEffect(() => {
-    refreshSavedRecipes().then();
-  }, [refreshSavedRecipes]);
-
   return (
     <>
       <UserContext.Provider value={{ userId, setUserId }}>
         <InventoryContext.Provider
           value={{ userInventories, setUserInventories }}
         >
-          <RecipeContext.Provider
-            value={{ savedRecipeIds, setSavedRecipeIds, refreshSavedRecipes }}
+          <ShoppingListContext.Provider
+            value={{ userShoppingLists, setUserShoppingLists }}
           >
-            <ShoppingListContext.Provider 
-              value={{ userShoppingLists, setUserShoppingLists }} 
-            >
-              <RevisionModal />
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <FlashMessage position="top" />
               <NavigationContainer>
                 <Stack.Navigator>
                   <Stack.Screen
@@ -123,11 +104,30 @@ export default function App() {
                       headerShown: false,
                     }}
                   />
+                  <Stack.Screen
+                    name="Narration"
+                    component={NarrationPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
+                    }}
+                  />
+
+                  <Stack.Screen
+                    name="InventoryStatistics"
+                    component={InventoryStatisticsPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: true,
+                    }}
+                  />
                   {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
                 </Stack.Navigator>
               </NavigationContainer>
-            </ShoppingListContext.Provider>
-          </RecipeContext.Provider>
+            </GestureHandlerRootView>
+          </ShoppingListContext.Provider>
         </InventoryContext.Provider>
       </UserContext.Provider>
     </>

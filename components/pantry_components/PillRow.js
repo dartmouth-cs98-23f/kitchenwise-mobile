@@ -1,20 +1,21 @@
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 import themeStyles from "../../styles";
 import { useMemo } from "react";
 
-const Pill = ({ title, color, width }) => {
+const Pill = ({ title, color, width, onPress }) => {
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.pillContainer,
         { width: width || "auto" },
         { backgroundColor: color || themeStyles.colors.interactableBackground },
       ]}
+      onPress={onPress}
     >
       <Text style={[styles.pillText, { color: color ? "white" : "black" }]}>
         {title}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 const PillRow = ({
@@ -25,22 +26,35 @@ const PillRow = ({
   selectedColor,
   width,
 }) => {
-  const unselectedItems = useMemo(
-    () => items.filter((item) => !selectedItems.includes(item)),
-    [selectedItems, items]
-  );
   return (
     <ScrollView
       contentContainerStyle={styles.rowContainer}
       horizontal
       showsHorizontalScrollIndicator={false}
     >
-      {selectedItems.map((item, i) => (
-        <Pill title={item} key={i} color={selectedColor} width={width} />
+      {Array.from(selectedItems).map((item, i) => (
+        <Pill
+          title={item}
+          key={i}
+          color={selectedColor}
+          width={width}
+          onPress={() => {
+            onItemDeselect(item);
+          }}
+        />
       ))}
-      {unselectedItems.map((item, i) => (
-        <Pill title={item} key={i} width={width} />
-      ))}
+      {items
+        .filter((item) => !selectedItems.includes(item))
+        .map((item, i) => (
+          <Pill
+            title={item}
+            key={i}
+            width={width}
+            onPress={() => {
+              onItemSelect(item);
+            }}
+          />
+        ))}
     </ScrollView>
   );
 };
@@ -61,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    paddingHorizontal: 4,
   },
   pillText: {
     fontFamily: "Lato",
