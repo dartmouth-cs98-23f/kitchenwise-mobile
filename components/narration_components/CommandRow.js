@@ -1,19 +1,58 @@
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { Input } from "../form_components";
 import themeStyles from "../../styles";
+import { Picker } from "@react-native-picker/picker";
 
-const CommandRow = ({ quantity, name, location, onDelete }) => {
+const CommandRow = ({
+  quantity,
+  name,
+  location,
+  onDelete,
+  onItemChange,
+  locationNames,
+}) => {
+  const [item, setItem] = useState({ quantity, name, location });
+  const setQuantity = useCallback(
+    (quantity) => {
+      setItem((prev) => ({ ...prev, quantity }));
+    },
+    [setItem]
+  );
+  const setName = useCallback(
+    (name) => {
+      setItem((prev) => ({ ...prev, name }));
+    },
+    [setItem]
+  );
+  const setLocation = useCallback(
+    (location) => {
+      setItem((prev) => ({ ...prev, location }));
+    },
+    [setItem]
+  );
+  useEffect(() => {
+    onItemChange(item);
+  }, [item]);
   return (
     <View style={styles.rowContainer}>
       <Text style={styles.conjunctionText}>Add</Text>
-      <Input value={quantity} style={styles.input} />
+      <Input value={quantity} style={styles.input} onChangeText={setQuantity} />
       <Text style={styles.conjunctionText}>of</Text>
-      <Input value={name} style={styles.input} />
+      <Input value={name} style={styles.input} onChangeText={setName} />
       <Text style={styles.conjunctionText}>to</Text>
-      <Input value={location} style={styles.input} />
-      <TouchableOpacity>
+      <Picker
+        value={location}
+        onValueChange={setLocation}
+        itemStyle={{ height: 20 }}
+      >
+        {locationNames.map((name) => (
+          <Picker.Item name={name} value={name} key={name} />
+        ))}
+      </Picker>
+      <TouchableOpacity onPress={onDelete}>
         <Ionicons
           name="remove-circle-outline"
           size={24}

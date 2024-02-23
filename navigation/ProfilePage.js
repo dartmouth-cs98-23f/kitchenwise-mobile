@@ -1,9 +1,17 @@
 import React, { useContext, useState, useCallback } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { showMessage } from "react-native-flash-message";
+import { useNavigation } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 
 import Navbar from "./Navbar";
@@ -23,10 +31,9 @@ import UserContext from "../context/user-context";
 import DeleteModal from "../components/profile_components/DeleteModal";
 
 const ProfilePage = () => {
-  const navigation = useNavigation();
-
   const { userInventories, setUserInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
+  const navigation = useNavigation();
   const [editingInventories, setEditingInventories] = useState(false);
   const [creatingInventory, setCreatingInventory] = useState(false);
   // ID of the inventory currently being deleted, null if none are
@@ -94,10 +101,10 @@ const ProfilePage = () => {
     },
     [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
   );
-  // statistics
-  const navigateToStatisticsPage = () => {
-    navigation.navigate('Statistics');
-  };
+
+  const navigateToStatisticsPage = useCallback(() => {
+    navigation.navigate("Statistics");
+  }, [navigation]);
 
   return (
     <>
@@ -125,36 +132,42 @@ const ProfilePage = () => {
               />
             )}
           </View>
-          {editingInventories ? (
-            <>
-              {/* TODO: dragging doesn't work */}
-              <DraggableFlatList
-                data={userInventories}
-                renderItem={({ item }) => (
-                  <InventoryPill
-                    name={item.title}
-                    editing
-                    onChange={(newText) => onRename(item._id, newText)}
-                    onDelete={() => onStartDelete(item)}
-                    deleteable={userInventories.length > 1}
+          {userInventories ? (
+            editingInventories ? (
+              <>
+                {/* TODO: dragging doesn't work */}
+                <DraggableFlatList
+                  data={userInventories}
+                  renderItem={({ item }) => (
+                    <InventoryPill
+                      name={item.title}
+                      editing
+                      onChange={(newText) => onRename(item._id, newText)}
+                      onDelete={() => onStartDelete(item)}
+                      deleteable={userInventories.length > 1}
+                    />
+                  )}
+                  keyExtractor={(inv) => inv._id}
+                  contentContainerStyle={styles.pillsContainerEditing}
+                  style={{ overflow: "visible" }}
+                  scrollEnabled={false}
+                />
+                {editingInventories && (
+                  <AddInventoryPill
+                    onPress={() => setCreatingInventory(true)}
                   />
                 )}
-                keyExtractor={(inv) => inv._id}
-                contentContainerStyle={styles.pillsContainerEditing}
-                style={{ overflow: "visible" }}
-                scrollEnabled={false}
-              />
-              {editingInventories && (
-                <AddInventoryPill onPress={() => setCreatingInventory(true)} />
-              )}
-            </>
-          ) : (
-            <View style={[styles.pillsContainer, styles.pillsContainerStatic]}>
-              {userInventories.map((inv, i) => (
-                <InventoryPill name={inv.title} key={i} />
-              ))}
-            </View>
-          )}
+              </>
+            ) : (
+              <View
+                style={[styles.pillsContainer, styles.pillsContainerStatic]}
+              >
+                {userInventories.map((inv, i) => (
+                  <InventoryPill name={inv.title} key={i} />
+                ))}
+              </View>
+            )
+          ) : null}
         </View>
         <View>
           <Text style={themeStyles.text.h2}>Your Integrations</Text>
@@ -170,21 +183,40 @@ const ProfilePage = () => {
             <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
           </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Connect to Instacart</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Help</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Settings</Text>
+            <View style={styles.separator} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>About</Text>
+          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
       <Navbar />
-      <CreateModal
-        visible={creatingInventory}
-        onSubmit={onSubmit}
-        onClose={() => setCreatingInventory(false)}
-      />
-      <DeleteModal
-        visible={inventoryDeleting != null}
-        inventoryTitle={inventoryDeleting?.title}
-        inventories={userInventories}
-        onSubmit={onConfirmDelete}
-        onClose={() => setInventoryDeleting(null)}
-      />
+      {userInventories && (
+        <>
+          <CreateModal
+            visible={creatingInventory}
+            onSubmit={onSubmit}
+            onClose={() => setCreatingInventory(false)}
+          />
+          <DeleteModal
+            visible={inventoryDeleting != null}
+            inventoryTitle={inventoryDeleting?.title}
+            inventories={userInventories}
+            onSubmit={onConfirmDelete}
+            onClose={() => setInventoryDeleting(null)}
+          />
+        </>
+      )}
     </>
   );
 };
