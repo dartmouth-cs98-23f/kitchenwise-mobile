@@ -15,7 +15,6 @@ import InventoryContext, {
   defaultInventoryContext,
 } from "./context/inventory-context";
 import UserContext, { defaultUserContext } from "./context/user-context";
-import RecipeContext, { defaultRecipeContext } from "./context/recipe-context";
 import ShoppingListContext, {
   defaultShoppingContext,
 } from "./context/shoppingList-context";
