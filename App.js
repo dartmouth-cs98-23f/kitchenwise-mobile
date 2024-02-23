@@ -115,8 +115,8 @@ export default function App() {
                   />
 
                   <Stack.Screen
-                    name="InventoryStatistics"
-                    component={InventoryStatisticsPage}
+                    name="Statistics"
+                    component={StatisticsPage}
                     options={{
                       title: "",
                       headerBackVisible: true,
