@@ -1,9 +1,10 @@
 import React, { useContext, useState, useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { showMessage } from "react-native-flash-message";
+import { useNavigation } from '@react-navigation/native';
 
 import Navbar from "./Navbar";
 import Button from "../components/form_components/Button";
@@ -22,6 +23,8 @@ import UserContext from "../context/user-context";
 import DeleteModal from "../components/profile_components/DeleteModal";
 
 const ProfilePage = () => {
+  const navigation = useNavigation();
+
   const { userInventories, setUserInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
   const [editingInventories, setEditingInventories] = useState(false);
@@ -91,6 +94,10 @@ const ProfilePage = () => {
     },
     [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
   );
+  // statistics
+  const navigateToStatisticsPage = () => {
+    navigation.navigate('Statistics');
+  };
 
   return (
     <>
@@ -155,33 +162,13 @@ const ProfilePage = () => {
         <View>
           <Text style={themeStyles.text.h2}>Settings</Text>
         </View>
-        <ScrollView style={styles.scrollView}>
-          {/* Your touchable opacity buttons go here */}
+        <ScrollView>
           <TouchableOpacity
             style={styles.button}
-            onPress={navigateToInventoryStatisticsPage}
+            onPress={navigateToStatisticsPage}
           >
             <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Add to Alexa</Text>
-            <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Connect to Instacart</Text>
-            <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Help</Text>
-            <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Settings</Text>
-            <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>About</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
