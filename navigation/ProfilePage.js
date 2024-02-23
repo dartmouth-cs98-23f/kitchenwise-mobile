@@ -1,9 +1,16 @@
 import React, { useContext, useState, useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { showMessage } from "react-native-flash-message";
+import { useNavigation } from "@react-navigation/native";
 
 import Navbar from "./Navbar";
 import Button from "../components/form_components/Button";
@@ -24,6 +31,7 @@ import DeleteModal from "../components/profile_components/DeleteModal";
 const ProfilePage = () => {
   const { userInventories, setUserInventories } = useContext(InventoryContext);
   const { userId } = useContext(UserContext);
+  const navigation = useNavigation();
   const [editingInventories, setEditingInventories] = useState(false);
   const [creatingInventory, setCreatingInventory] = useState(false);
   // ID of the inventory currently being deleted, null if none are
@@ -91,6 +99,10 @@ const ProfilePage = () => {
     },
     [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
   );
+
+  const navigateToInventoryStatisticsPage = useCallback(() => {
+    navigation.navigate("InventoryStatistics");
+  }, [navigation]);
 
   return (
     <>
@@ -162,10 +174,6 @@ const ProfilePage = () => {
             onPress={navigateToInventoryStatisticsPage}
           >
             <Text style={styles.buttonText}>Inventory Statistics</Text>
-            <View style={styles.separator} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Add to Alexa</Text>
             <View style={styles.separator} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
