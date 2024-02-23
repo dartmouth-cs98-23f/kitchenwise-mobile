@@ -9,7 +9,7 @@ const DeleteModal = ({
   inventoryTitle,
   inventories,
 }) => {
-  const [pickedInventoryId, setPickedInventoryId] = useState(inventories[0]);
+  const [pickedInventoryId, setPickedInventoryId] = useState(null);
 
   return (
     <BottomModal

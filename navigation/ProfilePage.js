@@ -130,36 +130,42 @@ const ProfilePage = () => {
               />
             )}
           </View>
-          {editingInventories ? (
-            <>
-              {/* TODO: dragging doesn't work */}
-              <DraggableFlatList
-                data={userInventories}
-                renderItem={({ item }) => (
-                  <InventoryPill
-                    name={item.title}
-                    editing
-                    onChange={(newText) => onRename(item._id, newText)}
-                    onDelete={() => onStartDelete(item)}
-                    deleteable={userInventories.length > 1}
+          {userInventories ? (
+            editingInventories ? (
+              <>
+                {/* TODO: dragging doesn't work */}
+                <DraggableFlatList
+                  data={userInventories}
+                  renderItem={({ item }) => (
+                    <InventoryPill
+                      name={item.title}
+                      editing
+                      onChange={(newText) => onRename(item._id, newText)}
+                      onDelete={() => onStartDelete(item)}
+                      deleteable={userInventories.length > 1}
+                    />
+                  )}
+                  keyExtractor={(inv) => inv._id}
+                  contentContainerStyle={styles.pillsContainerEditing}
+                  style={{ overflow: "visible" }}
+                  scrollEnabled={false}
+                />
+                {editingInventories && (
+                  <AddInventoryPill
+                    onPress={() => setCreatingInventory(true)}
                   />
                 )}
-                keyExtractor={(inv) => inv._id}
-                contentContainerStyle={styles.pillsContainerEditing}
-                style={{ overflow: "visible" }}
-                scrollEnabled={false}
-              />
-              {editingInventories && (
-                <AddInventoryPill onPress={() => setCreatingInventory(true)} />
-              )}
-            </>
-          ) : (
-            <View style={[styles.pillsContainer, styles.pillsContainerStatic]}>
-              {userInventories.map((inv, i) => (
-                <InventoryPill name={inv.title} key={i} />
-              ))}
-            </View>
-          )}
+              </>
+            ) : (
+              <View
+                style={[styles.pillsContainer, styles.pillsContainerStatic]}
+              >
+                {userInventories.map((inv, i) => (
+                  <InventoryPill name={inv.title} key={i} />
+                ))}
+              </View>
+            )
+          ) : null}
         </View>
         <View>
           <Text style={themeStyles.text.h2}>Your Integrations</Text>
@@ -194,18 +200,22 @@ const ProfilePage = () => {
         </ScrollView>
       </SafeAreaView>
       <Navbar />
-      <CreateModal
-        visible={creatingInventory}
-        onSubmit={onSubmit}
-        onClose={() => setCreatingInventory(false)}
-      />
-      <DeleteModal
-        visible={inventoryDeleting != null}
-        inventoryTitle={inventoryDeleting?.title}
-        inventories={userInventories}
-        onSubmit={onConfirmDelete}
-        onClose={() => setInventoryDeleting(null)}
-      />
+      {userInventories && (
+        <>
+          <CreateModal
+            visible={creatingInventory}
+            onSubmit={onSubmit}
+            onClose={() => setCreatingInventory(false)}
+          />
+          <DeleteModal
+            visible={inventoryDeleting != null}
+            inventoryTitle={inventoryDeleting?.title}
+            inventories={userInventories}
+            onSubmit={onConfirmDelete}
+            onClose={() => setInventoryDeleting(null)}
+          />
+        </>
+      )}
     </>
   );
 };
