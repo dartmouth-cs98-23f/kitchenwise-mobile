@@ -144,7 +144,7 @@ const PantryPage = () => {
   );
 
   const onCreate = useCallback((foodItem) => {
-    addFoodItem(userId, foodItem.inventoryId, foodItem)
+    addFoodItem(userId, foodItem, foodItem.inventoryId)
       .then(() => {
         refreshItems();
       })
