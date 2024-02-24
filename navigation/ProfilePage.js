@@ -1,11 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -100,8 +94,8 @@ const ProfilePage = () => {
     [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
   );
 
-  const navigateToInventoryStatisticsPage = useCallback(() => {
-    navigation.navigate("InventoryStatistics");
+  const navigateToStatisticsPage = useCallback(() => {
+    navigation.navigate("Statistics");
   }, [navigation]);
 
   return (
@@ -130,36 +124,42 @@ const ProfilePage = () => {
               />
             )}
           </View>
-          {editingInventories ? (
-            <>
-              {/* TODO: dragging doesn't work */}
-              <DraggableFlatList
-                data={userInventories}
-                renderItem={({ item }) => (
-                  <InventoryPill
-                    name={item.title}
-                    editing
-                    onChange={(newText) => onRename(item._id, newText)}
-                    onDelete={() => onStartDelete(item)}
-                    deleteable={userInventories.length > 1}
+          {userInventories ? (
+            editingInventories ? (
+              <>
+                {/* TODO: dragging doesn't work */}
+                <DraggableFlatList
+                  data={userInventories}
+                  renderItem={({ item }) => (
+                    <InventoryPill
+                      name={item.title}
+                      editing
+                      onChange={(newText) => onRename(item._id, newText)}
+                      onDelete={() => onStartDelete(item)}
+                      deleteable={userInventories.length > 1}
+                    />
+                  )}
+                  keyExtractor={(inv) => inv._id}
+                  contentContainerStyle={styles.pillsContainerEditing}
+                  style={{ overflow: "visible" }}
+                  scrollEnabled={false}
+                />
+                {editingInventories && (
+                  <AddInventoryPill
+                    onPress={() => setCreatingInventory(true)}
                   />
                 )}
-                keyExtractor={(inv) => inv._id}
-                contentContainerStyle={styles.pillsContainerEditing}
-                style={{ overflow: "visible" }}
-                scrollEnabled={false}
-              />
-              {editingInventories && (
-                <AddInventoryPill onPress={() => setCreatingInventory(true)} />
-              )}
-            </>
-          ) : (
-            <View style={[styles.pillsContainer, styles.pillsContainerStatic]}>
-              {userInventories.map((inv, i) => (
-                <InventoryPill name={inv.title} key={i} />
-              ))}
-            </View>
-          )}
+              </>
+            ) : (
+              <View
+                style={[styles.pillsContainer, styles.pillsContainerStatic]}
+              >
+                {userInventories.map((inv, i) => (
+                  <InventoryPill name={inv.title} key={i} />
+                ))}
+              </View>
+            )
+          ) : null}
         </View>
         <View>
           <Text style={themeStyles.text.h2}>Your Integrations</Text>
@@ -167,11 +167,10 @@ const ProfilePage = () => {
         <View>
           <Text style={themeStyles.text.h2}>Settings</Text>
         </View>
-        <ScrollView style={styles.scrollView}>
-          {/* Your touchable opacity buttons go here */}
+        <ScrollView>
           <TouchableOpacity
             style={styles.button}
-            onPress={navigateToInventoryStatisticsPage}
+            onPress={navigateToStatisticsPage}
           >
             <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
@@ -194,18 +193,22 @@ const ProfilePage = () => {
         </ScrollView>
       </SafeAreaView>
       <Navbar />
-      <CreateModal
-        visible={creatingInventory}
-        onSubmit={onSubmit}
-        onClose={() => setCreatingInventory(false)}
-      />
-      <DeleteModal
-        visible={inventoryDeleting != null}
-        inventoryTitle={inventoryDeleting?.title}
-        inventories={userInventories}
-        onSubmit={onConfirmDelete}
-        onClose={() => setInventoryDeleting(null)}
-      />
+      {userInventories && (
+        <>
+          <CreateModal
+            visible={creatingInventory}
+            onSubmit={onSubmit}
+            onClose={() => setCreatingInventory(false)}
+          />
+          <DeleteModal
+            visible={inventoryDeleting != null}
+            inventoryTitle={inventoryDeleting?.title}
+            inventories={userInventories}
+            onSubmit={onConfirmDelete}
+            onClose={() => setInventoryDeleting(null)}
+          />
+        </>
+      )}
     </>
   );
 };

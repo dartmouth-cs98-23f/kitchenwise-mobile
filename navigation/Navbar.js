@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import themeStyles from "../styles";
 
 const Navbar = () => {
   const navigation = useNavigation();
   const [selectedPage, setSelectedPage] = useState(null);
+  const route = useRoute();
 
   const navigateToProfile = () => {
     navigation.navigate("Profile");
@@ -30,7 +31,11 @@ const Navbar = () => {
           <Ionicons
             name="cart-outline"
             size={24}
-            color={themeStyles.colors.uninteractableText}
+            color={
+              route.name === "ShoppingList"
+                ? "black"
+                : themeStyles.colors.uninteractableText
+            }
             onPress={navigateToShoppingList}
           />
         </TouchableOpacity>
@@ -38,7 +43,11 @@ const Navbar = () => {
           <Ionicons
             name="file-tray-stacked-outline"
             size={24}
-            color={themeStyles.colors.uninteractableText}
+            color={
+              route.name === "Pantry"
+                ? "black"
+                : themeStyles.colors.uninteractableText
+            }
             stroke
           />
         </TouchableOpacity>
@@ -46,7 +55,11 @@ const Navbar = () => {
           <Ionicons
             name="person-outline"
             size={24}
-            color={themeStyles.colors.uninteractableText}
+            color={
+              route.name === "Profile"
+                ? "black"
+                : themeStyles.colors.uninteractableText
+            }
           />
         </TouchableOpacity>
       </View>
