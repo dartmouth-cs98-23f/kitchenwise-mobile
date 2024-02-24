@@ -2,18 +2,8 @@ import React from "react";
 import { TextInput, StyleSheet } from "react-native";
 
 function Input(props) {
-  return (
-    <TextInput
-      style={[styles.input, props.style]}
-      placeholder={props.placeholder}
-      value={props.value}
-      defaultValue={props.defaultValue}
-      keyboardType={props.keyboardType}
-      onChangeText={props.onChangeText}
-      onEndEditing={props.onEndEditing}
-      onBlur={props.onBlur}
-    ></TextInput>
-  );
+  const { style, ...otherProps } = props;
+  return <TextInput style={[styles.input, style]} {...otherProps}></TextInput>;
 }
 
 const styles = StyleSheet.create({

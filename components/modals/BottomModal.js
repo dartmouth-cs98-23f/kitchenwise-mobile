@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import Button from "../form_components/Button";
 import themeStyles from "../../styles";
 
-const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
+const BottomModal = ({
+  visible,
+  children,
+  title,
+  onConfirm,
+  onCancel,
+  oneButton,
+}) => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(false);
@@ -20,6 +27,14 @@ const BottomModal = ({ visible, children, title, onConfirm, onCancel }) => {
           <View style={styles.buttonRow}>
             {loading ? (
               <Text style={styles.loadingText}>Loading...</Text>
+            ) : oneButton ? (
+              <Button
+                text="Done"
+                onPress={() => {
+                  onConfirm();
+                  setLoading(true);
+                }}
+              ></Button>
             ) : (
               <>
                 <Button

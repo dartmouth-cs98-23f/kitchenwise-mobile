@@ -11,6 +11,7 @@ import CommandRow from "../components/narration_components/CommandRow";
 import { addFoodItems } from "../api/fooditem-api";
 import UserContext from "../context/user-context";
 import InventoryContext from "../context/inventory-context";
+import LocationModal from "../components/narration_components/LocationModal";
 
 const transcriptionOptions = {
   language: "en",
@@ -59,6 +60,7 @@ const NarrationPage = ({ navigation }) => {
   const [parsedCommands, setParsedCommands] = useState([
     { name: "pie", location: "my frige", quantity: "one slice" },
   ]);
+  const [editingLocationIndex, setEditingLocationIndex] = useState(null);
   useEffect(() => {
     const newParsedCommands = [];
     const rawCommands = spokenText.toLocaleLowerCase().split("add ");
@@ -135,7 +137,7 @@ const NarrationPage = ({ navigation }) => {
   const updateCommand = useCallback(
     (i, newCommand) => {
       setParsedCommands((prev) => {
-        prev[i] = newCommand;
+        prev[i] = { ...prev[i], ...newCommand };
         return prev;
       });
     },
@@ -143,6 +145,7 @@ const NarrationPage = ({ navigation }) => {
   );
   const deleteCommand = useCallback(
     (i) => {
+      console.log("delete", i);
       setParsedCommands((prev) => {
         prev.splice(i, 1);
         return prev;
@@ -150,58 +153,76 @@ const NarrationPage = ({ navigation }) => {
     },
     [setParsedCommands]
   );
-
   return (
-    <SafeAreaView style={[themeStyles.components.screenContainer]}>
-      <View style={styles.header}>
-        <Text style={themeStyles.text.h2}>What do you want to add?</Text>
-      </View>
-      <View style={styles.transcribeContent}>
-        {/* <Text>{spokenText}</Text> */}
-        {parsedCommands.map(({ quantity, name, location }, i) => (
-          <CommandRow
-            quantity={quantity}
-            name={name}
-            location={location}
-            key={i}
-            locationNames={userInventories.map((inv) => inv.title)}
-            onItemChange={(newItem) => updateCommand(i, newItem)}
-            onDelete={() => deleteCommand(i)}
-          />
-        ))}
-      </View>
-      <View style={styles.buttonRow}>
-        {whisperLoaded ? (
-          isRecording ? (
-            stopRecording && (
-              <Button
-                text="Stop"
-                onPress={() => {
-                  stopRecording();
-                  setIsRecording(false);
-                }}
-                containerStyle={styles.button}
-              />
+    <>
+      <SafeAreaView style={[themeStyles.components.screenContainer]}>
+        <View style={styles.header}>
+          <Text style={themeStyles.text.h2}>What do you want to add?</Text>
+        </View>
+        <View style={styles.transcribeContent}>
+          {/* <Text>{spokenText}</Text> */}
+          {parsedCommands.map(({ quantity, name, location }, i) => (
+            <CommandRow
+              quantity={quantity}
+              name={name}
+              location={location}
+              key={i}
+              locationNames={userInventories.map((inv) => inv.title)}
+              onItemChange={(newItem) => updateCommand(i, newItem)}
+              onDelete={() => deleteCommand(i)}
+              onLocationPress={() => {
+                setEditingLocationIndex(i);
+              }}
+            />
+          ))}
+        </View>
+        <View style={styles.buttonRow}>
+          {whisperLoaded ? (
+            isRecording ? (
+              stopRecording && (
+                <Button
+                  text="Stop"
+                  onPress={() => {
+                    stopRecording();
+                    setIsRecording(false);
+                  }}
+                  containerStyle={styles.button}
+                />
+              )
+            ) : (
+              <>
+                <Button
+                  text="Cancel"
+                  containerStyle={styles.button}
+                  onPress={onCancel}
+                />
+                <Button
+                  text="Confirm"
+                  containerStyle={styles.button}
+                  onPress={onConfirm}
+                />
+              </>
             )
           ) : (
-            <>
-              <Button
-                text="Cancel"
-                containerStyle={styles.button}
-                onPress={onCancel}
-              />
-              <Button
-                text="Confirm"
-                containerStyle={styles.button}
-                onPress={onConfirm}
-              />
-            </>
-          )
-        ) : (
-          <Text>Loading voice transcription...</Text>
-        )}
-      </View>
-    </SafeAreaView>
+            <Text>Loading voice transcription...</Text>
+          )}
+        </View>
+      </SafeAreaView>
+      {userInventories && (
+        <LocationModal
+          locationNames={userInventories.map((inv) => inv.title)}
+          currentLocation={
+            parsedCommands?.[editingLocationIndex]?.location || null
+          }
+          onLocationChange={(location) => {
+            updateCommand(editingLocationIndex, { location });
+          }}
+          onConfirm={() => {
+            setEditingLocationIndex(null);
+          }}
+        />
+      )}
+    </>
   );
 };
 

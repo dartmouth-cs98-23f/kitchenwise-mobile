@@ -4,7 +4,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { Input } from "../form_components";
 import themeStyles from "../../styles";
-import { Picker } from "@react-native-picker/picker";
 
 const CommandRow = ({
   quantity,
@@ -12,7 +11,7 @@ const CommandRow = ({
   location,
   onDelete,
   onItemChange,
-  locationNames,
+  onLocationPress,
 }) => {
   const [item, setItem] = useState({ quantity, name, location });
   const setQuantity = useCallback(
@@ -27,31 +26,34 @@ const CommandRow = ({
     },
     [setItem]
   );
-  const setLocation = useCallback(
-    (location) => {
-      setItem((prev) => ({ ...prev, location }));
-    },
-    [setItem]
-  );
   useEffect(() => {
     onItemChange(item);
   }, [item]);
   return (
     <View style={styles.rowContainer}>
       <Text style={styles.conjunctionText}>Add</Text>
-      <Input value={quantity} style={styles.input} onChangeText={setQuantity} />
+      <Input
+        value={item.quantity}
+        style={styles.input}
+        onChangeText={setQuantity}
+      />
       <Text style={styles.conjunctionText}>of</Text>
-      <Input value={name} style={styles.input} onChangeText={setName} />
+      <Input
+        value={item.name}
+        style={[styles.input]}
+        onChangeText={setName}
+        multiline
+      />
       <Text style={styles.conjunctionText}>to</Text>
-      <Picker
-        value={location}
-        onValueChange={setLocation}
-        itemStyle={{ height: 20 }}
+      <TouchableOpacity
+        onPress={() => {
+          onLocationPress();
+        }}
+        style={{ flexGrow: 1 }}
       >
-        {locationNames.map((name) => (
-          <Picker.Item name={name} value={name} key={name} />
-        ))}
-      </Picker>
+        <Text>{item.location}</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={onDelete}>
         <Ionicons
           name="remove-circle-outline"
@@ -71,11 +73,12 @@ const styles = StyleSheet.create({
     height: 36,
     width: "100%",
     gap: 4,
+    flexWrap: "wrap",
   },
   input: {
     height: 28,
-    width: "25%",
     fontSize: 10,
+    width: 84,
   },
   conjunctionText: {
     fontSize: 14,
