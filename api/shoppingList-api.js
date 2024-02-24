@@ -22,4 +22,13 @@ export const getUserShoppingListItems = async (userId, title) => {
 
 export const deleteShoppingItem = async (userId, title, itemId) => {
   return (await axios.delete(URL + "/delete",  { userId, title, itemId} )).data;
+};
+
+export const exportToShoppingList = async (userId, listName, items, inv) => {
+  return (await axios.post(URL + "/export", {userId, listName, items, inv})).data;
+}
+
+
+export const importToShoppingList = async (userId, title) => {
+  return (await axios.post(URL + "/import", {userId, title})).data;
 }
