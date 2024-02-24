@@ -78,3 +78,9 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+Podfile.lock
+project.pbxproj
+
+yarn.lock
+package-lock.json
