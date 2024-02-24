@@ -13,17 +13,17 @@ export const editFoodItem = async (inventoryId, foodItemId, newFoodItem) => {
   ).data;
 };
 
-export const addFoodItem = async (userId, foodItem, inventoryId = null) => {
+export const addFoodItem = async (userId, foodItem = null, inventoryId) => {
   return (
     await axios.post(URL + "/additem", {
       userId,
-      foodItem,
       inventoryId,
+      foodItem,
     })
   ).data;
 };
 
-export const addFoodItems = async (userId, foodItems, inventoryName) => {
+export const addFoodItems = async (userId, foodItems) => {
   return (
     await axios.post(URL + "/additems", {
       userId,
