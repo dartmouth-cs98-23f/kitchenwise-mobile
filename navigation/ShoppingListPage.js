@@ -133,13 +133,23 @@ const ShoppingListPage = () => {
   }, [pendingDeletions]);
  
   const importItems = useCallback(() => {
-    importToShoppingList(userId,listName).then((data) => {
-      setListItems(data.shoppingListItems);
-    })
-    
-    setAddItemModal(false);
-    setListAvailable(true);
-  })
+    importToShoppingList(userId, listName)
+      .then((data) => {
+        setListItems(data.shoppingListItems);
+        setAddItemModal(false);
+        setListAvailable(true);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          alert(error.response.data.message);
+        } else {
+          console.error('Error importing items:', error.message);
+        }
+   
+      });
+  });
+  
+  
 
   
   //TODO: pull in the items from the back end, should each category be dynamic via tags?
@@ -150,7 +160,6 @@ const ShoppingListPage = () => {
           setListAvailable(true);
         } else {
           setListAvailable(false);
-          console.log("setting list back to false");
         }
         setListItems(data);
       })
