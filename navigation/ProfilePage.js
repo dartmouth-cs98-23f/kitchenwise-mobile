@@ -1,18 +1,10 @@
 import React, { useContext, useState, useCallback } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { showMessage } from "react-native-flash-message";
 import { useNavigation } from "@react-navigation/native";
-import { useNavigation } from '@react-navigation/native';
 
 import Navbar from "./Navbar";
 import Button from "../components/form_components/Button";
