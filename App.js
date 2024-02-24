@@ -8,7 +8,7 @@ import FlashMessage from "react-native-flash-message";
 import LoginScreen from "./components/login_components/LoginScreen";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
-import InventoryStatisticsPage from "./navigation/InventoryStatisticsPage";
+import StatisticsPage from "./navigation/StatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
 import NarrationPage from "./navigation/NarrationPage";
 import InventoryContext, {
@@ -115,8 +115,8 @@ export default function App() {
                   />
 
                   <Stack.Screen
-                    name="InventoryStatistics"
-                    component={InventoryStatisticsPage}
+                    name="Statistics"
+                    component={StatisticsPage}
                     options={{
                       title: "",
                       headerBackVisible: true,

@@ -1,11 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -100,8 +94,8 @@ const ProfilePage = () => {
     [userId, inventoryDeleting, refreshInventories, setInventoryDeleting]
   );
 
-  const navigateToInventoryStatisticsPage = useCallback(() => {
-    navigation.navigate("InventoryStatistics");
+  const navigateToStatisticsPage = useCallback(() => {
+    navigation.navigate("Statistics");
   }, [navigation]);
 
   return (
@@ -173,11 +167,10 @@ const ProfilePage = () => {
         <View>
           <Text style={themeStyles.text.h2}>Settings</Text>
         </View>
-        <ScrollView style={styles.scrollView}>
-          {/* Your touchable opacity buttons go here */}
+        <ScrollView>
           <TouchableOpacity
             style={styles.button}
-            onPress={navigateToInventoryStatisticsPage}
+            onPress={navigateToStatisticsPage}
           >
             <Text style={styles.buttonText}>Inventory Statistics</Text>
             <View style={styles.separator} />
