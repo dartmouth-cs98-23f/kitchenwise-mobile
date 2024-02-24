@@ -24,11 +24,13 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		BD9BFC8A124B4EC783AE73EA /* Lato-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 508198AFEF4341AD882CD854 /* Lato-BlackItalic.ttf */; };
 		CBE8DBCA76154A45B0CAFEF6 /* Lato-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1BD0AEC16B6409C982A191B /* Lato-ThinItalic.ttf */; };
+		D6895C2058343D810BDA93E1 /* libPods-kitchenwisemobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03010EE8A674BA36AB318870 /* libPods-kitchenwisemobile.a */; };
 		FE001F812020406582D01374 /* Lato-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A969A53ADEF406CABDA19D4 /* Lato-Black.ttf */; };
 		FF10CA41B0D94F2082EE8648 /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9677EBD51A4F491F9FCEED60 /* Lato-Light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03010EE8A674BA36AB318870 /* libPods-kitchenwisemobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-kitchenwisemobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		057508B8B3654D768F53710E /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "kitchenwisemobile/noop-file.swift"; sourceTree = "<group>"; };
 		0C89DB9A1F124DBABED8A339 /* Lato-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Thin.ttf"; path = "../assets/fonts/Lato-Thin.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* kitchenwisemobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitchenwisemobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +57,7 @@
 		D681282F5676442F8D0A6729 /* Lato-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-LightItalic.ttf"; path = "../assets/fonts/Lato-LightItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-kitchenwisemobile/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		FF79B487BBBA82681F0442CC /* Pods-kitchenwisemobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kitchenwisemobile.debug.xcconfig"; path = "Target Support Files/Pods-kitchenwisemobile/Pods-kitchenwisemobile.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

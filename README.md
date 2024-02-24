@@ -27,6 +27,10 @@ If it crashes immediately, make sure you've run npm install and have the correct
 
 TODO: how to deploy the project
 
+## Trouble shooting 
+cd ios 
+npx pod deintegrate 
+
 ## Authors
 
 Stefel Smith <br>
