@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { initWhisper } from "whisper.rn";
+import { initWhisper, releaseAllWhisper } from "whisper.rn";
 import { useAssets } from "expo-asset";
 import stringSimilarity from "string-similarity";
 
@@ -15,7 +15,7 @@ import LocationModal from "../components/narration_components/LocationModal";
 
 const transcriptionOptions = {
   language: "en",
-  duration: 2000,
+  duration: 4000,
 };
 
 const cleanTranscription = (transcribedString) => {
@@ -57,28 +57,40 @@ const NarrationPage = ({ navigation }) => {
   const { userInventories } = useContext(InventoryContext);
   const [modelPath, setModelPath] = useState(null);
   const [spokenText, setSpokenText] = useState("");
-  const [parsedCommands, setParsedCommands] = useState([
-    { name: "pie", location: "my frige", quantity: "one slice" },
-  ]);
+  const [parsedCommands, setParsedCommands] = useState([]);
   const [editingLocationIndex, setEditingLocationIndex] = useState(null);
+  const addParsedCommands = useCallback(
+    (commands) => {
+      setParsedCommands((prev) => prev.concat(commands));
+    },
+    [setParsedCommands]
+  );
   useEffect(() => {
     const newParsedCommands = [];
     const rawCommands = spokenText.toLocaleLowerCase().split("add ");
     // remove empty first command
     rawCommands.shift();
     for (const rawCommand of rawCommands) {
-      newParsedCommands.push(
-        parseCommand(
-          rawCommand,
-          userInventories.map((inv) => inv.title)
-        )
+      if (rawCommand.trim() == "") continue;
+      const parsedCommand = parseCommand(
+        rawCommand,
+        userInventories.map((inv) => inv.title)
       );
+      if (parsedCommand.name && parsedCommand.quantity) {
+        newParsedCommands.push(parsedCommand);
+      }
     }
-    setParsedCommands(newParsedCommands);
-  }, [spokenText, userInventories]);
-  const [stopRecording, setStopRecording] = useState(() => {});
+    if (newParsedCommands.length > 0) {
+      addParsedCommands(newParsedCommands);
+      if (isRecording) {
+        stopFunction();
+        startRecording();
+      }
+    }
+  }, [spokenText, userInventories, isRecording]);
+  const [stopFunction, setStopFunction] = useState(() => {});
   const [isRecording, setIsRecording] = useState(false);
-  const [whisperLoaded, setWhisperLoaded] = useState(false);
+  const [whisperContext, setWhisperContext] = useState(null);
   const [assets, error] = useAssets([require("../assets/ggml-tiny.en.bin")]);
   useEffect(() => {
     if (error) {
@@ -93,47 +105,59 @@ const NarrationPage = ({ navigation }) => {
     navigation.navigate("Pantry");
   }, [navigation]);
   const onConfirm = useCallback(() => {
-    console.log(parsedCommands);
     addFoodItems(userId, parsedCommands)
       .then(() => {
-        // navigation.navigate("Pantry");
+        navigation.navigate("Pantry");
       })
       .catch(() => {});
   }, [parsedCommands, userId]);
   const subscribeCallback = useCallback((evt) => {
     const { isCapturing, data, processTime, recordingTime } = evt;
-    console.log(data);
-    console.log(
-      `Realtime transcribing: ${isCapturing ? "ON" : "OFF"}\n` +
-        // The inference text result from audio record:
-        `Result: ${data.result}\n\n` +
-        `Process time: ${processTime}ms\n` +
-        `Recording time: ${recordingTime}ms`
-    );
+    // console.log(data);
+    // console.log(
+    //   `Realtime transcribing: ${isCapturing ? "ON" : "OFF"}\n` +
+    //     // The inference text result from audio record:
+    //     `Result: ${data.result}\n\n` +
+    //     `Process time: ${processTime}ms\n` +
+    //     `Recording time: ${recordingTime}ms`
+    // );
     if (data.result && isCapturing)
       setSpokenText(cleanTranscription(data.result));
-    if (!isCapturing) console.log("Finished realtime transcribing");
+    // if (!isCapturing) console.log("Finished realtime transcribing");
   }, []);
   useEffect(() => {
     if (modelPath) {
       initWhisper({
         filePath: modelPath,
       }).then((newContext) => {
-        setWhisperLoaded(true);
-        newContext
-          .transcribeRealtime(transcriptionOptions)
-          .then(({ stop, subscribe }) => {
-            setStopRecording(() => stop);
-            subscribe(subscribeCallback);
-            setIsRecording(true);
-          })
-          .catch((err) => {
-            console.error(err);
-            setIsRecording(false);
-          });
+        setWhisperContext(newContext);
       });
     }
-  }, [modelPath, setWhisperLoaded]);
+  }, [modelPath, setWhisperContext, startRecording]);
+  useEffect(() => {
+    if (whisperContext) {
+      startRecording();
+      setIsRecording(true);
+    }
+  }, [whisperContext]);
+  const startRecording = useCallback(() => {
+    if (whisperContext)
+      whisperContext
+        .transcribeRealtime(transcriptionOptions)
+        .then(({ stop, subscribe }) => {
+          setStopFunction(() => stop);
+          subscribe(subscribeCallback);
+        })
+        .catch((err) => {
+          console.error(err);
+          setIsRecording(false);
+        });
+  }, [whisperContext]);
+  const stopRecording = useCallback(() => {
+    setIsRecording(false);
+    stopFunction();
+    releaseAllWhisper();
+  }, [setIsRecording, stopFunction]);
   const updateCommand = useCallback(
     (i, newCommand) => {
       setParsedCommands((prev) => {
@@ -145,7 +169,6 @@ const NarrationPage = ({ navigation }) => {
   );
   const deleteCommand = useCallback(
     (i) => {
-      console.log("delete", i);
       setParsedCommands((prev) => {
         prev.splice(i, 1);
         return prev;
@@ -161,31 +184,34 @@ const NarrationPage = ({ navigation }) => {
         </View>
         <View style={styles.transcribeContent}>
           {/* <Text>{spokenText}</Text> */}
-          {parsedCommands.map(({ quantity, name, location }, i) => (
-            <CommandRow
-              quantity={quantity}
-              name={name}
-              location={location}
-              key={i}
-              locationNames={userInventories.map((inv) => inv.title)}
-              onItemChange={(newItem) => updateCommand(i, newItem)}
-              onDelete={() => deleteCommand(i)}
-              onLocationPress={() => {
-                setEditingLocationIndex(i);
-              }}
-            />
-          ))}
+          {parsedCommands.length > 0 ? (
+            parsedCommands.map(({ quantity, name, location }, i) => (
+              <CommandRow
+                quantity={quantity}
+                name={name}
+                location={location}
+                key={i}
+                locationNames={userInventories.map((inv) => inv.title)}
+                onItemChange={(newItem) => updateCommand(i, newItem)}
+                onDelete={() => deleteCommand(i)}
+                onLocationPress={() => {
+                  setEditingLocationIndex(i);
+                }}
+              />
+            ))
+          ) : (
+            <Text style={styles.placeholderCommand}>
+              Example: "Add five cloves of garlic to My Fridge"
+            </Text>
+          )}
         </View>
         <View style={styles.buttonRow}>
-          {whisperLoaded ? (
+          {whisperContext ? (
             isRecording ? (
-              stopRecording && (
+              stopFunction && (
                 <Button
-                  text="Stop"
-                  onPress={() => {
-                    stopRecording();
-                    setIsRecording(false);
-                  }}
+                  text="Stop Transcribing"
+                  onPress={stopRecording}
                   containerStyle={styles.button}
                 />
               )
@@ -243,6 +269,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     gap: 4,
+  },
+  placeholderCommand: {
+    color: "#666",
   },
 });
 

@@ -38,18 +38,13 @@ const CommandRow = ({
         onChangeText={setQuantity}
       />
       <Text style={styles.conjunctionText}>of</Text>
-      <Input
-        value={item.name}
-        style={[styles.input]}
-        onChangeText={setName}
-        multiline
-      />
+      <Input value={item.name} style={[styles.input]} onChangeText={setName} />
       <Text style={styles.conjunctionText}>to</Text>
       <TouchableOpacity
         onPress={() => {
           onLocationPress();
         }}
-        style={{ flexGrow: 1 }}
+        style={styles.locationContainer}
       >
         <Text>{item.location}</Text>
       </TouchableOpacity>
@@ -79,6 +74,15 @@ const styles = StyleSheet.create({
     height: 28,
     fontSize: 10,
     width: 84,
+  },
+  locationContainer: {
+    backgroundColor: themeStyles.colors.interactableBackground,
+    flexGrow: 1,
+    height: 28,
+    borderRadius: 8,
+    display: "flex",
+    justifyContent: "center",
+    paddingHorizontal: 4,
   },
   conjunctionText: {
     fontSize: 14,
