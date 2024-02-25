@@ -2,16 +2,14 @@ import React, { useCallback, useState, useContext, useEffect } from "react";
 import {
   FlatList,
   Modal,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import themeStyles from "../styles";
 import UserContext from "../context/user-context";
 import InventoryContext from "../context/inventory-context";
@@ -24,33 +22,11 @@ import {
   exportToShoppingList,
   importToShoppingList,
 } from "../api/shoppingList-api";
-import { shouldUseActivityState } from "react-native-screens";
 import { Button, Input } from "../components/form_components";
 import Bubble from "../components/Bubble";
 import BottomModal from "../components/modals/BottomModal";
-
-const ShoppingListItem = ({ item, name, amount, selectItems }) => {
-  const [isSelected, setIsSelected] = useState(false);
-
-  const itemPressed = () => {
-    selectItems(item);
-    let toggle = isSelected ? false : true;
-    setIsSelected(toggle);
-  };
-
-  let style = isSelected ? "ellipse" : "ellipse-outline";
-  return (
-    <View style={styles.listItemContainer}>
-      <Text style={styles.listItemText}>{name}</Text>
-      <View style={styles.listItemRight}>
-        <Text style={styles.listItemText}>{amount || "1"}</Text>
-        <TouchableOpacity onPress={itemPressed}>
-          <Ionicons name={style} size={30} />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+import ShoppingListItem from "../components/shoppinglist_components/ShoppingListItem";
+import BubbleModal from "../components/modals/BubbleModal";
 
 const ShoppingListPage = () => {
   const { userId } = useContext(UserContext);
@@ -61,7 +37,7 @@ const ShoppingListPage = () => {
   const [itemToAdd, setItemToAdd] = useState("");
   const [amountToAdd, setAmountToAdd] = useState("");
   const [pendingDeletions, setPendingDeletions] = useState([]); // list of all the items to be cleared or pushed to inventory clea
-  const [selectionModal, setSelectionModal] = useState(false);
+  const [selectionModalVisible, setSelectionModalVisible] = useState(false);
   const [updateInventoryModal, setUpdateInventoryModal] = useState(false);
   const { userInventories } = useContext(InventoryContext);
   const [listName, setListName] = useState("list 1");
@@ -78,7 +54,9 @@ const ShoppingListPage = () => {
   };
 
   const toggleSelection = () => {
-    selectionModal ? setSelectionModal(false) : setSelectionModal(true);
+    selectionModalVisible
+      ? setSelectionModalVisible(false)
+      : setSelectionModalVisible(true);
   };
 
   const cancelAdd = () => {
@@ -105,7 +83,7 @@ const ShoppingListPage = () => {
   };
 
   const cancelSelectionModal = () => {
-    setSelectionModal(false);
+    setSelectionModalVisible(false);
   };
 
   const createList = useCallback(() => {
@@ -119,10 +97,10 @@ const ShoppingListPage = () => {
     setListAvailable(true);
   });
 
-  const onAddUpdateInvenotryPress = () => {
+  const onAddUpdateInventoryPress = () => {
     setUpdateInventoryModal(true);
   };
-  const onCloseUpdateInvetoryModal = () => {
+  const onCloseUpdateInventoryModal = () => {
     setUpdateInventoryModal(false);
   };
   const sendItemsToInventory = useCallback(
@@ -234,7 +212,7 @@ const ShoppingListPage = () => {
           </Bubble>
         )}
 
-        {isListAvailable && !selectionModal && (
+        {isListAvailable && !selectionModalVisible && (
           <Bubble
             onPress={toggleSelection}
             positionStyle={{ left: 12, bottom: 10 }}
@@ -247,25 +225,23 @@ const ShoppingListPage = () => {
           </Bubble>
         )}
 
-        {selectionModal && (
+        <BubbleModal
+          visible={selectionModalVisible}
+          positionStyle={{ left: 12, bottom: 72 + 32 }}
+          onPressOut={cancelSelectionModal}
+        >
           <View style={styles.moreContainer}>
             <TouchableOpacity
               style={styles.moreOption}
-              onPress={onAddUpdateInvenotryPress}
+              onPress={onAddUpdateInventoryPress}
             >
               <Text>Update Inventory</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.moreOption}>
               <Text>Clear List</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.moreOption}
-              onPress={cancelSelectionModal}
-            >
-              <Text>Cancel</Text>
-            </TouchableOpacity>
           </View>
-        )}
+        </BubbleModal>
 
         <Modal
           visible={updateInventoryModal}
@@ -283,7 +259,7 @@ const ShoppingListPage = () => {
               </TouchableOpacity>
             ))}
 
-            <TouchableOpacity onPress={onCloseUpdateInvetoryModal}>
+            <TouchableOpacity onPress={onCloseUpdateInventoryModal}>
               <Text>CANCEL</Text>
             </TouchableOpacity>
           </SafeAreaView>
@@ -315,14 +291,6 @@ const ShoppingListPage = () => {
 };
 
 const styles = StyleSheet.create({
-  searchBar: {
-    // borderColor: "gray",
-    // borderWidth: 1,
-    // paddingHorizontal: 8,
-    // paddingVertical: 8,
-    // marginRight: "5%",
-    // borderRadius: 10,
-  },
   line: {
     borderBottomColor: "black",
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -330,21 +298,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     marginTop: 10,
-  },
-  listItemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 3,
-  },
-  listItemText: {
-    fontSize: 16,
-    fontFamily: "Lato",
-  },
-  listItemRight: {
-    fontFamily: "Lato",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
   },
   editContainer: {
     flexDirection: "row",
@@ -408,6 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    width: 196,
   },
   moreOption: {
     padding: 2,

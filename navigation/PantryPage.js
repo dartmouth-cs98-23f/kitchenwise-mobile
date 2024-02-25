@@ -1,5 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import moment from "moment";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -18,6 +24,7 @@ import EditModal from "../components/pantry_components/EditModal";
 import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
 import { addFoodItem, editFoodItem } from "../api/fooditem-api";
+import BubbleModal from "../components/modals/BubbleModal";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -27,6 +34,7 @@ const PantryPage = () => {
   const [deletingItem, setDeletingItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
 
@@ -249,9 +257,32 @@ const PantryPage = () => {
           onSubmit={onCreate}
           creating
         />
+        <BubbleModal
+          visible={addModalVisible}
+          positionStyle={{ bottom: 72 + 32, left: 12 }}
+          onPressOut={() => setAddModalVisible(false)}
+        >
+          <View style={styles.moreContainer}>
+            <TouchableOpacity style={styles.moreOption}>
+              <Text>Scan Receipt</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.moreOption}
+              onPress={() => {
+                setCreatingItem(true);
+                setAddModalVisible(false);
+                
+              }}
+            >
+              <Text>Manual Add</Text>
+            </TouchableOpacity>
+          </View>
+        </BubbleModal>
       </SafeAreaView>
       <VoiceBubble />
-      <AddBubble onPress={() => setCreatingItem(true)} />
+      {!addModalVisible && (
+        <AddBubble onPress={() => setAddModalVisible(true)} />
+      )}
       <Navbar />
     </>
   );
@@ -294,6 +325,20 @@ const styles = StyleSheet.create({
   },
   filterSelect: {
     margin: 15,
+  },
+  moreContainer: {
+    backgroundColor: "#F2F2F2",
+    padding: 1,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 196,
+  },
+  moreOption: {
+    padding: 2,
+    height: 36,
+    display: "flex",
+    justifyContent: "center",
   },
 });
 
