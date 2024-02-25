@@ -7,9 +7,9 @@ import tempfile
 import json
 import io
 import base64
-# OPENAI KEY
-OPENAI_API_KEY = "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"
-# DO NOT SHARE PLEASE
+import os
+from dotenv import load_dotenv
+# OPENAI KEY from environment
 
 
 def convert_image(input_path):
@@ -113,6 +113,12 @@ def encode_image(image_path):
 # OpenAI API
 def visionAPI(base64_image):
 
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Access the OpenAI API key from environment variables
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
     headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {OPENAI_API_KEY}"
@@ -184,10 +190,3 @@ def parseData(filename):
 
     # Return the dictionary
     return(items_dict)
-
-
-testfile = 'images/grocery-receipt-3.jpg'
-result = parseData(testfile)
-
-for key, value in result.items():
-    print(f"Key: {key}, Value: {value}")

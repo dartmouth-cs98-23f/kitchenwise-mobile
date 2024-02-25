@@ -17,8 +17,10 @@ SmartReader does not do this. It calls on OpenAI's Vision API to read and proces
 - tempfile
 - json
 - io
-- base64 (only for smartReader)
-- re (only for naiveReader)
+- re (naiveReader)
+- base64 (smartReader)
+- os (smartReader)
+- dotenv (pip; smartReader)
 
 
 ## Usage

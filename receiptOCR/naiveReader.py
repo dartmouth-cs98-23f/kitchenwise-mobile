@@ -85,6 +85,7 @@ def imageProcessor(imageFile):
 
 
 # API
+# The api key is free to get, so just sign up on ocr space to get yours.
 def ocr_space_file(filename, overlay=False, api_key='K85707808888957', language='eng'):
     """ OCR.space API request with local file.
     :param filename: Your file path & name.
@@ -166,10 +167,3 @@ def parseData(filename):
     # The word_counts dictionary now contains the words (excluding those that begin with a digit) as keys,
     # and the number of occurrences as values.
     return(word_counts)
-
-
-testfile = 'images\weirdReceipt2.jpg'
-result = parseData(testfile)
-
-for key, value in result.items():
-    print(f"Key: {key}, Value: {value}")
