@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useContext, useEffect } from "react";
 import {
   FlatList,
-  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Picker } from "@react-native-picker/picker";
 
 import themeStyles from "../styles";
 import UserContext from "../context/user-context";
@@ -27,6 +27,7 @@ import Bubble from "../components/Bubble";
 import BottomModal from "../components/modals/BottomModal";
 import ShoppingListItem from "../components/shoppinglist_components/ShoppingListItem";
 import BubbleModal from "../components/modals/BubbleModal";
+import UpdateInventoryModal from "../components/shoppinglist_components/UpdateInventoryModal";
 
 const ShoppingListPage = () => {
   const { userId } = useContext(UserContext);
@@ -38,12 +39,14 @@ const ShoppingListPage = () => {
   const [amountToAdd, setAmountToAdd] = useState("");
   const [pendingDeletions, setPendingDeletions] = useState([]); // list of all the items to be cleared or pushed to inventory clea
   const [selectionModalVisible, setSelectionModalVisible] = useState(false);
-  const [updateInventoryModal, setUpdateInventoryModal] = useState(false);
-  const { userInventories } = useContext(InventoryContext);
+  const [updateInventoryModalVisible, setUpdateInventoryModalVisible] =
+    useState(false);
+
   const [listName, setListName] = useState("list 1");
 
   const addToList = () => {
     addItemToList(userId, listName, itemToAdd, amountToAdd).then((data) => {
+      console.log(itemToAdd, amountToAdd);
       setListItems(data.shoppingListItems);
     });
     setAddItemModal(false);
@@ -51,12 +54,6 @@ const ShoppingListPage = () => {
 
   const promptAddItem = () => {
     setAddItemModal(true);
-  };
-
-  const toggleSelection = () => {
-    selectionModalVisible
-      ? setSelectionModalVisible(false)
-      : setSelectionModalVisible(true);
   };
 
   const cancelAdd = () => {
@@ -98,16 +95,14 @@ const ShoppingListPage = () => {
   });
 
   const onAddUpdateInventoryPress = () => {
-    setUpdateInventoryModal(true);
-  };
-  const onCloseUpdateInventoryModal = () => {
-    setUpdateInventoryModal(false);
+    setSelectionModalVisible(false);
+    setUpdateInventoryModalVisible(true);
   };
   const sendItemsToInventory = useCallback(
     (inv) => {
       exportToShoppingList(userId, listName, pendingDeletions, inv)
         .then(() => {
-          setUpdateInventoryModal(false);
+          setUpdateInventoryModalVisible(false);
         })
         .catch((error) => {
           console.error("Error exporting items to inventory:", error);
@@ -148,7 +143,6 @@ const ShoppingListPage = () => {
       });
   }, [userId, setListItems]);
   useEffect(() => {
-    // TODO: this is horrible and must be replaced next term
     refreshItems();
     const interval = setInterval(refreshItems, 2500);
     return () => clearInterval(interval);
@@ -195,7 +189,7 @@ const ShoppingListPage = () => {
             />
 
             <Button
-              text="Add New Item"
+              text="Add First Item"
               containerStyle={[styles.addItemButton, { width: 164 }]}
               onPress={promptAddItem}
             />
@@ -214,7 +208,7 @@ const ShoppingListPage = () => {
 
         {isListAvailable && !selectionModalVisible && (
           <Bubble
-            onPress={toggleSelection}
+            onPress={() => setSelectionModalVisible(true)}
             positionStyle={{ left: 12, bottom: 10 }}
           >
             <Ionicons
@@ -243,29 +237,14 @@ const ShoppingListPage = () => {
           </View>
         </BubbleModal>
 
-        <Modal
-          visible={updateInventoryModal}
-          transparent={true}
-          animationType="slide"
-        >
-          <SafeAreaView style={styles.updateInventoryModal}>
-            <Text>Select an Inventory</Text>
-            {userInventories.map((inv) => (
-              <TouchableOpacity
-                key={inv._id}
-                onPress={() => sendItemsToInventory(inv)}
-              >
-                <Text>{inv.title}</Text>
-              </TouchableOpacity>
-            ))}
+        <UpdateInventoryModal
+          visible={updateInventoryModalVisible}
+          onCancel={() => setUpdateInventoryModalVisible(false)}
+          onSubmit={sendItemsToInventory}
+        />
 
-            <TouchableOpacity onPress={onCloseUpdateInventoryModal}>
-              <Text>CANCEL</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
         <BottomModal
-          transparent={true}
+          transparent
           visible={additemModal}
           onConfirm={isListAvailable ? addToList : createList}
           onCancel={cancelAdd}

@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import BottomModal from "../modals/BottomModal";
 import Input from "../form_components/Input";
 import { Picker } from "@react-native-picker/picker";
-import Button from "../form_components/Button";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import themeStyles from "../../styles";
 
