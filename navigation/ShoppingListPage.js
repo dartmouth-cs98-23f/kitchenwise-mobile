@@ -46,7 +46,6 @@ const ShoppingListPage = () => {
 
   const addToList = () => {
     addItemToList(userId, listName, itemToAdd, amountToAdd).then((data) => {
-      console.log(itemToAdd, amountToAdd);
       setListItems(data.shoppingListItems);
     });
     setAddItemModal(false);
