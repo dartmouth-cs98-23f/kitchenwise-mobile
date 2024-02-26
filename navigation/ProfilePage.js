@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -165,9 +165,22 @@ const ProfilePage = () => {
           <Text style={themeStyles.text.h2}>Your Integrations</Text>
         </View>
         <View>
+          <Text style={themeStyles.text.h2}>Your Statistics</Text>
+          <Button
+            text="See Your Statistics"
+            onPress={navigateToStatisticsPage}
+            containerStyle={{
+              width: "50%",
+              backgroundColor: themeStyles.colors.interactableBackground,
+              borderRadius: 2,
+            }}
+          />
+        </View>
+        <View>
           <Text style={themeStyles.text.h2}>Settings</Text>
         </View>
-        <ScrollView>
+
+        {/* <ScrollView>
           <TouchableOpacity
             style={styles.button}
             onPress={navigateToStatisticsPage}
@@ -190,7 +203,7 @@ const ProfilePage = () => {
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>About</Text>
           </TouchableOpacity>
-        </ScrollView>
+        </ScrollView> */}
       </SafeAreaView>
       <Navbar />
       {userInventories && (

@@ -78,9 +78,7 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
-
-Podfile.lock
-project.pbxproj
-
 yarn.lock
 package-lock.json
+ios/Podfile.lock
+ios/kitchenwisemobile.xcodeproj/project.pbxproj

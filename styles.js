@@ -42,6 +42,7 @@ const themeStyles = StyleSheet.create({
     interactableText: "#AAAAAA",
     uninteractableBackground: "#FAFAFA",
     uninteractableText: "#616161",
+    selectedText: "#999999",
   },
   components: {
     screenContainer: {
