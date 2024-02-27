@@ -25,6 +25,7 @@ import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
 import { addFoodItem, editFoodItem } from "../api/fooditem-api";
 import BubbleModal from "../components/modals/BubbleModal";
+import { useNavigation } from "@react-navigation/native";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -37,6 +38,7 @@ const PantryPage = () => {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (userInventories)
@@ -263,7 +265,12 @@ const PantryPage = () => {
           onPressOut={() => setAddModalVisible(false)}
         >
           <View style={styles.moreContainer}>
-            <TouchableOpacity style={styles.moreOption}>
+            <TouchableOpacity
+              style={styles.moreOption}
+              onPress={() => {
+                navigation.navigate("ReceiptScanner");
+              }}
+            >
               <Text>Scan Receipt</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -271,7 +278,6 @@ const PantryPage = () => {
               onPress={() => {
                 setCreatingItem(true);
                 setAddModalVisible(false);
-                
               }}
             >
               <Text>Manual Add</Text>
