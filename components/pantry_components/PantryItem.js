@@ -32,14 +32,17 @@ const springConfig = {
   dampingRatio: 1.7,
 };
 
+const DRAG_TRIGGER_AMOUNT = 24;
+
 const PantryItem = ({ foodItem, onDelete, onEdit }) => {
   const { name, expiration, quantity, unit } = foodItem;
   const amountPanned = useSharedValue(0);
   const swiped = useSharedValue(false);
+
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       if (!swiped.value) {
-        if (Math.abs(e.translationX) >= MAX_DRAG - 16) {
+        if (Math.abs(e.translationX) >= DRAG_TRIGGER_AMOUNT) {
           amountPanned.value = withSpring(
             Math.sign(e.translationX) * MAX_DRAG,
             springConfig
@@ -78,7 +81,7 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
             height="100%"
             activeOpacity={1}
             style={styles.innerInfoLayer}
-            onPress={onInfoPress}
+            onPressIn={onInfoPress}
           >
             <Text style={styles.itemName}>{toTitleCase(name)}</Text>
             {expiration ? (

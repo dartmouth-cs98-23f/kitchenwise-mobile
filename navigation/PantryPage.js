@@ -268,6 +268,7 @@ const PantryPage = () => {
             <TouchableOpacity
               style={styles.moreOption}
               onPress={() => {
+                setAddModalVisible(false);
                 navigation.navigate("ReceiptScanner");
               }}
             >
@@ -338,11 +339,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: 196,
+    width: 128,
   },
   moreOption: {
     padding: 2,
-    height: 36,
+    height: 48,
     display: "flex",
     justifyContent: "center",
   },

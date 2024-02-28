@@ -8,11 +8,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Picker } from "@react-native-picker/picker";
 
 import themeStyles from "../styles";
 import UserContext from "../context/user-context";
-import InventoryContext from "../context/inventory-context";
 import Navbar from "./Navbar";
 import SearchBar from "../components/pantry_components/SearchBar";
 import {
@@ -304,7 +302,7 @@ const styles = StyleSheet.create({
   additemModalContainer: {
     marginTop: "100%",
     height: "30%",
-    backgroundColor: "#f7f9f9",
+    backgroundColor: "#4D8AFF",
     borderColor: "grey",
     borderWidth: 5,
     borderRadius: 5,
@@ -339,11 +337,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: 196,
+    width: 128,
   },
   moreOption: {
     padding: 2,
-    height: 36,
+    height: 48,
     display: "flex",
     justifyContent: "center",
   },
