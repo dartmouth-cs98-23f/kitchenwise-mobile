@@ -32,3 +32,7 @@ export const exportToShoppingList = async (userId, listName, items, inv) => {
 export const importToShoppingList = async (userId, title) => {
   return (await axios.post(URL + "/import", {userId, title})).data;
 }
+
+export const deleteList = async (listName) => {
+  return (await axios.delete(URL + "/deletelist", { data: { listName } })).data;
+};

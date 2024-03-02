@@ -21,6 +21,7 @@ import {
   getUserShoppingListItems,
   exportToShoppingList,
   importToShoppingList,
+  deleteList
 } from "../api/shoppingList-api";
 import { Button, Input } from "../components/form_components";
 import Bubble from "../components/Bubble";
@@ -60,7 +61,8 @@ const categories = [
   "Canned and Jarred",
   "Refrigerated",
   "Spices and Seasonings",
-  "Health Foods"
+  "Health Foods",
+  "Other",
 ];
 
 const ShoppingListPage = () => {
@@ -84,6 +86,11 @@ const ShoppingListPage = () => {
     });
     setAddItemModal(false);
   };
+
+  const clearList = useCallback(() => {
+    deleteList(listName).then(
+    )
+  });
 
   const promptAddItem = () => {
     setAddItemModal(true);
@@ -193,12 +200,21 @@ const ShoppingListPage = () => {
             <SearchBar />
             <View style={styles.listContainer}>
               {categories.map((category) => {
+                const undefinedItems = [];
                 const itemsInCategory = listItems.filter(
-                  (item) => item.tags[0] === category
+                  (item) => { 
+                    if (item.tags[0]){
+                      return item.tags[0] === category
+                    } else {
+                      if (category === "Other"){
+                        return undefinedItems.push(item)
+                      }
+                    }
+                  }
                 );
                 if (itemsInCategory.length > 0) {
                   return (
-                    <>
+                    <View key={category}>
                     <Text style={themeStyles.text.h3}>{category}</Text>
                     <View style={styles.line} />
                     {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */ }
@@ -218,7 +234,7 @@ const ShoppingListPage = () => {
                         keyExtractor={(item) => item._id}
                       />
                     </View>
-                    </>
+                    </View>
                   )
               }
               })}
@@ -276,7 +292,7 @@ const ShoppingListPage = () => {
             >
               <Text>Update Inventory</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.moreOption}>
+            <TouchableOpacity style={styles.moreOption} onPress={clearList}>
               <Text>Clear List</Text>
             </TouchableOpacity>
           </View>
