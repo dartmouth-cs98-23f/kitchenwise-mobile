@@ -29,6 +29,40 @@ import ShoppingListItem from "../components/shoppinglist_components/ShoppingList
 import BubbleModal from "../components/modals/BubbleModal";
 import UpdateInventoryModal from "../components/shoppinglist_components/UpdateInventoryModal";
 
+const categories = [
+  "Bread",
+  "Dried Fruits",
+  "Seafood",
+  "Cheese",
+  "Produce",
+  "Grilling supplies",
+  "Cereal",
+  "Nuts",
+  "Meat",
+  "Milk, Eggs, Other Dairy",
+  "Online",
+  "Bakery/Bread",
+  "Not in Grocery Store/Homemade",
+  "Pasta and Rice",
+  "Beverages",
+  "Baking",
+  "Alcoholic Beverages",
+  "Gluten Free",
+  "Sweet Snacks",
+  "Gourmet",
+  "Tea and coffee",
+  "Ethnic foods",
+  "Savory Snacks",
+  "Condiments",
+  "Oil, Vinegar, Salad Dressing",
+  "Nut butters, Jam, and Honey",
+  "Frozen",
+  "Canned and Jarred",
+  "Refrigerated",
+  "Spices and Seasonings",
+  "Health Foods"
+];
+
 const ShoppingListPage = () => {
   const { userId } = useContext(UserContext);
   const [listItems, setListItems] = useState([]);
@@ -126,7 +160,7 @@ const ShoppingListPage = () => {
       });
   });
 
-  //TODO: pull in the items from the back end, should each category be dynamic via tags?
+  // TODO: pull in the items from the back end, should each category be dynamic via tags?
   const refreshItems = useCallback(() => {
     getUserShoppingListItems(userId, listName)
       .then((data) => {
@@ -158,24 +192,36 @@ const ShoppingListPage = () => {
           <>
             <SearchBar />
             <View style={styles.listContainer}>
-              <Text style={themeStyles.text.h3}>Category</Text>
-              <View style={styles.line} />
-              {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */}
-              <View style={styles.list}>
-                <FlatList
-                  data={listItems}
-                  renderItem={({ item }) => (
-                    <ShoppingListItem
-                      item={item}
-                      name={item.title}
-                      amount={item.amount}
-                      key={item._id}
-                      selectItems={togglePendingDeletion}
-                    />
-                  )}
-                  keyExtractor={(item) => item._id}
-                />
-              </View>
+              {categories.map((category) => {
+                const itemsInCategory = listItems.filter(
+                  (item) => item.tags[0] === category
+                );
+                if (itemsInCategory.length > 0) {
+                  return (
+                    <>
+                    <Text style={themeStyles.text.h3}>{category}</Text>
+                    <View style={styles.line} />
+                    {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */ }
+                    <View style={styles.list}>
+                      <FlatList
+                        data={itemsInCategory}
+                        renderItem={({ item }) => (
+                          <ShoppingListItem
+                            item={item}
+                            name={item.title}
+                            amount={item.amount}
+                            key={item._id}
+                            selectItems={togglePendingDeletion}
+                            tags={item.tags}
+                          />
+                        )}
+                        keyExtractor={(item) => item._id}
+                      />
+                    </View>
+                    </>
+                  )
+              }
+              })}
             </View>
           </>
         ) : (
