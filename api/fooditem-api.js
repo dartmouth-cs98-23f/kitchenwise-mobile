@@ -31,3 +31,17 @@ export const addFoodItems = async (userId, foodItems) => {
     })
   ).data;
 };
+
+export const sendReceipt = async (userId, receiptPhotoUri) => {
+  // FormData logic from https://www.reactnativeschool.com/how-to-upload-images-from-react-native
+  const data = new FormData();
+
+  data.append("receipt", {
+    name: "receipt",
+    type: "jpeg",
+    uri: receiptPhotoUri,
+  });
+  data.append("userId", userId);
+
+  return (await axios.post(URL + "/scanreceipt", data)).data;
+};

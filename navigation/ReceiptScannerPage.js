@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 import themeStyles from "../styles";
+import { sendReceipt } from "../api/fooditem-api";
 
 const ReceiptScannerPage = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -23,8 +24,13 @@ const ReceiptScannerPage = () => {
     }
   }, [permission, requestPermission, navigation]);
   const cameraRef = useRef(null);
-  const onCapture = useCallback(() => {
-    console.log(cameraRef?.current);
+  const onCapture = useCallback(async () => {
+    if (cameraRef?.current) {
+      const imgObject = await cameraRef.current.takePictureAsync({
+        imageType: "jpeg",
+      });
+      await sendReceipt(userId, imgObject.uri);
+    }
   }, [cameraRef]);
   return (
     <SafeAreaView style={themeStyles.components.screenContainer}>
