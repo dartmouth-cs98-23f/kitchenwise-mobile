@@ -1,14 +1,19 @@
 import { StyleSheet } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Audio } from 'expo-av';
 
 import Bubble from "../Bubble.js";
 
 const VoiceBubble = () => {
   const navigation = useNavigation();
   const onPress = useCallback(() => {
-    navigation.navigate("Narration");
+    Audio.requestPermissionsAsync().then((permission)=>{
+      if (permission.status === "granted"){
+        navigation.navigate("Narration");
+      }
+    });
   }, []);
 
   return (
