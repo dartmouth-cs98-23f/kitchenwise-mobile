@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
-
+import CreateAccount from "./components/login_components/createaccount";
 import LoginScreen from "./components/login_components/LoginScreen";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
@@ -72,6 +72,12 @@ export default function App() {
                     name="Home"
                     component={LoginScreen}
                     options={{ title: "Welcome", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="createaccountpage"
+                    component={CreateAccount}
+                    options={{ title: "createact", headerShown: false }}
+
                   />
                   <Stack.Screen
                     name="Profile"
