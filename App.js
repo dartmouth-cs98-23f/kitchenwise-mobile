@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
-import CreateAccount from "./components/login_components/createaccount";
-import LoginScreen from "./components/login_components/LoginScreen";
+import CreateAccountScreen from "./navigation/SignUpScreen";
+import LoginScreen from "./navigation/LoginScreen";
 import ProfilePage from "./navigation/ProfilePage";
 import PantryPage from "./navigation/PantryPage";
 import StatisticsPage from "./navigation/StatisticsPage";
@@ -74,10 +74,9 @@ export default function App() {
                     options={{ title: "Welcome", headerShown: false }}
                   />
                   <Stack.Screen
-                    name="createaccountpage"
-                    component={CreateAccount}
-                    options={{ title: "createact", headerShown: false }}
-
+                    name="CreateAccount"
+                    component={CreateAccountScreen}
+                    options={{ title: "Create Account", headerShown: false }}
                   />
                   <Stack.Screen
                     name="Profile"
