@@ -1,8 +1,8 @@
 # kitchenwise-mobile
 
-![THE_BOYS](https://github.com/dartmouth-cs98-23f/project-embedded-pantry/assets/90659949/cf96b595-a592-4b15-9057-54b348b2463f)
-
-TODO: short project description, some sample screenshots or mockups
+Command your kitchen.
+Have you ever gone to the grocery store, seen something that piqued your interest, and thought "do I already have this?"
+Have you ever forgotten to add a critical item to your shopping list and, one day later, opened the fridge disappointed?
 
 ## Architecture
 
@@ -27,9 +27,10 @@ If it crashes immediately, make sure you've run npm install and have the correct
 
 TODO: how to deploy the project
 
-## Trouble shooting 
-cd ios 
-npx pod deintegrate 
+## Trouble shooting
+
+cd ios
+npx pod deintegrate
 
 ## Authors
 
