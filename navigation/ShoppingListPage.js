@@ -21,6 +21,7 @@ import {
   getUserShoppingListItems,
   exportToShoppingList,
   importToShoppingList,
+  deleteList
 } from "../api/shoppingList-api";
 import { Button, Input } from "../components/form_components";
 import Bubble from "../components/Bubble";
@@ -28,6 +29,41 @@ import BottomModal from "../components/modals/BottomModal";
 import ShoppingListItem from "../components/shoppinglist_components/ShoppingListItem";
 import BubbleModal from "../components/modals/BubbleModal";
 import UpdateInventoryModal from "../components/shoppinglist_components/UpdateInventoryModal";
+
+const categories = [
+  "Bread",
+  "Dried Fruits",
+  "Seafood",
+  "Cheese",
+  "Produce",
+  "Grilling supplies",
+  "Cereal",
+  "Nuts",
+  "Meat",
+  "Milk, Eggs, Other Dairy",
+  "Online",
+  "Bakery/Bread",
+  "Not in Grocery Store/Homemade",
+  "Pasta and Rice",
+  "Beverages",
+  "Baking",
+  "Alcoholic Beverages",
+  "Gluten Free",
+  "Sweet Snacks",
+  "Gourmet",
+  "Tea and coffee",
+  "Ethnic foods",
+  "Savory Snacks",
+  "Condiments",
+  "Oil, Vinegar, Salad Dressing",
+  "Nut butters, Jam, and Honey",
+  "Frozen",
+  "Canned and Jarred",
+  "Refrigerated",
+  "Spices and Seasonings",
+  "Health Foods",
+  "Other",
+];
 
 const ShoppingListPage = () => {
   const { userId } = useContext(UserContext);
@@ -50,6 +86,11 @@ const ShoppingListPage = () => {
     });
     setAddItemModal(false);
   };
+
+  const clearList = useCallback(() => {
+    deleteList(listName).then(
+    )
+  });
 
   const promptAddItem = () => {
     setAddItemModal(true);
@@ -126,7 +167,7 @@ const ShoppingListPage = () => {
       });
   });
 
-  //TODO: pull in the items from the back end, should each category be dynamic via tags?
+  // TODO: pull in the items from the back end, should each category be dynamic via tags?
   const refreshItems = useCallback(() => {
     getUserShoppingListItems(userId, listName)
       .then((data) => {
@@ -158,24 +199,45 @@ const ShoppingListPage = () => {
           <>
             <SearchBar />
             <View style={styles.listContainer}>
-              <Text style={themeStyles.text.h3}>Category</Text>
-              <View style={styles.line} />
-              {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */}
-              <View style={styles.list}>
-                <FlatList
-                  data={listItems}
-                  renderItem={({ item }) => (
-                    <ShoppingListItem
-                      item={item}
-                      name={item.title}
-                      amount={item.amount}
-                      key={item._id}
-                      selectItems={togglePendingDeletion}
-                    />
-                  )}
-                  keyExtractor={(item) => item._id}
-                />
-              </View>
+              {categories.map((category) => {
+                const undefinedItems = [];
+                const itemsInCategory = listItems.filter(
+                  (item) => { 
+                    if (item.tags[0]){
+                      return item.tags[0] === category
+                    } else {
+                      if (category === "Other"){
+                        return undefinedItems.push(item)
+                      }
+                    }
+                  }
+                );
+                if (itemsInCategory.length > 0) {
+                  return (
+                    <View key={category}>
+                    <Text style={themeStyles.text.h3}>{category}</Text>
+                    <View style={styles.line} />
+                    {/* <>{listItems.map((item) => <ShoppingListItem name={item.title} amount={item.amount} key={item._id}/>)}</> */ }
+                    <View style={styles.list}>
+                      <FlatList
+                        data={itemsInCategory}
+                        renderItem={({ item }) => (
+                          <ShoppingListItem
+                            item={item}
+                            name={item.title}
+                            amount={item.amount}
+                            key={item._id}
+                            selectItems={togglePendingDeletion}
+                            tags={item.tags}
+                          />
+                        )}
+                        keyExtractor={(item) => item._id}
+                      />
+                    </View>
+                    </View>
+                  )
+              }
+              })}
             </View>
           </>
         ) : (
@@ -230,7 +292,7 @@ const ShoppingListPage = () => {
             >
               <Text>Update Inventory</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.moreOption}>
+            <TouchableOpacity style={styles.moreOption} onPress={clearList}>
               <Text>Clear List</Text>
             </TouchableOpacity>
           </View>
