@@ -228,7 +228,7 @@ const PantryPage = () => {
           style={styles.pantryList}
           ListEmptyComponent={
             <Text style={styles.emptyComponent}>
-              No items in your inventory. Add some through Alexa.
+              No items in your inventory. Add some below.
             </Text>
           }
         />
