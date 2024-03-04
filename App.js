@@ -54,7 +54,6 @@ export default function App() {
         }
       });
   }, [userId, setUserShoppingLists]);
-
   return (
     <>
       <UserContext.Provider value={{ userId, setUserId }}>

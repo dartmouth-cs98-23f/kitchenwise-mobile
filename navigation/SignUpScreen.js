@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { Input, Button } from "../components/form_components";
 
 const CreateAccountScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -22,39 +23,44 @@ const CreateAccountScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>kitchenwise.</Text>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email address"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword}
-          value={password}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          secureTextEntry
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-        />
+      <View style={styles.splashContainer}>
+        <Text style={styles.title}>kitchenwise.</Text>
       </View>
-      <TouchableOpacity style={styles.buttonBlack} onPress={handleConfirmPress}>
-        <Text style={styles.buttonText}>Confirm</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonWhite}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.buttonTextWhite}>Back</Text>
-      </TouchableOpacity>
+      <View style={styles.formContainer}>
+        <View style={styles.inputContainer}>
+          <Input
+            placeholder="Email address"
+            onChangeText={setEmail}
+            value={email}
+          />
+          <Input
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={setPassword}
+            value={password}
+          />
+          <Input
+            placeholder="Confirm Password"
+            secureTextEntry
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            containerStyle={styles.button}
+            onPress={handleConfirmPress}
+            text="Confirm"
+            color="#222"
+            textColor="white"
+          />
+          <Button
+            style={styles.button}
+            onPress={() => navigation.goBack()}
+            text="Cancel"
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -65,7 +71,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+  },
+  splashContainer: {
+    display: "flex",
+    height: "30%",
+    justifyContent: "center",
   },
   title: {
     fontSize: 36,
@@ -73,69 +83,22 @@ const styles = StyleSheet.create({
     color: "#64D2D9",
     marginBottom: "45%",
   },
+  formContainer: {
+    display: "flex",
+    gap: 28,
+    width: "100%",
+    paddingHorizontal: 20,
+  },
   inputContainer: {
-    width: "90%",
-    marginBottom: "45%",
+    display: "flex",
+    gap: 12,
+    width: "100%",
   },
-  input: {
-    backgroundColor: "#f7f7f7",
-    borderWidth: 1,
-    borderColor: "#e1e1e1",
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 16,
-    fontSize: 18,
-    textAlign: "center",
-    textAlignVertical: "center",
-    height: 50,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonBlack: {
+  button: {
     backgroundColor: "#000",
     paddingVertical: 12,
-    width: "90%",
-    borderRadius: 20,
-    marginBottom: 16,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "600",
-    fontSize: 20,
-  },
-  buttonTextWhite: {
-    color: "#000",
-    textAlign: "center",
-    fontWeight: "600",
-    fontSize: 20,
-  },
-  buttonWhite: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e1e1e1",
-    paddingVertical: 12,
-    width: "90%",
-    borderRadius: 20,
-    marginBottom: 16,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonTextBlack: {
-    color: "#000",
-    textAlign: "center",
-    fontWeight: "600",
+    width: "100%",
+    borderRadius: 16,
   },
 });
 
