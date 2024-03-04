@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Input, Button } from "../components/form_components";
 
-const CreateAccountScreen = ({ navigation }) => {
+const SignUpPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateAccountScreen;
+export default SignUpPage;

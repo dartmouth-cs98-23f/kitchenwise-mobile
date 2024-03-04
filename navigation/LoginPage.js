@@ -4,7 +4,7 @@ import { Button, Input } from "../components/form_components";
 import UserContext from "../context/user-context";
 import themeStyles from "../styles";
 
-const LoginScreen = ({ navigation }) => {
+const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUserId } = useContext(UserContext);
@@ -17,6 +17,10 @@ const LoginScreen = ({ navigation }) => {
   const handleSignUp = () => {
     // TODO: Handle sign-up logic or navigation here
     navigation.navigate("CreateAccount");
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate("ForgotPassword");
   };
 
   return (
@@ -38,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry
             onChangeText={setPassword}
           />
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
@@ -140,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginPage;
