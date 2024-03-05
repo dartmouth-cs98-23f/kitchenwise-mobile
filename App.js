@@ -7,6 +7,7 @@ import FlashMessage from "react-native-flash-message";
 import CreateAccount from "./components/login_components/createaccount";
 import LoginScreen from "./components/login_components/LoginScreen";
 import ProfilePage from "./navigation/ProfilePage";
+import ForgotPassword from "./components/login_components/forgotpassword";
 import PantryPage from "./navigation/PantryPage";
 import StatisticsPage from "./navigation/StatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
@@ -72,6 +73,11 @@ export default function App() {
                     name="Home"
                     component={LoginScreen}
                     options={{ title: "Welcome", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="forgotpasswordpage"
+                    component={ForgotPassword}
+                    options={{ title: "forgotpassword", headerShown: false }}
                   />
                   <Stack.Screen
                     name="createaccountpage"

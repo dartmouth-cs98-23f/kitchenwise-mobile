@@ -1,21 +1,45 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import UserContext from '../../context/user-context';
+import { getAuth, signInWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUserId } = useContext(UserContext);
+  const auth = getAuth();
 
   const handleLogin = () => {
-    // TODO: Add authentication logic here
-    // For now, we just navigate to the next screen
-    navigation.navigate('Pantry');
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user);
+        navigation.navigate('Pantry');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log('In the catch block', errorCode);
+        if (errorCode === 'auth/invalid-credential') {
+          console.log('User not found');
+          alert('No user with this email found.');
+        } else if (errorCode === 'auth/invalid-email') {
+          console.log('Wrong email');
+          alert('Wrong email.');
+        }else if (errorCode === 'auth/missing-password') {
+          console.log('Wrong password');
+          alert('Wrong password.');
+        }
+      });
   };
-
   const handleSignUp = () => {
     // TODO: Handle sign-up logic or navigation here
     navigation.navigate('createaccountpage')
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('forgotpasswordpage')
   };
 
 
@@ -37,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
           secureTextEntry
           onChangeText={setPassword}
         />
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={handleForgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot password?</Text>
         </TouchableOpacity>
       </View>

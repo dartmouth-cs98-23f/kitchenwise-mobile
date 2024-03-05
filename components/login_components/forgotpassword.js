@@ -1,34 +1,32 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { auth } from '../../firebase';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-const CreateAccount = ({ navigation }) => {
+const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const auth = getAuth();
 
-  const handleConfirmPress = () => {
-    // TODO: Implement the create account logic
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up 
-        const user = userCredential.user;
-        // ...
+  const handleForgotPassword = () => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        // Password reset email sent!
+        alert('Password reset email sent to ' + email);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
+        // Handle errors
+        if (errorCode === 'auth/invalid-email') {
+          alert('No user with this email found.');
+        } else {
+          console.error('Error sending password reset email', error);
+        }
       });
-
-    navigation.navigate('Pantry');
   };
-  const handleBack = () => {
-    navigation.navigate('Home')
-  }
 
   return (
     <View style={styles.container}>
@@ -41,22 +39,9 @@ const CreateAccount = ({ navigation }) => {
           onChangeText={setEmail}
           value={email}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword}
-          value={password}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          secureTextEntry
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-        />
+
       </View>
-      <TouchableOpacity style={styles.buttonBlack} onPress={handleConfirmPress}>
+      <TouchableOpacity style={styles.buttonBlack} onPress={handleForgotPassword}>
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonWhite} onPress={() => navigation.goBack()}>
@@ -147,4 +132,4 @@ const styles = StyleSheet.create({
       },
 });
 
-export default CreateAccount;
+export default ForgotPassword;
