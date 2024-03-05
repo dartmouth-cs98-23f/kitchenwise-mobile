@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#64D2D9",
+    color: themeStyles.colors.logoBlue,
   },
   subtitle: {
     fontSize: 20,

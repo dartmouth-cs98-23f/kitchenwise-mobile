@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { initWhisper, releaseAllWhisper } from "whisper.rn";
 import { useAssets } from "expo-asset";
 import stringSimilarity from "string-similarity";
+import { Wave } from "react-native-animated-spinkit";
 
 import themeStyles from "../styles";
 import { Button } from "../components/form_components";
@@ -114,13 +115,13 @@ const NarrationPage = ({ navigation }) => {
   const subscribeCallback = useCallback((evt) => {
     const { isCapturing, data, processTime, recordingTime } = evt;
     // console.log(data);
-    // console.log(
-    //   `Realtime transcribing: ${isCapturing ? "ON" : "OFF"}\n` +
-    //     // The inference text result from audio record:
-    //     `Result: ${data.result}\n\n` +
-    //     `Process time: ${processTime}ms\n` +
-    //     `Recording time: ${recordingTime}ms`
-    // );
+    console.log(
+      `Realtime transcribing: ${isCapturing ? "ON" : "OFF"}\n` +
+        // The inference text result from audio record:
+        `Result: ${data.result}\n\n` +
+        `Process time: ${processTime}ms\n` +
+        `Recording time: ${recordingTime}ms`
+    );
     if (data.result && isCapturing)
       setSpokenText(cleanTranscription(data.result));
     // if (!isCapturing) console.log("Finished realtime transcribing");
@@ -133,6 +134,7 @@ const NarrationPage = ({ navigation }) => {
         setWhisperContext(newContext);
       });
     }
+    return () => releaseAllWhisper();
   }, [modelPath, setWhisperContext, startRecording]);
   useEffect(() => {
     if (whisperContext) {
@@ -176,35 +178,64 @@ const NarrationPage = ({ navigation }) => {
     },
     [setParsedCommands]
   );
+
   return (
     <>
       <SafeAreaView style={[themeStyles.components.screenContainer]}>
         <View style={styles.header}>
           <Text style={themeStyles.text.h2}>What do you want to add?</Text>
         </View>
-        <View style={styles.transcribeContent}>
-          {/* <Text>{spokenText}</Text> */}
-          {parsedCommands.length > 0 ? (
-            parsedCommands.map(({ quantity, name, location }, i) => (
-              <CommandRow
-                quantity={quantity}
-                name={name}
-                location={location}
-                key={i}
-                locationNames={userInventories.map((inv) => inv.title)}
-                onItemChange={(newItem) => updateCommand(i, newItem)}
-                onDelete={() => deleteCommand(i)}
-                onLocationPress={() => {
-                  setEditingLocationIndex(i);
-                }}
-              />
-            ))
-          ) : (
-            <Text style={styles.placeholderCommand}>
-              Example: "Add five cloves of garlic to My Fridge"
-            </Text>
+        <ScrollView style={styles.transcribeContent}>
+          <View styles={styles.commandContainer}>
+            {/* <Text>{spokenText}</Text> */}
+            {parsedCommands.length > 0 ? (
+              <>
+                {parsedCommands.map(({ quantity, name, location }, i) => (
+                  <CommandRow
+                    quantity={quantity}
+                    name={name}
+                    location={location}
+                    key={i}
+                    locationNames={userInventories.map((inv) => inv.title)}
+                    onItemChange={(newItem) => updateCommand(i, newItem)}
+                    onDelete={() => deleteCommand(i)}
+                    onLocationPress={() => {
+                      setEditingLocationIndex(i);
+                    }}
+                  />
+                ))}
+              </>
+            ) : (
+              <Text style={styles.placeholderCommand}>
+                Example: "
+                <Text
+                  style={[styles.placeholderCommand, { fontWeight: "bold" }]}
+                >
+                  Add
+                </Text>{" "}
+                five cloves{" "}
+                <Text
+                  style={[styles.placeholderCommand, { fontWeight: "bold" }]}
+                >
+                  of
+                </Text>{" "}
+                garlic{" "}
+                <Text
+                  style={[styles.placeholderCommand, { fontWeight: "bold" }]}
+                >
+                  to
+                </Text>{" "}
+                My Fridge"
+              </Text>
+            )}
+          </View>
+          {isRecording && (
+            <View style={styles.loadingContainer}>
+              <Wave color={themeStyles.colors.uninteractableBackground} />
+              <Text>Transcribing</Text>
+            </View>
           )}
-        </View>
+        </ScrollView>
         <View style={styles.buttonRow}>
           {whisperContext ? (
             isRecording ? (
@@ -272,6 +303,15 @@ const styles = StyleSheet.create({
   },
   placeholderCommand: {
     color: "#666",
+  },
+  commandContainer: {
+    minHeight: "80%",
+  },
+  loadingContainer: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    height: "20%",
   },
 });
 

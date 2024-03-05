@@ -37,7 +37,7 @@ const themeStyles = StyleSheet.create({
   colors: {
     success: "#158013",
     failure: "#F22424",
-
+    logoBlue: "#64D2D9",
     interactableBackground: "#F2F2F2",
     interactableText: "#AAAAAA",
     uninteractableBackground: "#FAFAFA",

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Input, Button } from "../components/form_components";
+import themeStyles from "../styles";
 
 const CreateAccountScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#64D2D9",
+    color: themeStyles.colors.logoBlue,
     marginBottom: "45%",
   },
   formContainer: {
