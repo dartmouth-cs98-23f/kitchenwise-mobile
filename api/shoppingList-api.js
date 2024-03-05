@@ -12,8 +12,8 @@ export const getUserShoppingLists = async (userId) => {
   return (await axios.get(URL + "/all", { params: { userId } })).data;
 };
 
-export const addItemToList = async (userId, title, foodItem, foodAmount) => {
-  return (await axios.put(URL + "/additem",  { userId, title, foodItem, foodAmount } )).data
+export const addItemToList = async (userId, title, foodItem, foodAmount, unit) => {
+  return (await axios.put(URL + "/additem",  { userId, title, foodItem, foodAmount, unit} )).data
 }
 
 export const getUserShoppingListItems = async (userId, title) => {
@@ -25,6 +25,7 @@ export const deleteShoppingItem = async (userId, title, itemId) => {
 };
 
 export const exportToShoppingList = async (userId, listName, items, inv) => {
+  console.log(inv)
   return (await axios.post(URL + "/export", {userId, listName, items, inv})).data;
 }
 
