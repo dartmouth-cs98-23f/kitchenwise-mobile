@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
-import CreateAccountScreen from "./navigation/SignUpPage";
+import CreateAccountScreen from "./navigation/SignUpScreen";
 import LoginScreen from "./navigation/LoginPage";
 import ProfilePage from "./navigation/ProfilePage";
 import ForgotPasswordScreen from "./navigation/ForgotPasswordPage";
