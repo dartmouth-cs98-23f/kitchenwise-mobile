@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export const defaultUserContext = {
-  userId: null,
+  userId: "653997da2d9889247c37976e",
   setUserId: () => {},
 };
 
