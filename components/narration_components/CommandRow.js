@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
   input: {
     height: 28,
     fontSize: 10,
-    width: 84,
+    flexGrow: 1,
+    // width: 84,
   },
   locationContainer: {
     backgroundColor: themeStyles.colors.interactableBackground,

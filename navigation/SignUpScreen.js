@@ -52,7 +52,7 @@ const CreateAccountScreen = ({ navigation }) => {
             containerStyle={styles.button}
             onPress={handleConfirmPress}
             text="Confirm"
-            color="#222"
+            color={themeStyles.colors.authBlack}
             textColor="white"
           />
           <Button

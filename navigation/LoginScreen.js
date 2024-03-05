@@ -10,7 +10,7 @@ const LoginScreen = ({ navigation }) => {
   const { setUserId } = useContext(UserContext);
 
   const handleLogin = () => {
-    setUserId();
+    // setUserId();
     navigation.navigate("Pantry");
   };
 
@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
             onPress={handleLogin}
             containerStyle={styles.button}
             text="Log In"
-            color="#222"
+            color={themeStyles.colors.authBlack}
             textColor="white"
           />
           <Button
