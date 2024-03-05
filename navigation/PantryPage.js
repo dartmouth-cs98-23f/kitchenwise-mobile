@@ -35,6 +35,7 @@ const PantryPage = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
+  const [selectedTags, setSelectedTags] = useState(["All"]);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
 
@@ -92,6 +93,42 @@ const PantryPage = () => {
       return prev;
     });
   }, []);
+
+  useEffect(() => {
+    // Filter items based on selected tags
+    let newFilteredItems = items;
+    if (selectedTags.length && !selectedTags.includes("All")) {
+      newFilteredItems = newFilteredItems.filter((item) =>
+        item.tags.some((tag) => selectedTags.includes(tag))
+      );
+    }
+    setFilteredItems(newFilteredItems);
+  }, [items, selectedTags]);
+
+  const onTagSelect = useCallback(
+    (tag) => {
+      setSelectedTags((prevTags) => {
+        // If 'All' tag is selected, deselect all other tags
+        if (tag === 'All') {
+          return prevTags.includes('All') ? [] : [tag];
+        }
+        // If the selected tag is already in the list, remove it
+        if (prevTags.includes(tag)) {
+          return prevTags.filter((prevTag) => prevTag !== tag && prevTag !== 'All');
+        }
+        // Otherwise, add the tag to the list
+        return [...prevTags.filter(prevTag => prevTag !== 'All'), tag];
+      });
+    },
+    [setSelectedTags]
+  );
+
+  const onTagDeselect = useCallback((tag) => {
+    setSelectedTags((prevTags) => {
+      // Remove the deselected tag
+      return prevTags.filter((prevTag) => prevTag !== tag);
+    });
+  }, [setSelectedTags]);
 
   const onSearchChange = useCallback((newSearchText) => {
     if (newSearchText && newSearchText.length > 0) setSearchText(newSearchText);
@@ -180,20 +217,46 @@ const PantryPage = () => {
           </View>
           <SearchBar onChange={onSearchChange} />
           <PillRow
-            items={[
-              "Vegetarian",
-              "Dairy",
-              "Fruit",
-              "Meat",
-              "Vegetables",
+             items={[
+              "All",
+              "Bread",
+              "Dried Fruits",
+              "Seafood",
+              "Cheese",
+              "Produce",
+              "Grilling supplies",
               "Cereal",
-              "Dessert",
-              "Sauces",
+              "Nuts",
+              "Meat",
+              "Milk, Eggs, Other Dairy",
+              "Online",
+              "Bakery/Bread",
+              "Not in Grocery Store/Homemade",
+              "Pasta and Rice",
+              "Beverages",
+              "Baking",
+              "Alcoholic Beverages",
+              "Gluten Free",
+              "Sweet Snacks",
+              "Gourmet",
+              "Tea and coffee",
+              "Ethnic foods",
+              "Savory Snacks",
               "Condiments",
+              "Oil, Vinegar, Salad Dressing",
+              "Nut butters, Jam, and Honey",
+              "Frozen",
+              "Canned and Jarred",
+              "Refrigerated",
+              "Spices and Seasonings",
+              "Health Foods",
             ]}
-            selectedItems={[]}
+            selectedItems={selectedTags}
             selectedColor="#466646"
-            width={80}
+            width={100}  // width should scale depending on length of tag string
+            onItemSelect={onTagSelect}
+            onItemDeselect={onTagDeselect}
+            
           />
           {userInventories && (
             <PillRow
@@ -228,7 +291,7 @@ const PantryPage = () => {
           style={styles.pantryList}
           ListEmptyComponent={
             <Text style={styles.emptyComponent}>
-              No items in your inventory. Add some through Alexa.
+              No items in your inventory. Add some below.
             </Text>
           }
         />
