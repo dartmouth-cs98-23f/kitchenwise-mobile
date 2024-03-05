@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
-import CreateAccount from "./components/login_components/createaccount";
-import LoginScreen from "./components/login_components/LoginScreen";
+import CreateAccountScreen from "./navigation/SignUpScreen";
+import LoginScreen from "./navigation/LoginPage";
 import ProfilePage from "./navigation/ProfilePage";
-import ForgotPassword from "./components/login_components/forgotpassword";
+import ForgotPasswordScreen from "./navigation/ForgotPasswordPage";
 import PantryPage from "./navigation/PantryPage";
 import StatisticsPage from "./navigation/StatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
@@ -55,7 +55,6 @@ export default function App() {
         }
       });
   }, [userId, setUserShoppingLists]);
-
   return (
     <>
       <UserContext.Provider value={{ userId, setUserId }}>
@@ -75,15 +74,14 @@ export default function App() {
                     options={{ title: "Welcome", headerShown: false }}
                   />
                   <Stack.Screen
-                    name="forgotpasswordpage"
-                    component={ForgotPassword}
-                    options={{ title: "forgotpassword", headerShown: false }}
+                    name="CreateAccount"
+                    component={CreateAccountScreen}
+                    options={{ title: "Create Account", headerShown: false }}
                   />
                   <Stack.Screen
-                    name="createaccountpage"
-                    component={CreateAccount}
-                    options={{ title: "createact", headerShown: false }}
-
+                    name="ForgotPassword"
+                    component={ForgotPasswordScreen}
+                    options={{ title: "forgotpassword", headerShown: false }}
                   />
                   <Stack.Screen
                     name="Profile"

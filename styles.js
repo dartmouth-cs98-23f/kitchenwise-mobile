@@ -37,12 +37,13 @@ const themeStyles = StyleSheet.create({
   colors: {
     success: "#158013",
     failure: "#F22424",
-
+    logoBlue: "#40B4E5",
     interactableBackground: "#F2F2F2",
     interactableText: "#AAAAAA",
     uninteractableBackground: "#FAFAFA",
     uninteractableText: "#616161",
     selectedText: "#999999",
+    authBlack: "#222",
   },
   components: {
     screenContainer: {
