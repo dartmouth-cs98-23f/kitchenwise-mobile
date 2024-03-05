@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { ReactNativeAsyncStorage } from "@react-native-async-storage/async-storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -14,10 +15,12 @@ const firebaseConfig = {
   storageBucket: "kitchenwise-20ce1.appspot.com",
   messagingSenderId: "966980480629",
   appId: "1:966980480629:web:d63e449c5670c5b2bf923c",
-  measurementId: "G-5QLF22KPKQ"
+  measurementId: "G-5QLF22KPKQ",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
 const analytics = getAnalytics(app);
