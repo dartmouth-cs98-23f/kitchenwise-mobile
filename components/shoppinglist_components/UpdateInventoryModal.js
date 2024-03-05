@@ -5,14 +5,16 @@ import InventoryContext from "../../context/inventory-context";
 import BottomModal from "../modals/BottomModal";
 
 const UpdateInventoryModal = ({ visible, onCancel, onSubmit }) => {
-  const [selectedInventoryId, setSelectedInventoryId] = useState(null);
+
   const { userInventories } = useContext(InventoryContext);
+  const [selectedInventoryId, setSelectedInventoryId] = useState(userInventories[0]._id);
   const onConfirm = useCallback(() => {
     const selectedInventory = userInventories.filter(
       (inv) => inv._id === selectedInventoryId
     )[0];
     onSubmit(selectedInventory);
   }, [onSubmit, selectedInventoryId]);
+
   return (
     <BottomModal
       visible={visible}
