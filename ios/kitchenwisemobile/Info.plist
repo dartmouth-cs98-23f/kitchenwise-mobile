@@ -48,6 +48,8 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>UIAppFonts</key>
     <array>
       <string>Lato-Black.ttf</string>
