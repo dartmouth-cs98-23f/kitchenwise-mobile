@@ -49,7 +49,7 @@ const categories = [
   "Gluten Free",
   "Sweet Snacks",
   "Gourmet",
-  "Tea and coffee",
+  "Tea and Coffee",
   "Ethnic foods",
   "Savory Snacks",
   "Condiments",
@@ -71,6 +71,7 @@ const ShoppingListPage = () => {
   const [additemModal, setAddItemModal] = useState(false);
   const [itemToAdd, setItemToAdd] = useState("");
   const [amountToAdd, setAmountToAdd] = useState("");
+  const [unitToAdd, setUnitToAdd] = useState("");
   const [pendingDeletions, setPendingDeletions] = useState([]); // list of all the items to be cleared or pushed to inventory clea
   const [selectionModalVisible, setSelectionModalVisible] = useState(false);
   const [updateInventoryModalVisible, setUpdateInventoryModalVisible] =
@@ -79,14 +80,18 @@ const ShoppingListPage = () => {
   const [listName, setListName] = useState("list 1");
 
   const addToList = () => {
-    addItemToList(userId, listName, itemToAdd, amountToAdd).then((data) => {
+    addItemToList(userId, listName, itemToAdd, amountToAdd, unitToAdd).then((data) => {
       setListItems(data.shoppingListItems);
     });
     setAddItemModal(false);
+    setItemToAdd("");
+    setAmountToAdd('');
+    setUnitToAdd('');
   };
 
   const clearList = useCallback(() => {
     deleteList(listName).then(
+      setSelectionModalVisible(false)
     )
   });
 
@@ -123,19 +128,23 @@ const ShoppingListPage = () => {
 
   const createList = useCallback(() => {
     createNewShoppingList(userId, listName).then(() => {
-      addItemToList(userId, listName, itemToAdd, amountToAdd).then((data) => {
+      addItemToList(userId, listName, itemToAdd, amountToAdd, unitToAdd).then((data) => {
         setListItems(data.shoppingListItems);
       });
-    });
+    })
 
     setAddItemModal(false);
     setListAvailable(true);
+    setItemToAdd("");
+    setAmountToAdd('');
+    setUnitToAdd('');
   });
 
   const onAddUpdateInventoryPress = () => {
     setSelectionModalVisible(false);
     setUpdateInventoryModalVisible(true);
   };
+
   const sendItemsToInventory = useCallback(
     (inv) => {
       exportToShoppingList(userId, listName, pendingDeletions, inv)
@@ -202,7 +211,7 @@ const ShoppingListPage = () => {
                 const itemsInCategory = listItems.filter(
                   (item) => { 
                     if (item.tags[0]){
-                      return item.tags[0] === category
+                      return item.tags[0].toLowerCase() === category.toLowerCase()
                     } else {
                       if (category === "Other"){
                         return undefinedItems.push(item)
@@ -224,6 +233,7 @@ const ShoppingListPage = () => {
                             item={item}
                             name={item.title}
                             amount={item.amount}
+                            unit ={item.unit}
                             key={item._id}
                             selectItems={togglePendingDeletion}
                             tags={item.tags}
@@ -314,11 +324,20 @@ const ShoppingListPage = () => {
               placeholder="Food Name"
               style={styles.addModalInput}
               onChangeText={(food) => setItemToAdd(food)}
+              value={itemToAdd}
             />
             <Input
               placeholder="Amount"
               style={styles.addModalInput}
               onChangeText={(amount) => setAmountToAdd(amount)}
+              keyboardType="numeric"
+              value={amountToAdd}
+            />
+            <Input
+              placeholder="Unit"
+              style={styles.addModalInput}
+              onChangeText={(unit) => setUnitToAdd(unit)}
+              value={unitToAdd}
             />
           </View>
         </BottomModal>

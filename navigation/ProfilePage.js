@@ -21,6 +21,7 @@ import {
 } from "../api/inventory-api";
 import UserContext from "../context/user-context";
 import DeleteModal from "../components/profile_components/DeleteModal";
+import IntegrationPill from "../components/profile_components/IntegrationPill";
 
 const ProfilePage = () => {
   const { userInventories, setUserInventories } = useContext(InventoryContext);
@@ -104,7 +105,7 @@ const ProfilePage = () => {
         <View style={styles.pageHeader}>
           <Text style={themeStyles.text.h1}>Your Profile</Text>
         </View>
-        <View>
+        <View style={styles.sectionContainer}>
           <View style={styles.sectionHeaderRow}>
             <Text style={themeStyles.text.h2}>Your Inventories</Text>
             {editingInventories ? (
@@ -161,11 +162,18 @@ const ProfilePage = () => {
             )
           ) : null}
         </View>
-        <View>
-          <Text style={themeStyles.text.h2}>Your Integrations</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={themeStyles.text.h2}>Your Integrations</Text>
+          </View>
+          <View>
+            <IntegrationPill source={require("../assets/instacart_logo.png")} />
+          </View>
         </View>
-        <View>
-          <Text style={themeStyles.text.h2}>Your Statistics</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={themeStyles.text.h2}>Your Statistics</Text>
+          </View>
           <Button
             text="See Your Statistics"
             onPress={navigateToStatisticsPage}
@@ -176,8 +184,17 @@ const ProfilePage = () => {
             }}
           />
         </View>
-        <View>
-          <Text style={themeStyles.text.h2}>Settings</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={themeStyles.text.h2}>Settings</Text>
+          </View>
+          <Button
+            text="Log Out"
+            color={themeStyles.colors.authBlack}
+            textColor="white"
+            containerStyle={styles.logOutButton}
+            onPress={() => navigation.navigate("Home")}
+          />
         </View>
 
         {/* <ScrollView>
@@ -254,6 +271,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 12,
+  },
+  sectionContainer: {
+    paddingVertical: 12,
+  },
+  logOutButton: {
+    borderRadius: 8,
   },
 });
 
