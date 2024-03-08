@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
+import { BACKEND_API_URL } from "@env";
 
-dotenv.config();
-
-export const API_URL = process.env.API_URL;
+export const API_URL = BACKEND_API_URL;
