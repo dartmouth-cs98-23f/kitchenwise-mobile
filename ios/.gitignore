@@ -28,7 +28,3 @@ project.xcworkspace
 
 # CocoaPods
 /Pods/
-
-# kitchenwie config
-./Podfile.lock
-./kitchenwie.xcodeproj/project.pbxproj
