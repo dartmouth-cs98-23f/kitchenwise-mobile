@@ -83,15 +83,23 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
             style={styles.innerInfoLayer}
             onPressIn={onInfoPress}
           >
-            <Text style={styles.itemName}>{toTitleCase(name)}</Text>
+            <View
+              style={[styles.itemName, { width: expiration ? "50%" : "75%" }]}
+            >
+              <Text>{toTitleCase(name)}</Text>
+            </View>
             {expiration ? (
-              <Text style={[styles.itemInfoText]}>
-                {expiration ? "exp." + expiration : null}
-              </Text>
+              <View style={styles.itemInfoContainer}>
+                <Text style={styles.itemInfoText}>
+                  {expiration ? "exp." + expiration : null}
+                </Text>
+              </View>
             ) : null}
-            <Text style={[styles.itemInfoText]}>
-              {quantity} {unit}
-            </Text>
+            <View style={styles.itemInfoContainer}>
+              <Text style={styles.itemInfoText}>
+                {quantity} {unit}
+              </Text>
+            </View>
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.backLayer}>
@@ -179,9 +187,12 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     maxWidth: "80%",
   },
-  itemInfoText: {
+  itemInfoContainer: {
     color: "#333",
-    width: "20%",
+    width: "25%",
+    textAlign: "right",
+  },
+  itemInfoText: {
     textAlign: "right",
   },
   itemInfoContainer: {
