@@ -176,7 +176,7 @@ const NarrationPage = ({ navigation }) => {
         return prev;
       });
     },
-    [setParsedCommands]
+    [setParsedCommands, parsedCommands]
   );
 
   return (
@@ -231,8 +231,8 @@ const NarrationPage = ({ navigation }) => {
           </View>
           {isRecording && (
             <View style={styles.loadingContainer}>
-              <Wave color={themeStyles.colors.uninteractableBackground} />
-              <Text>Transcribing</Text>
+              <Wave color="#111" />
+              <Text color="#111">Transcribing</Text>
             </View>
           )}
         </ScrollView>
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     height: "20%",
+    marginTop: 48,
   },
 });
 
