@@ -6,16 +6,20 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { showMessage } from "react-native-flash-message";
 
 import themeStyles from "../styles";
+import UserContext from "../context/user-context";
 import { sendReceipt } from "../api/fooditem-api";
 
 const ReceiptScannerPage = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const { userId } = useContext(UserContext);
   useEffect(() => {
     if (!permission) {
       requestPermission();
@@ -29,13 +33,25 @@ const ReceiptScannerPage = () => {
       const imgObject = await cameraRef.current.takePictureAsync({
         imageType: "jpeg",
       });
-      await sendReceipt(userId, imgObject.uri);
+      try {
+        setLoading(true);
+        const scanResult = await sendReceipt(userId, imgObject.uri);
+      } catch (err) {
+        showMessage({
+          message: "Error",
+          description: err?.response?.data?.message || "Server Error",
+          type: "danger",
+        });
+      }
+      setLoading(false);
+
+      console.log("res", scanResult);
     }
   }, [cameraRef]);
   return (
     <SafeAreaView style={themeStyles.components.screenContainer}>
       <Camera
-        type={CameraType.front}
+        type={CameraType.back}
         ref={cameraRef}
         style={styles.cameraComponent}
       >
@@ -45,12 +61,14 @@ const ReceiptScannerPage = () => {
               <Ionicons name="chevron-back-outline" color="white" size={32} />
             </TouchableOpacity>
           </View>
-          <View style={styles.cameraButton}>
-            <TouchableOpacity
-              onPress={onCapture}
-              style={styles.cameraButtonInner}
-            />
-          </View>
+          {!loading && (
+            <View style={styles.cameraButton}>
+              <TouchableOpacity
+                onPress={onCapture}
+                style={styles.cameraButtonInner}
+              />
+            </View>
+          )}
         </View>
       </Camera>
     </SafeAreaView>

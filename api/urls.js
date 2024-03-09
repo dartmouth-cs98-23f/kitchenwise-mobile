@@ -1,3 +1,1 @@
-import { BACKEND_API_URL } from "@env";
-
-export const API_URL = BACKEND_API_URL;
+export const API_URL = "http://localhost:3000";
