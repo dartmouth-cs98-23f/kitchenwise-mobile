@@ -25,6 +25,7 @@ import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
 import { addFoodItem, editFoodItem } from "../api/fooditem-api";
 import BubbleModal from "../components/modals/BubbleModal";
+import { useNavigation } from "@react-navigation/native";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -38,6 +39,7 @@ const PantryPage = () => {
   const [selectedTags, setSelectedTags] = useState(["All"]);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (userInventories)
@@ -324,7 +326,13 @@ const PantryPage = () => {
           onPressOut={() => setAddModalVisible(false)}
         >
           <View style={styles.moreContainer}>
-            <TouchableOpacity style={styles.moreOption}>
+            <TouchableOpacity
+              style={styles.moreOption}
+              onPress={() => {
+                setAddModalVisible(false);
+                navigation.navigate("ReceiptScanner");
+              }}
+            >
               <Text>Scan Receipt</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -332,7 +340,6 @@ const PantryPage = () => {
               onPress={() => {
                 setCreatingItem(true);
                 setAddModalVisible(false);
-                
               }}
             >
               <Text>Manual Add</Text>
@@ -393,11 +400,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: 196,
+    width: 128,
   },
   moreOption: {
     padding: 2,
-    height: 36,
+    height: 48,
     display: "flex",
     justifyContent: "center",
   },

@@ -46,7 +46,7 @@ const CommandRow = ({
         }}
         style={styles.locationContainer}
       >
-        <Text>{item.location}</Text>
+        <Text style={styles.locationText}> {item.location}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onDelete}>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     height: 28,
     fontSize: 10,
     flexGrow: 1,
-    // width: 84,
+    width: 72,
   },
   locationContainer: {
     backgroundColor: themeStyles.colors.interactableBackground,
@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     paddingHorizontal: 4,
+  },
+  locationText: {
+    fontSize: 10,
   },
   conjunctionText: {
     fontSize: 14,

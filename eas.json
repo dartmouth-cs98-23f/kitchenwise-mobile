@@ -6,12 +6,19 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BACKEND_API_URL": "http://localhost:3000"
+      }
     },
     "preview": {
       "distribution": "internal"
     },
-    "production": {},
+    "production": {
+      "env": {
+        "BACKEND_API_URL": "https://kitchenwise-backend-65oo.onrender.com"
+      }
+    },
     "development-simulator": {
       "developmentClient": true,
       "distribution": "internal",

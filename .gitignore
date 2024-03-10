@@ -82,3 +82,5 @@ yarn.lock
 package-lock.json
 ios/Podfile.lock
 ios/kitchenwisemobile.xcodeproj/project.pbxproj
+ 
+.env
