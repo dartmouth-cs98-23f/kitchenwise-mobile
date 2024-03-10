@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import themeStyles from "../../styles";
 
-const ShoppingListItem = ({ item, name, amount, selectItems }) => {
+const ShoppingListItem = ({ item, name, amount, unit, selectItems, tags }) => {
   const [isSelected, setIsSelected] = useState(false);
 
   const itemPressed = () => {
@@ -11,6 +11,7 @@ const ShoppingListItem = ({ item, name, amount, selectItems }) => {
     let toggle = isSelected ? false : true;
     setIsSelected(toggle);
   };
+
 
   return (
     <View style={styles.listItemContainer}>
@@ -25,6 +26,9 @@ const ShoppingListItem = ({ item, name, amount, selectItems }) => {
       </Text>
       <Text style={[styles.listItemText, isSelected && styles.selectedText]}>
         {amount || "1"}
+      </Text>
+      <Text style={[styles.listItemText, isSelected && styles.selectedText]}>
+        {unit || ""}
       </Text>
       <TouchableOpacity onPress={itemPressed}>
         <Ionicons
@@ -46,6 +50,7 @@ const styles = StyleSheet.create({
   listItemText: {
     fontSize: 16,
     fontFamily: "Lato",
+    marginHorizontal: 2,
   },
   listItemRight: {
     fontFamily: "Lato",

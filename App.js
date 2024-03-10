@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
-
-import LoginScreen from "./components/login_components/LoginScreen";
+import CreateAccountScreen from "./navigation/SignUpScreen";
+import LoginScreen from "./navigation/LoginPage";
 import ProfilePage from "./navigation/ProfilePage";
+import ForgotPasswordScreen from "./navigation/ForgotPasswordPage";
 import PantryPage from "./navigation/PantryPage";
 import StatisticsPage from "./navigation/StatisticsPage";
 import ShoppingListPage from "./navigation/ShoppingListPage";
@@ -20,6 +21,7 @@ import ShoppingListContext, {
 } from "./context/shoppingList-context";
 import { getUserShoppingLists } from "./api/shoppingList-api";
 import { getUserInventories } from "./api/inventory-api";
+import ReceiptScannerPage from "./navigation/ReceiptScannerPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,7 +56,6 @@ export default function App() {
         }
       });
   }, [userId, setUserShoppingLists]);
-
   return (
     <>
       <UserContext.Provider value={{ userId, setUserId }}>
@@ -72,6 +73,16 @@ export default function App() {
                     name="Home"
                     component={LoginScreen}
                     options={{ title: "Welcome", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="CreateAccount"
+                    component={CreateAccountScreen}
+                    options={{ title: "Create Account", headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="ForgotPassword"
+                    component={ForgotPasswordScreen}
+                    options={{ title: "forgotpassword", headerShown: false }}
                   />
                   <Stack.Screen
                     name="Profile"
@@ -120,6 +131,16 @@ export default function App() {
                     options={{
                       title: "",
                       headerBackVisible: true,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="ReceiptScanner"
+                    component={ReceiptScannerPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
                     }}
                   />
                   {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}

@@ -32,14 +32,17 @@ const springConfig = {
   dampingRatio: 1.7,
 };
 
+const DRAG_TRIGGER_AMOUNT = 24;
+
 const PantryItem = ({ foodItem, onDelete, onEdit }) => {
   const { name, expiration, quantity, unit } = foodItem;
   const amountPanned = useSharedValue(0);
   const swiped = useSharedValue(false);
+
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       if (!swiped.value) {
-        if (Math.abs(e.translationX) >= MAX_DRAG - 16) {
+        if (Math.abs(e.translationX) >= DRAG_TRIGGER_AMOUNT) {
           amountPanned.value = withSpring(
             Math.sign(e.translationX) * MAX_DRAG,
             springConfig
@@ -78,17 +81,25 @@ const PantryItem = ({ foodItem, onDelete, onEdit }) => {
             height="100%"
             activeOpacity={1}
             style={styles.innerInfoLayer}
-            onPress={onInfoPress}
+            onPressIn={onInfoPress}
           >
-            <Text style={styles.itemName}>{toTitleCase(name)}</Text>
+            <View
+              style={[styles.itemName, { width: expiration ? "50%" : "75%" }]}
+            >
+              <Text>{toTitleCase(name)}</Text>
+            </View>
             {expiration ? (
-              <Text style={[styles.itemInfoText]}>
-                {expiration ? "exp." + expiration : null}
-              </Text>
+              <View style={styles.itemInfoContainer}>
+                <Text style={styles.itemInfoText}>
+                  {expiration ? "exp." + expiration : null}
+                </Text>
+              </View>
             ) : null}
-            <Text style={[styles.itemInfoText]}>
-              {quantity} {unit}
-            </Text>
+            <View style={styles.itemInfoContainer}>
+              <Text style={styles.itemInfoText}>
+                {quantity} {unit}
+              </Text>
+            </View>
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.backLayer}>
@@ -176,9 +187,12 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     maxWidth: "80%",
   },
-  itemInfoText: {
+  itemInfoContainer: {
     color: "#333",
-    width: "20%",
+    width: "25%",
+    textAlign: "right",
+  },
+  itemInfoText: {
     textAlign: "right",
   },
   itemInfoContainer: {

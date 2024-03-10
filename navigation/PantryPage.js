@@ -25,6 +25,7 @@ import { createRemoveAction } from "../api/removeaction-api";
 import { showMessage } from "react-native-flash-message";
 import { addFoodItem, editFoodItem } from "../api/fooditem-api";
 import BubbleModal from "../components/modals/BubbleModal";
+import { useNavigation } from "@react-navigation/native";
 
 const PantryPage = () => {
   const [items, setItems] = useState([]);
@@ -35,8 +36,10 @@ const PantryPage = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
+  const [selectedTags, setSelectedTags] = useState(["All"]);
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (userInventories)
@@ -92,6 +95,35 @@ const PantryPage = () => {
       return prev;
     });
   }, []);
+
+  useEffect(() => {
+    let newFilteredItems = items;
+    if (selectedTags.length && !selectedTags.includes("All")) {
+      newFilteredItems = newFilteredItems.filter((item) =>
+        item.tags.some((tag) => selectedTags.includes(tag))
+      );
+    }
+    setFilteredItems(newFilteredItems);
+  }, [items, selectedTags]);
+
+  const onTagSelect = useCallback(
+    (tag) => {
+      setSelectedTags((prevTags) => {
+        if (prevTags.includes(tag)) {
+          return prevTags.filter((prevTag) => prevTag !== tag);
+        } else {
+          return [tag];
+        }
+      });
+    },
+    [setSelectedTags]
+  );
+
+  const onTagDeselect = useCallback((tag) => {
+    setSelectedTags((prevTags) => {
+      return prevTags.filter((prevTag) => prevTag !== tag);
+    });
+  }, [setSelectedTags]);
 
   const onSearchChange = useCallback((newSearchText) => {
     if (newSearchText && newSearchText.length > 0) setSearchText(newSearchText);
@@ -180,20 +212,33 @@ const PantryPage = () => {
           </View>
           <SearchBar onChange={onSearchChange} />
           <PillRow
-            items={[
-              "Vegetarian",
-              "Dairy",
-              "Fruit",
+             items={[
+              "All",
+              "Gluten Free",
+              "Milk, Eggs, Other Dairy",
               "Meat",
-              "Vegetables",
+              "Bakery/Bread",
+              "Seafood",
+              "Produce",
               "Cereal",
-              "Dessert",
-              "Sauces",
+              "Nuts",
+              "Pasta and Rice",
+              "Beverages",
+              "Alcoholic Beverages",
+              "Sweet Snacks",
+              "Gourmet",
+              "Tea and coffee",
+              "Savory Snacks",
               "Condiments",
+              "Canned and Jarred",                           
+              "Spices and Seasonings",
             ]}
-            selectedItems={[]}
+            selectedItems={selectedTags}
             selectedColor="#466646"
-            width={80}
+            width={100}  // width should scale depending on length of tag string
+            onItemSelect={onTagSelect}
+            onItemDeselect={onTagDeselect}
+            
           />
           {userInventories && (
             <PillRow
@@ -228,7 +273,7 @@ const PantryPage = () => {
           style={styles.pantryList}
           ListEmptyComponent={
             <Text style={styles.emptyComponent}>
-              No items in your inventory. Add some through Alexa.
+              No items in your inventory. Add some below.
             </Text>
           }
         />
@@ -263,7 +308,13 @@ const PantryPage = () => {
           onPressOut={() => setAddModalVisible(false)}
         >
           <View style={styles.moreContainer}>
-            <TouchableOpacity style={styles.moreOption}>
+            <TouchableOpacity
+              style={styles.moreOption}
+              onPress={() => {
+                setAddModalVisible(false);
+                navigation.navigate("ReceiptScanner");
+              }}
+            >
               <Text>Scan Receipt</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -271,7 +322,6 @@ const PantryPage = () => {
               onPress={() => {
                 setCreatingItem(true);
                 setAddModalVisible(false);
-                
               }}
             >
               <Text>Manual Add</Text>
@@ -332,11 +382,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: 196,
+    width: 128,
   },
   moreOption: {
     padding: 2,
-    height: 36,
+    height: 48,
     display: "flex",
     justifyContent: "center",
   },
