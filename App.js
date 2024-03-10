@@ -21,6 +21,7 @@ import ShoppingListContext, {
 } from "./context/shoppingList-context";
 import { getUserShoppingLists } from "./api/shoppingList-api";
 import { getUserInventories } from "./api/inventory-api";
+import ReceiptScannerPage from "./navigation/ReceiptScannerPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -130,6 +131,16 @@ export default function App() {
                     options={{
                       title: "",
                       headerBackVisible: true,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="ReceiptScanner"
+                    component={ReceiptScannerPage}
+                    options={{
+                      title: "",
+                      headerBackVisible: false,
+                      animation: "none",
+                      headerShown: false,
                     }}
                   />
                   {/* //add stack screens here like: <Stack.Screen name="Name" component={ScreenName} /> */}
