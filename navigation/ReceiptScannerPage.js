@@ -10,6 +10,7 @@ import { useRef, useCallback, useEffect, useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { showMessage } from "react-native-flash-message";
+import { Circle } from "react-native-animated-spinkit";
 
 import themeStyles from "../styles";
 import UserContext from "../context/user-context";
@@ -18,6 +19,7 @@ import { sendReceipt } from "../api/fooditem-api";
 const ReceiptScannerPage = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [loading, setLoading] = useState(false);
+  const [imgUri, setImgUri] = useState(null);
   const navigation = useNavigation();
   const { userId } = useContext(UserContext);
   useEffect(() => {
@@ -35,7 +37,9 @@ const ReceiptScannerPage = () => {
       });
       try {
         setLoading(true);
+        setImgUri(imgObject.uri);
         const scanResult = await sendReceipt(userId, imgObject.uri);
+        cameraRef.current.pausePreview();
       } catch (err) {
         showMessage({
           message: "Error",
@@ -44,8 +48,6 @@ const ReceiptScannerPage = () => {
         });
       }
       setLoading(false);
-
-      console.log("res", scanResult);
     }
   }, [cameraRef]);
   return (
@@ -54,6 +56,7 @@ const ReceiptScannerPage = () => {
         type={CameraType.back}
         ref={cameraRef}
         style={styles.cameraComponent}
+        autoFocus
       >
         <View style={styles.overlayContainer}>
           <View style={styles.topRow}>
@@ -61,13 +64,15 @@ const ReceiptScannerPage = () => {
               <Ionicons name="chevron-back-outline" color="white" size={32} />
             </TouchableOpacity>
           </View>
-          {!loading && (
+          {!loading ? (
             <View style={styles.cameraButton}>
               <TouchableOpacity
                 onPress={onCapture}
                 style={styles.cameraButtonInner}
               />
             </View>
+          ) : (
+            <Circle color="white" />
           )}
         </View>
       </Camera>
