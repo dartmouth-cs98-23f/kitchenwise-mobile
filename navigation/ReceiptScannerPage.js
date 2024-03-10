@@ -38,8 +38,14 @@ const ReceiptScannerPage = () => {
       try {
         setLoading(true);
         setImgUri(imgObject.uri);
-        const scanResult = await sendReceipt(userId, imgObject.uri);
         cameraRef.current.pausePreview();
+        const scanResult = await sendReceipt(userId, imgObject.uri);
+        showMessage({
+          message: "Successful scan",
+          description: "Your receipt was successfully scanned.",
+          type: "success",
+        });
+        navigation.goBack();
       } catch (err) {
         showMessage({
           message: "Error",
