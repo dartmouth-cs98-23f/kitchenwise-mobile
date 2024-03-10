@@ -95,7 +95,6 @@ const PantryPage = () => {
   }, []);
 
   useEffect(() => {
-    // Filter items based on selected tags
     let newFilteredItems = items;
     if (selectedTags.length && !selectedTags.includes("All")) {
       newFilteredItems = newFilteredItems.filter((item) =>
@@ -108,16 +107,11 @@ const PantryPage = () => {
   const onTagSelect = useCallback(
     (tag) => {
       setSelectedTags((prevTags) => {
-        // If 'All' tag is selected, deselect all other tags
-        if (tag === 'All') {
-          return prevTags.includes('All') ? [] : [tag];
-        }
-        // If the selected tag is already in the list, remove it
         if (prevTags.includes(tag)) {
-          return prevTags.filter((prevTag) => prevTag !== tag && prevTag !== 'All');
+          return prevTags.filter((prevTag) => prevTag !== tag);
+        } else {
+          return [tag];
         }
-        // Otherwise, add the tag to the list
-        return [...prevTags.filter(prevTag => prevTag !== 'All'), tag];
       });
     },
     [setSelectedTags]
@@ -125,7 +119,6 @@ const PantryPage = () => {
 
   const onTagDeselect = useCallback((tag) => {
     setSelectedTags((prevTags) => {
-      // Remove the deselected tag
       return prevTags.filter((prevTag) => prevTag !== tag);
     });
   }, [setSelectedTags]);
@@ -219,37 +212,24 @@ const PantryPage = () => {
           <PillRow
              items={[
               "All",
-              "Bread",
-              "Dried Fruits",
+              "Gluten Free",
+              "Milk, Eggs, Other Dairy",
+              "Meat",
+              "Bakery/Bread",
               "Seafood",
-              "Cheese",
               "Produce",
-              "Grilling supplies",
               "Cereal",
               "Nuts",
-              "Meat",
-              "Milk, Eggs, Other Dairy",
-              "Online",
-              "Bakery/Bread",
-              "Not in Grocery Store/Homemade",
               "Pasta and Rice",
               "Beverages",
-              "Baking",
               "Alcoholic Beverages",
-              "Gluten Free",
               "Sweet Snacks",
               "Gourmet",
               "Tea and coffee",
-              "Ethnic foods",
               "Savory Snacks",
               "Condiments",
-              "Oil, Vinegar, Salad Dressing",
-              "Nut butters, Jam, and Honey",
-              "Frozen",
-              "Canned and Jarred",
-              "Refrigerated",
+              "Canned and Jarred",                           
               "Spices and Seasonings",
-              "Health Foods",
             ]}
             selectedItems={selectedTags}
             selectedColor="#466646"

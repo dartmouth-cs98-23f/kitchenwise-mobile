@@ -7,7 +7,7 @@ const Pill = ({ title, color, width, onPress }) => {
     <TouchableOpacity
       style={[
         styles.pillContainer,
-        { width: width || "auto" },
+        { width: width + (title.length*2) || "auto" },
         { backgroundColor: color || themeStyles.colors.interactableBackground },
       ]}
       onPress={onPress}
