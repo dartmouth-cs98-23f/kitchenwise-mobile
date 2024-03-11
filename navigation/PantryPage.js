@@ -31,7 +31,7 @@ const PantryPage = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchText, setSearchText] = useState(null);
-  const [selectedInventories, setSelectedInventories] = useState(new Set());
+  const [selectedInventories, setSelectedInventories] = useState([]);
   const [deletingItem, setDeletingItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
@@ -42,8 +42,8 @@ const PantryPage = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (userInventories)
-      setSelectedInventories(new Set(userInventories.map((inv) => inv.title)));
+    if (userInventories && userInventories.length > 0)
+      setSelectedInventories([userInventories[0].title]);
   }, [userInventories]);
 
   const refreshItems = useCallback(() => {
@@ -78,33 +78,32 @@ const PantryPage = () => {
       newFilteredItems = newFilteredItems.filter((item) =>
         item.name.toLowerCase().includes(searchText.toLowerCase())
       );
-    newFilteredItems = newFilteredItems.filter((item) =>
-      selectedInventories.has(item.inventoryTitle)
-    );
-    setFilteredItems(newFilteredItems);
-  }, [items, selectedInventories, searchText]);
-  const onInventorySelect = useCallback((inventoryName) => {
-    setSelectedInventories((prev) => {
-      prev.add(inventoryName);
-      return prev;
-    });
-  }, []);
-  const onInventoryDeselect = useCallback((inventoryName) => {
-    setSelectedInventories((prev) => {
-      prev.delete(inventoryName);
-      return prev;
-    });
-  }, []);
+      setFilteredItems(newFilteredItems);
+    }, [items, searchText]);
 
   useEffect(() => {
     let newFilteredItems = items;
+    if (selectedInventories && selectedInventories.length > 0) {
+      newFilteredItems = newFilteredItems.filter((item) =>
+        selectedInventories.includes(item.inventory)
+      );
+    }
+
     if (selectedTags.length && !selectedTags.includes("All")) {
       newFilteredItems = newFilteredItems.filter((item) =>
         item.tags.some((tag) => selectedTags.includes(tag))
       );
     }
     setFilteredItems(newFilteredItems);
-  }, [items, selectedTags]);
+  }, [items, selectedTags, selectedInventories]);
+  
+  const onInventorySelect = useCallback((inventoryName) => {
+    setSelectedInventories((prev) => [inventoryName]);
+  }, []);
+  
+  const onInventoryDeselect = useCallback((inventoryName) => {
+    setSelectedInventories((prev) => prev.filter((name) => name !== inventoryName));
+  }, []);
 
   const onTagSelect = useCallback(
     (tag) => {
@@ -261,9 +260,7 @@ const PantryPage = () => {
           {userInventories && (
             <PillRow
               items={userInventories.map((inv) => inv.title)}
-              selectedItems={userInventories
-                .map((inv) => inv.title)
-                .filter((name) => selectedInventories.has(name))}
+              selectedItems={selectedInventories}
               selectedColor="#5C81A0"
               width={100}
               onItemSelect={onInventorySelect}

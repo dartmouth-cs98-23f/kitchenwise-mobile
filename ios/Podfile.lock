@@ -13,7 +13,7 @@ PODS:
   - EXJSONUtils (0.12.3)
   - EXManifests (0.13.2):
     - ExpoModulesCore
-  - Expo (50.0.6):
+  - Expo (50.0.7):
     - ExpoModulesCore
   - expo-dev-client (3.3.8):
     - EXManifests
@@ -82,7 +82,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - ExpoCamera (14.0.5):
+  - ExpoCamera (14.0.6):
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
@@ -1566,12 +1566,12 @@ SPEC CHECKSUMS:
   EXFont: f20669cb266ef48b004f1eb1f2b20db96cd1df9f
   EXJSONUtils: 5c42959e87be238b045ef37cc5268b16a6c0ad4a
   EXManifests: 5e8c29f36c716af768a4ea47ec05e1b89ab93091
-  Expo: fb745b3074989670b6641f9f20463e8ee56a69ca
+  Expo: 1cf3922a9b26262b2556544d4defcecccd37d033
   expo-dev-client: 025dce84f48b04c60c3891547732f001f6aad777
   expo-dev-launcher: 3cddfcd8e54748d0046af07dc8e4f58dbb045e93
   expo-dev-menu: 8088833c320b616a312ffe438fbea5df276c010e
   expo-dev-menu-interface: 7ba029c9d1a82ac22b9b584c00514860b060553e
-  ExpoCamera: 9eb966748a7897e84986567e3eef71836c219823
+  ExpoCamera: a3d19935309c1d0150c5d792eeb82d906dd0979e
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoLinearGradient: 4ad1449a2408e0435ac959076562b3921f2e32a1
