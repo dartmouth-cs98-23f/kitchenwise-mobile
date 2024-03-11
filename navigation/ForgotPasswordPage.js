@@ -6,33 +6,30 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { auth } from "../firebase";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const auth = getAuth();
+  // const auth = getAuth();
 
-  const handleForgotPassword = () => {
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        // Password reset email sent!
-        alert("Password reset email sent to " + email);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // Handle errors
-        if (errorCode === "auth/invalid-email") {
-          alert("No user with this email found.");
-        } else {
-          console.error("Error sending password reset email", error);
-        }
-      });
-  };
+  // const handleForgotPassword = () => {
+  //   sendPasswordResetEmail(auth, email)
+  //     .then(() => {
+  //       // Password reset email sent!
+  //       alert("Password reset email sent to " + email);
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       // Handle errors
+  //       if (errorCode === "auth/invalid-email") {
+  //         alert("No user with this email found.");
+  //       } else {
+  //         console.error("Error sending password reset email", error);
+  //       }
+  //     });
+  // };
 
   return (
     <View style={styles.container}>
