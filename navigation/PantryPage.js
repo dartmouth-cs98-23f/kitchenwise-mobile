@@ -81,6 +81,11 @@ const PantryPage = () => {
     newFilteredItems = newFilteredItems.filter((item) =>
       selectedInventories.has(item.inventoryTitle)
     );
+    if (selectedTags.length && !selectedTags.includes("All")) {
+      newFilteredItems = newFilteredItems.filter((item) =>
+        item.tags.some((tag) => selectedTags.includes(tag))
+      );
+    }
     setFilteredItems(newFilteredItems);
   }, [items, selectedInventories, searchText]);
   const onInventorySelect = useCallback((inventoryName) => {
@@ -96,16 +101,6 @@ const PantryPage = () => {
     });
   }, []);
 
-  useEffect(() => {
-    let newFilteredItems = items;
-    if (selectedTags.length && !selectedTags.includes("All")) {
-      newFilteredItems = newFilteredItems.filter((item) =>
-        item.tags.some((tag) => selectedTags.includes(tag))
-      );
-    }
-    setFilteredItems(newFilteredItems);
-  }, [items, selectedTags]);
-
   const onTagSelect = useCallback(
     (tag) => {
       setSelectedTags((prevTags) => {
@@ -119,11 +114,14 @@ const PantryPage = () => {
     [setSelectedTags]
   );
 
-  const onTagDeselect = useCallback((tag) => {
-    setSelectedTags((prevTags) => {
-      return prevTags.filter((prevTag) => prevTag !== tag);
-    });
-  }, [setSelectedTags]);
+  const onTagDeselect = useCallback(
+    (tag) => {
+      setSelectedTags((prevTags) => {
+        return prevTags.filter((prevTag) => prevTag !== tag);
+      });
+    },
+    [setSelectedTags]
+  );
 
   const onSearchChange = useCallback((newSearchText) => {
     if (newSearchText && newSearchText.length > 0) setSearchText(newSearchText);
@@ -212,7 +210,7 @@ const PantryPage = () => {
           </View>
           <SearchBar onChange={onSearchChange} />
           <PillRow
-             items={[
+            items={[
               "All",
               "Bread",
               "Dried Fruits",
@@ -247,16 +245,15 @@ const PantryPage = () => {
               "Frozen",
               "Canned and Jarred",
               "Refrigerated",
-              "Canned and Jarred",                           
+              "Canned and Jarred",
               "Spices and Seasonings",
               "Health Foods",
             ]}
             selectedItems={selectedTags}
             selectedColor="#466646"
-            width={100}  // width should scale depending on length of tag string
+            width={100} // width should scale depending on length of tag string
             onItemSelect={onTagSelect}
             onItemDeselect={onTagDeselect}
-            
           />
           {userInventories && (
             <PillRow
