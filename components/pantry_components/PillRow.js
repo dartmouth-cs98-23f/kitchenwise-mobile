@@ -7,7 +7,7 @@ const Pill = ({ title, color, width, onPress }) => {
     <TouchableOpacity
       style={[
         styles.pillContainer,
-        { width: width + (title.length*2) || "auto" },
+        { width: width + title.length * 2 || "auto" },
         { backgroundColor: color || themeStyles.colors.interactableBackground },
       ]}
       onPress={onPress}
@@ -44,7 +44,7 @@ const PillRow = ({
         />
       ))}
       {items
-        .filter((item) => !selectedItems.includes(item))
+        .filter((item) => !selectedItems.has(item))
         .map((item, i) => (
           <Pill
             title={item}

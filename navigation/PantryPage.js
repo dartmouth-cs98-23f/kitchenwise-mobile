@@ -31,19 +31,18 @@ const PantryPage = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchText, setSearchText] = useState(null);
-  const [selectedInventories, setSelectedInventories] = useState([]);
+  const [selectedInventories, setSelectedInventories] = useState(new Set());
   const [deletingItem, setDeletingItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
-  const [selectedTags, setSelectedTags] = useState(["All"]);
+  const [selectedTags, setSelectedTags] = useState(new Set(["All"]));
   const { userId } = useContext(UserContext);
   const { userInventories } = useContext(InventoryContext);
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (userInventories && userInventories.length > 0)
-      setSelectedInventories([userInventories[0].title]);
+    setSelectedInventories(new Set(userInventories.map((inv) => inv.title)));
   }, [userInventories]);
 
   const refreshItems = useCallback(() => {
@@ -81,9 +80,9 @@ const PantryPage = () => {
     newFilteredItems = newFilteredItems.filter((item) =>
       selectedInventories.has(item.inventoryTitle)
     );
-    if (selectedTags.length && !selectedTags.includes("All")) {
+    if (selectedTags && !selectedTags.has("All")) {
       newFilteredItems = newFilteredItems.filter((item) =>
-        item.tags.some((tag) => selectedTags.includes(tag))
+        item.tags.some((tag) => selectedTags.has(tag))
       );
     }
     setFilteredItems(newFilteredItems);
@@ -104,11 +103,8 @@ const PantryPage = () => {
   const onTagSelect = useCallback(
     (tag) => {
       setSelectedTags((prevTags) => {
-        if (prevTags.includes(tag)) {
-          return prevTags.filter((prevTag) => prevTag !== tag);
-        } else {
-          return [tag];
-        }
+        prevTags.add(tag);
+        return prevTags;
       });
     },
     [setSelectedTags]
@@ -117,7 +113,8 @@ const PantryPage = () => {
   const onTagDeselect = useCallback(
     (tag) => {
       setSelectedTags((prevTags) => {
-        return prevTags.filter((prevTag) => prevTag !== tag);
+        prevTags.delete(tag);
+        return prevTags;
       });
     },
     [setSelectedTags]

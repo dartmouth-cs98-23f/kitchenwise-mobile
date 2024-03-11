@@ -82,7 +82,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - ExpoCamera (14.0.6):
+  - ExpoCamera (14.0.5):
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
@@ -1571,7 +1571,7 @@ SPEC CHECKSUMS:
   expo-dev-launcher: 3cddfcd8e54748d0046af07dc8e4f58dbb045e93
   expo-dev-menu: 8088833c320b616a312ffe438fbea5df276c010e
   expo-dev-menu-interface: 7ba029c9d1a82ac22b9b584c00514860b060553e
-  ExpoCamera: a3d19935309c1d0150c5d792eeb82d906dd0979e
+  ExpoCamera: 9eb966748a7897e84986567e3eef71836c219823
   ExpoFileSystem: a9273932e69a9a1e1a8d01b6ba895bb8294bbea2
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoLinearGradient: 4ad1449a2408e0435ac959076562b3921f2e32a1
