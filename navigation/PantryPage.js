@@ -31,7 +31,7 @@ const PantryPage = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchText, setSearchText] = useState(null);
-  const [selectedInventories, setSelectedInventories] = useState(new Set());
+  const [selectedInventories, setSelectedInventories] = useState([]);
   const [deletingItem, setDeletingItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [creatingItem, setCreatingItem] = useState(false);
@@ -42,8 +42,8 @@ const PantryPage = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (userInventories)
-      setSelectedInventories(new Set(userInventories.map((inv) => inv.title)));
+    if (userInventories && userInventories.length > 0)
+      setSelectedInventories([userInventories[0].title]);
   }, [userInventories]);
 
   const refreshItems = useCallback(() => {
@@ -258,9 +258,7 @@ const PantryPage = () => {
           {userInventories && (
             <PillRow
               items={userInventories.map((inv) => inv.title)}
-              selectedItems={userInventories
-                .map((inv) => inv.title)
-                .filter((name) => selectedInventories.has(name))}
+              selectedItems={selectedInventories}
               selectedColor="#5C81A0"
               width={100}
               onItemSelect={onInventorySelect}
